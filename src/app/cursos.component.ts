@@ -7,7 +7,7 @@ import {Component} from '@angular/core'
   <p>TypeScript !!</p>
 
   `,
-  styles: ['h1 { color: red; }']
+  styles: ['h1 { color: green; }']
 })
 
 export class CursosComponent{
