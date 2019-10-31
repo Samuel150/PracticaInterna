@@ -10,8 +10,5 @@ export class LogInButtonComponent {
   description = 'Modulo de seguimiento de docentes';
   constructor() { }
 
-  logIn(){
-
-  }
 
 }
