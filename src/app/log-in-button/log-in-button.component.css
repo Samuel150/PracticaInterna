@@ -1,11 +1,16 @@
-div.boton{
-  text-align: center ;
+.container {
+  height: 200px;
+  position: relative;
+  padding: 12%;
+
 }
-h1{
-  font-size: 800%;
-  font-family: Dubai;
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
-p{
-  font-size: 200%;
-  font-family: "Agency FB ";
-}
+

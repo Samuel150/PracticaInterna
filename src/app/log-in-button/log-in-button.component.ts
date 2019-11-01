@@ -6,8 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./log-in-button.component.css']
 })
 export class LogInButtonComponent {
-  title = 'DocFollow';
-  description = 'Modulo de seguimiento de docentes';
+
+  description = 'Modulo de Seguimiento de Docentes';
   constructor() { }
 
 

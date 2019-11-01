@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {AppComponent} from "./app.component";
 import {PendingComponent} from "./pending/pending.component";
 import {LogInButtonComponent} from "./log-in-button/log-in-button.component";
 
