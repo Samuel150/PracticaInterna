@@ -1,4 +1,49 @@
+<div class="allTable">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="materia">
+    <th mat-header-cell *matHeaderCellDef> Materia </th>
+    <td mat-cell *matCellDef="let element"> {{element.materia}} </td>
+  </ng-container>
 
-<p>pending works!</p>
+  <ng-container matColumnDef="docente">
+    <th mat-header-cell *matHeaderCellDef> Docente </th>
+    <td mat-cell *matCellDef="let element"> {{element.docente}} </td>
+  </ng-container>
 
+  <ng-container matColumnDef="inicio">
+    <th mat-header-cell *matHeaderCellDef> Inicio </th>
+    <td mat-cell *matCellDef="let element"> {{element.inicio}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="fin">
+    <th mat-header-cell *matHeaderCellDef> Fin </th>
+    <td mat-cell *matCellDef="let element"> {{element.fin}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="pendiente">
+    <th mat-header-cell *matHeaderCellDef> Pendiente </th>
+    <td mat-cell *matCellDef="let element"> {{element.pendiente}} </td>
+  </ng-container>
+  <ng-container matColumnDef="selection">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [aria-label]="checkboxLabel()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      (click)="selection.toggle(row)">
+  </tr>
+</table>
+</div>
 

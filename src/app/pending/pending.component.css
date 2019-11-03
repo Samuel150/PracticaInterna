@@ -1,0 +1,9 @@
+table {
+  width: 90%;
+  margin: auto;
+  align-items: center;
+}
+.allTable{
+  align-self: center;
+  margin: 20px;
+}
