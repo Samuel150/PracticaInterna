@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { LogInButtonComponent } from './log-in-button/log-in-button.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from "./material/material.module";
-import { PendingComponent } from './pending/pending.component';
+import { PendingComponent } from './jefeDeCarrera/pending.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
