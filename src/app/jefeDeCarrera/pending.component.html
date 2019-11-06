@@ -28,16 +28,10 @@
       </ng-container>
       <ng-container matColumnDef="selection">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
-                        [checked]="selectionPendientes.hasValue() && isAllSelected()"
-                        [indeterminate]="selectionPendientes.hasValue() && !isAllSelected()"
-                        [aria-label]="checkboxLabel()">
-          </mat-checkbox>
+          Hecho
         </th>
         <td mat-cell *matCellDef="let row">
           <mat-checkbox color="primary" (click)="$event.stopPropagation()"
-                        (change)="$event ? selectionPendientes.toggle(row) : null"
-                        [checked]="selectionPendientes.isSelected(row)"
                         [aria-label]="checkboxLabel(row)">
           </mat-checkbox>
         </td>
@@ -77,40 +71,216 @@
             Silabo Subido
           </th>
           <td mat-cell *matCellDef="let row">
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()"
-                          (change)="$event ? selectionPendientes.toggle(row) : null"
-                          [checked]="selectionPendientes.isSelected(row)"
-                          [aria-label]="checkboxLabel(row)">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
         <ng-container matColumnDef="aula">
           <th mat-header-cell *matHeaderCellDef>
-            Silabo Subido
+            Revision Aula
           </th>
           <td mat-cell *matCellDef="let row">
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()"
-                          (change)="$event ? selectionPendientes.toggle(row) : null"
-                          [checked]="selectionPendientes.isSelected(row)"
-                          [aria-label]="checkboxLabel(row)">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
         <ng-container matColumnDef="revExamen">
           <th mat-header-cell *matHeaderCellDef>
-            Silabo Subido
+            Revision Exámen
           </th>
           <td mat-cell *matCellDef="let row">
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()"
-                          (change)="$event ? selectionPendientes.toggle(row) : null"
-                          [checked]="selectionPendientes.isSelected(row)"
-                          [aria-label]="checkboxLabel(row)">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumnsMaterias"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsMaterias;"
             (click)="selectionMaterias.toggle(row)">
+        </tr>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab label="Docentes">
+    <div class="allTable">
+      <table mat-table [dataSource]="dataSourceDocentes" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="docente">
+          <th mat-header-cell *matHeaderCellDef> Docente </th>
+          <td mat-cell *matCellDef="let element"> {{element.docente}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="materiasAsignadas">
+          <th mat-header-cell *matHeaderCellDef> Materias Asignadas </th>
+          <td mat-cell *matCellDef="let element"> {{element.materiasAsignadas}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="horasDePlanta">
+          <th mat-header-cell *matHeaderCellDef> Horas de Planta </th>
+          <td mat-cell *matCellDef="let element"> {{element.horasDePlanta}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="horasCubiertas">
+          <th mat-header-cell *matHeaderCellDef> Horas Cubiertas </th>
+          <td mat-cell *matCellDef="let element"> {{element.horasCubiertas}} </td>
+        </ng-container>
+        <ng-container matColumnDef="horasFaltantes">
+          <th mat-header-cell *matHeaderCellDef> Horas Faltantes </th>
+          <td mat-cell *matCellDef="let element"> {{element.horasFaltantes}} </td>
+        </ng-container>
+        <ng-container matColumnDef="evalPares">
+          <th mat-header-cell *matHeaderCellDef>
+            Evaluación por pares
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsDocentes"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsDocentes;"
+            (click)="selectionDocentes.toggle(row)">
+        </tr>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab label="Seguimiento General">
+    <div class="allTable">
+      <table mat-table [dataSource]="dataSourceSeguimiento" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="materia">
+          <th mat-header-cell *matHeaderCellDef> Materia </th>
+          <td mat-cell *matCellDef="let element"> {{element.materia}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="docente">
+          <th mat-header-cell *matHeaderCellDef> Docente </th>
+          <td mat-cell *matCellDef="let element"> {{element.docente}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inicio">
+          <th mat-header-cell *matHeaderCellDef> Inicio </th>
+          <td mat-cell *matCellDef="let element"> {{element.inicio}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fin">
+          <th mat-header-cell *matHeaderCellDef> Fin </th>
+          <td mat-cell *matCellDef="let element"> {{element.fin}} </td>
+        </ng-container>
+        <ng-container matColumnDef="silabo">
+          <th mat-header-cell *matHeaderCellDef>
+            Silabo subido
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="aula">
+          <th mat-header-cell *matHeaderCellDef>
+            Aula Revisada
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="revExamen">
+          <th mat-header-cell *matHeaderCellDef>
+            Examen Revisado
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="imprContrato">
+          <th mat-header-cell *matHeaderCellDef>
+            Contrato impreso
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="firmContrato">
+          <th mat-header-cell *matHeaderCellDef>
+            Contrato firmado
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="firmPlanilla">
+          <th mat-header-cell *matHeaderCellDef>
+            Planilla firmada
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="soliCheque">
+          <th mat-header-cell *matHeaderCellDef>
+            Cheque solicitado
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="llegaCheque">
+          <th mat-header-cell *matHeaderCellDef>
+            Cheque recibido
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="entrCheque">
+          <th mat-header-cell *matHeaderCellDef>
+            Cheque entregado
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsSeguimiento"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsSeguimiento;"
+            (click)="selectionSeguimiento.toggle(row)">
+        </tr>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab label="Configuracion">
+    <div class="allTable">
+      <table mat-table [dataSource]="dataSourceConfiguracion" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="opcion">
+          <th mat-header-cell *matHeaderCellDef> Opcion </th>
+          <td mat-cell *matCellDef="let element"> {{element.opcion}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="configuracion">
+          <th mat-header-cell *matHeaderCellDef>
+            Configuracion
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-slide-toggle>
+
+            </mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsConfiguracion"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsConfiguracion;"
+            (click)="selectionConfiguracion.toggle(row)">
         </tr>
       </table>
     </div>

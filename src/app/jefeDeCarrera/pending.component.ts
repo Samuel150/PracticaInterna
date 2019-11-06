@@ -30,7 +30,7 @@ export interface Seguimiento {
   fin : string;
 }
 export interface Configuracion {
-  opciones: String
+  opcion: String
 }
 
 const PENDIENTES: Pendientes[] = [
@@ -54,10 +54,10 @@ const SEGUIMIENTO: Seguimiento[] = [
   {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20'},
 ]
 const CONFIGURACION: Configuracion[] = [
-  {opciones: 'Mostrar pendientes de subida de silabo'},
-  {opciones: 'Mostrar pendientes de revicion de aula'},
-  {opciones: 'Mostrar pendientes de revicion de exxamen'},
-  {opciones: 'Mostrar pendientes de evaluacion de docentes'},
+  {opcion: 'Mostrar pendientes de subida de silabo'},
+  {opcion: 'Mostrar pendientes de revicion de aula'},
+  {opcion: 'Mostrar pendientes de revicion de exxamen'},
+  {opcion: 'Mostrar pendientes de evaluacion de docentes'},
 ]
 
 
@@ -79,7 +79,7 @@ export class PendingComponent implements OnInit {
   dataSourceDocentes =  new MatTableDataSource(DOCENTES);
   selectionDocentes = new SelectionModel(true,[]);
 
-  displayedColumnsSeguimiento: string[]=['materia','docente','inicio','fin','pendiente', 'silabo','aula', 'revExamen', 'imprContrato', 'firmContrato', 'firmPlanilla', 'soliCheque', 'llegaCheque','entrCheque'];
+  displayedColumnsSeguimiento: string[]=['materia','docente','inicio','fin', 'silabo','aula', 'revExamen', 'imprContrato', 'firmContrato', 'firmPlanilla', 'soliCheque', 'llegaCheque','entrCheque'];
   dataSourceSeguimiento =  new MatTableDataSource(SEGUIMIENTO);
   selectionSeguimiento = new SelectionModel(true,[]);
 
