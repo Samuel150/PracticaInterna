@@ -8,13 +8,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from "./material/material.module";
 import { PendingComponent } from './jefeDeCarrera/pending.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { ContabilidadComponent } from './contabilidad/contabilidad.component';
+import { AsistenteAdministrativoComponent } from './asistente-administrativo/asistente-administrativo.component';
+import { EncargadaRegistrosComponent } from './encargada-registros/encargada-registros.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LogInButtonComponent,
-    PendingComponent
+    PendingComponent,
+    ContabilidadComponent,
+    AsistenteAdministrativoComponent,
+    EncargadaRegistrosComponent
   ],
   imports: [
     BrowserModule,

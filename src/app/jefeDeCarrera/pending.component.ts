@@ -95,11 +95,13 @@ export class PendingComponent implements OnInit {
     const numRows = this.dataSourcePendientes.data.length;
     return numSelected === numRows;
   }
+
   masterToggle() {
     this.isAllSelected() ?
       this.selectionPendientes.clear() :
       this.dataSourcePendientes.data.forEach(row => this.selectionPendientes.select(row));
   }
+
   checkboxLabel(row?: Pendientes): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
