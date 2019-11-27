@@ -1,0 +1,39 @@
+
+  <div class="allTable">
+    <table mat-table [dataSource]="dataSourcePendientes" class="mat-elevation-z8">
+      <ng-container matColumnDef="materia">
+        <th mat-header-cell *matHeaderCellDef> Materia </th>
+        <td mat-cell *matCellDef="let element"> {{element.materia}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="docente">
+        <th mat-header-cell *matHeaderCellDef> Docente </th>
+        <td mat-cell *matCellDef="let element"> {{element.docente}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="inicio">
+        <th mat-header-cell *matHeaderCellDef> Inicio </th>
+        <td mat-cell *matCellDef="let element"> {{element.inicio}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fin">
+        <th mat-header-cell *matHeaderCellDef> Fin </th>
+        <td mat-cell *matCellDef="let element"> {{element.fin}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="pendiente">
+        <th mat-header-cell *matHeaderCellDef> Pendiente </th>
+        <td mat-cell *matCellDef="let element"> {{element.pendiente}} </td>
+      </ng-container>
+      <ng-container matColumnDef="hecho">
+        <th mat-header-cell *matHeaderCellDef> Hecho </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox color="primary" [checked]=element.hecho>
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsPendientes"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsPendientes;">
+      </tr>
+    </table>
+  </div>

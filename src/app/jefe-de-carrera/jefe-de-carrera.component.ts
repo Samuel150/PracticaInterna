@@ -2,13 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {SelectionModel} from '@angular/cdk/collections';
 
-export interface Pendientes {
-  materia : string;
-  docente : string;
-  inicio : string;
-  fin : string;
-  pendiente: string;
-}
+
 export interface Materias {
   materia : string;
   docente : string;
@@ -33,11 +27,6 @@ export interface Configuracion {
   opcion: String
 }
 
-const PENDIENTES: Pendientes[] = [
-  {materia: 'Materia1', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20', pendiente: 'El contrato no ha sido impreso'},
-  {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20', pendiente: 'El contrato no ha sido impreso'},
-  {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20', pendiente: 'El contrato no ha sido impreso'},
-]
 const MATERIAS: Materias[] = [
   {materia: 'Materia1', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20'},
   {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20'},
@@ -63,13 +52,12 @@ const CONFIGURACION: Configuracion[] = [
 
 @Component({
   selector: 'app-pending',
-  templateUrl: './pending.component.html',
-  styleUrls: ['./pending.component.css']
+  templateUrl: './jefe-de-carrera.component.html',
+  styleUrls: ['./jefe-de-carrera.component.css']
 })
-export class PendingComponent implements OnInit {
-  displayedColumnsPendientes: string[]=['materia','docente','inicio','fin','pendiente', 'selection'];
-  dataSourcePendientes =  new MatTableDataSource(PENDIENTES);
-  selectionPendientes = new SelectionModel(true,[]);
+export class JefeDeCarreraComponent implements OnInit {
+
+
 
   displayedColumnsMaterias: string[]=['materia','docente','inicio','fin','silabo', 'aula', 'revExamen'];
   dataSourceMaterias =  new MatTableDataSource(MATERIAS);
@@ -90,24 +78,8 @@ export class PendingComponent implements OnInit {
 
   constructor() { }
 
-  isAllSelected() {
-    const numSelected = this.selectionPendientes.selected.length;
-    const numRows = this.dataSourcePendientes.data.length;
-    return numSelected === numRows;
-  }
 
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selectionPendientes.clear() :
-      this.dataSourcePendientes.data.forEach(row => this.selectionPendientes.select(row));
-  }
 
-  checkboxLabel(row?: Pendientes): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selectionPendientes.isSelected(row) ? 'deselect' : 'select'} row ${row.pendiente+ 1}`;
-  }
 
   ngOnInit() {
   }

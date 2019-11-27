@@ -6,21 +6,29 @@ import { AppComponent } from './app.component';
 import { LogInButtonComponent } from './log-in-button/log-in-button.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from "./material/material.module";
-import { PendingComponent } from './jefeDeCarrera/pending.component';
+import { JefeDeCarreraComponent } from './jefe-de-carrera/jefe-de-carrera.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { ContabilidadComponent } from './contabilidad/contabilidad.component';
 import { AsistenteAdministrativoComponent } from './asistente-administrativo/asistente-administrativo.component';
 import { EncargadaRegistrosComponent } from './encargada-registros/encargada-registros.component';
+import { PendientesComponent } from './pendientes/pendientes.component';
+import { AddMateriaComponent } from './add-materia/add-materia.component';
+import { AddDocenteComponent } from './add-docente/add-docente.component';
+import { AddCuentaComponent } from './add-cuenta/add-cuenta.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LogInButtonComponent,
-    PendingComponent,
+    JefeDeCarreraComponent,
     ContabilidadComponent,
     AsistenteAdministrativoComponent,
-    EncargadaRegistrosComponent
+    EncargadaRegistrosComponent,
+    PendientesComponent,
+    AddMateriaComponent,
+    AddDocenteComponent,
+    AddCuentaComponent
   ],
   imports: [
     BrowserModule,
