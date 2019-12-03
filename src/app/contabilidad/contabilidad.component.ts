@@ -8,15 +8,18 @@ export interface Materias {
   docente : string;
   inicio : string;
   fin : string;
-
+  planillaFirmada: boolean;
+  chequeSolicitado: boolean;
+  chequeRecibido: boolean;
+  chequeEntregado: boolean;
 }
 
 
 const MATERIAS: Materias[] = [
-  {materia: 'Materia1', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20'},
-  {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20'},
-  {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20'},
-  {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20'}
+  {materia: 'Materia1', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20',planillaFirmada:true,chequeSolicitado: false, chequeRecibido: true, chequeEntregado: false},
+  {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20',planillaFirmada:false,chequeSolicitado: false, chequeRecibido: true, chequeEntregado: false},
+  {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20',planillaFirmada:false,chequeSolicitado: false, chequeRecibido: true, chequeEntregado: false},
+  {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20',planillaFirmada:false,chequeSolicitado: false, chequeRecibido: true, chequeEntregado: false}
 ]
 
 @Component({

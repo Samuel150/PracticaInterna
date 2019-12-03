@@ -30,8 +30,8 @@
           <th mat-header-cell *matHeaderCellDef>
             Recordatorio Enviado
           </th>
-          <td mat-cell *matCellDef="let row">
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" [checked]="element.recordatorioEnviado" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -39,8 +39,8 @@
           <th mat-header-cell *matHeaderCellDef>
             Planilla Firmada
           </th>
-          <td mat-cell *matCellDef="let row">
-            <mat-checkbox color="primary" (click)="$event.stopPropagation()">
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" [checked]="element.planillaFirmada" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>

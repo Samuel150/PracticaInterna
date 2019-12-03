@@ -7,12 +7,14 @@ export interface Materias {
   docente : string;
   inicio : string;
   fin : string;
+  recordatorioEnviado: boolean;
+  planillaFirmada: boolean
 }
 
 const MATERIAS: Materias[] = [
-  {materia: 'Materia1', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20'},
-  {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20'},
-  {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20'},
+  {materia: 'Materia1', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20', recordatorioEnviado: true, planillaFirmada: false},
+  {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20', recordatorioEnviado: true, planillaFirmada: false},
+  {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20', recordatorioEnviado: true, planillaFirmada: false},
 ]
 
 @Component({
