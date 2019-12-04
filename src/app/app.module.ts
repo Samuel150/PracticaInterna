@@ -1,6 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import {FormsModule} from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LogInButtonComponent } from './log-in-button/log-in-button.component';
@@ -15,6 +16,22 @@ import { PendientesComponent } from './pendientes/pendientes.component';
 import { AddMateriaComponent } from './add-materia/add-materia.component';
 import { AddDocenteComponent } from './add-docente/add-docente.component';
 import { AddCuentaComponent } from './add-cuenta/add-cuenta.component';
+import {HttpClientModule} from "@angular/common/http";
+
+
+import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { GoogleLogInComponent } from './google-log-in/google-log-in.component';
+
+const config = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider('602723697704-ucdbgn6m678gf5rkj02npjl2rrcak250.apps.googleusercontent.com')
+  }
+]);
+
+export function provideConfig() {
+  return config;
+}
 
 
 @NgModule({
@@ -28,16 +45,26 @@ import { AddCuentaComponent } from './add-cuenta/add-cuenta.component';
     PendientesComponent,
     AddMateriaComponent,
     AddDocenteComponent,
-    AddCuentaComponent
+    AddCuentaComponent,
+    GoogleLogInComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    HttpClientModule,
+    FormsModule,
+    SocialLoginModule,
+
   ],
-  providers: [],
+  providers: [
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

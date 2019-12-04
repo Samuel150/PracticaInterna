@@ -5,6 +5,7 @@ import {LogInButtonComponent} from "./log-in-button/log-in-button.component";
 import {ContabilidadComponent} from "./contabilidad/contabilidad.component";
 import {AsistenteAdministrativoComponent} from "./asistente-administrativo/asistente-administrativo.component";
 import {EncargadaRegistrosComponent} from "./encargada-registros/encargada-registros.component";
+import {GoogleLogInComponent} from "./google-log-in/google-log-in.component";
 
 
 const routes: Routes = [

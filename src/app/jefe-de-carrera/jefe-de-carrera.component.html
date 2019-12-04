@@ -106,12 +106,12 @@
 
         <ng-container matColumnDef="materia">
           <th mat-header-cell *matHeaderCellDef> Materia </th>
-          <td mat-cell *matCellDef="let element"> {{element.materia}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
         </ng-container>
 
         <ng-container matColumnDef="docente">
           <th mat-header-cell *matHeaderCellDef> Docente </th>
-          <td mat-cell *matCellDef="let element"> {{element.docente}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.id_docente}} </td>
         </ng-container>
 
         <ng-container matColumnDef="inicio">
@@ -128,7 +128,7 @@
             Silabo subido
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.silaboSubido"  (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.silabo_subido"  (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -137,7 +137,7 @@
             Aula Revisada
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.aulaRevisada" (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.aula_revisada" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -146,7 +146,7 @@
             Examen Revisado
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.examenRevisado" (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.examen_revisado" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -155,7 +155,7 @@
             Contrato impreso
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.contratoImpreso" (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.contrato_impreso" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -164,7 +164,7 @@
             Contrato firmado
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.contratoFirmado" (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.contrato_firmado" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -173,7 +173,7 @@
             Planilla firmada
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.planillaFirmada" (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.planilla_firmada" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -182,7 +182,7 @@
             Cheque solicitado
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.chequeSolicitado" (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.cheque_solicitado" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -191,7 +191,7 @@
             Cheque recibido
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.chequeRecibido" (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.cheque_recibido" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -200,7 +200,7 @@
             Cheque entregado
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.chequeEntregado" (click)="$event.stopPropagation()">
+            <mat-checkbox color="primary" [checked]="element.cheque_recibido" (click)="$event.stopPropagation()">
             </mat-checkbox>
           </td>
         </ng-container>

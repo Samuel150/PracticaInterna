@@ -1,25 +1,26 @@
 <div id="add_docente">
   <h2>Añadir Materia</h2>
-  <div id="grid">
-    <mat-form-field class="form">
-      <input matInput placeholder="Nombre">
-    </mat-form-field>
-    <mat-form-field class="form">
-      <input matInput placeholder="Inicio">
-    </mat-form-field>
-    <mat-form-field class="form">
-      <input matInput placeholder="Docente">
-    </mat-form-field>
-    <mat-form-field class="form">
-      <input matInput placeholder="Fin">
-    </mat-form-field>
-    <mat-form-field class="form">
-      <input matInput placeholder="Horas">
-    </mat-form-field>
 
-      <button class="add" mat-raised-button color="warn">Añadir</button>
 
+  <div>
+    <form id = "grid" #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <mat-form-field  class="form" >
+        <input type="text" id="nombre"  matInput  placeholder="Nombre" name="nombre" #nombre="ngModel" [(ngModel)]="materia.nombre">
+      </mat-form-field>
+      <mat-form-field class="form">
+        <input type="text" id="inicio" matInput placeholder="Inicio" name="inicio"  #inicio = "ngModel" [(ngModel)]="materia.inicio">
+      </mat-form-field>
+      <mat-form-field class="form">
+        <input type="text" id="docente" matInput placeholder="Docente" name="docente" #docente="ngModel" [(ngModel)]="materia.id_docente">
+      </mat-form-field>
+      <mat-form-field class="form">
+        <input type="text" id="fin" matInput placeholder="Fin" name="fin" #fin="ngModel" [(ngModel)]="materia.fin">
+      </mat-form-field>
+      <input  type="submit" class="add" mat-raised-button color="warn" value="Añadir"/>
+    </form>
   </div>
+
+
 
   <hr>
 
