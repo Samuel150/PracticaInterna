@@ -14,7 +14,10 @@ export class GoogleLogInComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-
+    this.authService.authState.subscribe(user => {
+      this.user = user;
+      this.loggedIn = (user != null);
+    });
   }
 
   signInWithGoogle(): void {
