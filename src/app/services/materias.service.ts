@@ -10,22 +10,21 @@ export class MateriasService {
 
 
   materias  : Materias[];
-  readonly URL_API = "http://186.121.251.3:7875/api/materias";
-  readonly URL_API2 = "http://192.168.50.100:7875/api/materias";
-  readonly URL_API2_MATERIA ="http://192.168.50.100:7875/api/materia";
+  readonly URL_API = "http://skynet.lp.upb.edu:7875/api/materias";
+  readonly URL_API_MATERIA ="http://skynet.lp.upb.edu:7875/api/materia";
   constructor(private http: HttpClient) {
 
   }
 
   getMaterias():Observable<any>{
     console.log('prueba');
-    return this.http.get(this.URL_API2);
+    return this.http.get(this.URL_API);
   }
 
   createMateria(materia: Materias){
     let params = JSON.stringify(materia);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
-    return this.http.put(this.URL_API2_MATERIA,params,{headers: headers});
+    return this.http.put(this.URL_API_MATERIA,params,{headers: headers});
   }
 
   postMateria(Materia: Materias){
