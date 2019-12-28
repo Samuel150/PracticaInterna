@@ -11,6 +11,7 @@ table {
 }
 .mat-header-cell {
   text-align: center;
+  font-size: medium;
 }
 th{
   margin: auto;

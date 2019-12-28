@@ -1,4 +1,4 @@
-<div id="add_docente">
+<div class="add_docente">
   <h2>Añadir Materia</h2>
 
 
@@ -16,7 +16,7 @@
       <mat-form-field class="form">
         <input type="text" id="fin" matInput placeholder="Fin" name="fin" #fin="ngModel" [(ngModel)]="materia.fin">
       </mat-form-field>
-      <input  type="submit" class="add" mat-raised-button color="warn" value="Añadir"/>
+      <button class="add" mat-raised-button color="warn">Añadir</button>
     </form>
   </div>
 
@@ -30,5 +30,6 @@
     </mat-form-field>
     <button class="add" mat-raised-button color="primary">Añadir Materias</button>
     <button class="add" mat-raised-button color="warn">Subir Archivo</button>
+
   </div>
 </div>
