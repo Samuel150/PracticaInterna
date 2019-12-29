@@ -3,20 +3,30 @@
 
 
   <div>
-    <form id = "grid" #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <form class = "grid" #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div>
       <mat-form-field  class="form" >
         <input type="text" id="nombre"  matInput  placeholder="Nombre" name="nombre" #nombre="ngModel" [(ngModel)]="materia.nombre">
       </mat-form-field>
-      <mat-form-field class="form">
-        <input type="text" id="inicio" matInput placeholder="Inicio" name="inicio"  #inicio = "ngModel" [(ngModel)]="materia.inicio">
-      </mat-form-field>
-      <mat-form-field class="form">
-        <input type="text" id="docente" matInput placeholder="Docente" name="docente" #docente="ngModel" [(ngModel)]="materia.id_docente">
-      </mat-form-field>
-      <mat-form-field class="form">
-        <input type="text" id="fin" matInput placeholder="Fin" name="fin" #fin="ngModel" [(ngModel)]="materia.fin">
-      </mat-form-field>
-      <button class="add" mat-raised-button color="warn">Añadir</button>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <input type="text" id="inicio" matInput placeholder="Inicio" name="inicio"  #inicio = "ngModel" [(ngModel)]="materia.inicio">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <input type="text" id="docente" matInput placeholder="Docente" name="docente" #docente="ngModel" [(ngModel)]="materia.id_docente">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <input type="text" id="fin" matInput placeholder="Fin" name="fin" #fin="ngModel" [(ngModel)]="materia.fin">
+        </mat-form-field>
+      </div>
+      <div>
+        <button class="add" mat-raised-button color="warn">Añadir</button>
+      </div>
     </form>
   </div>
 
@@ -24,12 +34,17 @@
 
   <hr>
 
-  <div id="grid2">
-    <mat-form-field class="form">
-      <input matInput placeholder="archivo.xls">
-    </mat-form-field>
-    <button class="add" mat-raised-button color="primary">Añadir Materias</button>
-    <button class="add" mat-raised-button color="warn">Subir Archivo</button>
-
+  <div class="grid">
+    <div>
+      <mat-form-field class="form">
+        <input matInput placeholder="archivo.xls">
+      </mat-form-field>
+    </div>
+    <div>
+      <button class="add" mat-raised-button color="warn">Añadir Materias</button>
+    </div>
+    <div>
+      <button class="add" mat-raised-button color="warn">Subir Archivo</button>
+    </div>
   </div>
 </div>

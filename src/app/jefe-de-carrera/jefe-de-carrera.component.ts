@@ -23,21 +23,6 @@ export interface Docentes {
   evaluacionPorPares: boolean;
 }
 export interface Seguimiento {
-  materia : string;
-  docente : string;
-  inicio : string;
-  fin : string;
-  silaboSubido: boolean;
-  aulaRevisada: boolean;
-  examenRevisado: boolean;
-  contratoImpreso: boolean;
-  contratoFirmado: boolean;
-  planillaFirmada: boolean;
-  chequeSolicitado: boolean;
-  chequeRecibido: boolean;
-  chequeEntregado: boolean;
-}
-export interface Seguimiento2 {
     _id: string;
     nombre: string;
     id_docente: string;
@@ -61,26 +46,22 @@ const MATERIAS: Materia[] = [
   {materia: 'Materia1', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20', silaboSubido: false, aulaRevisada: false, examenRevisado: false},
   {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20', silaboSubido: false, aulaRevisada: false, examenRevisado: false},
   {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20', silaboSubido: false, aulaRevisada: false, examenRevisado: false},
-]
+];
 
 const DOCENTES: Docentes[] = [
   {docente: 'Docente14', materiasAsignadas: 4, horasDePlanta: 8, horasCubiertas: 2,horasFaltantes: 6, evaluacionPorPares: false},
   {docente: 'Docente1', materiasAsignadas: 6, horasDePlanta: 16, horasCubiertas: 8,horasFaltantes: 8, evaluacionPorPares: true},
   {docente: 'Docente5', materiasAsignadas: 1, horasDePlanta: 4, horasCubiertas: 2,horasFaltantes: 2, evaluacionPorPares: true},
 ];
-var SEGUIMIENTO: Seguimiento[] = [
-  {materia: 'Preparación y Evaluación de Proyectos', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20',silaboSubido: false, aulaRevisada: false, examenRevisado: false, contratoImpreso: false, contratoFirmado: false, planillaFirmada: false, chequeSolicitado: false, chequeRecibido: false, chequeEntregado: false},
-  {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20', silaboSubido: false, aulaRevisada: false, examenRevisado: false, contratoImpreso: false, contratoFirmado: false, planillaFirmada: false, chequeSolicitado: false, chequeRecibido: false, chequeEntregado: false},
-  {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20', silaboSubido: false, aulaRevisada: false, examenRevisado: false, contratoImpreso: false, contratoFirmado: false, planillaFirmada: false, chequeSolicitado: false, chequeRecibido: false, chequeEntregado: false},
-]
-var SEGUIMIENTO2: Seguimiento2[];
+
+var SEGUIMIENTO2: Seguimiento[];
 
 const CONFIGURACION: Configuracion[] = [
   {opcion: 'Mostrar pendientes de subida de silabo'},
   {opcion: 'Mostrar pendientes de revicion de aula'},
   {opcion: 'Mostrar pendientes de revicion de exxamen'},
   {opcion: 'Mostrar pendientes de evaluacion de docentes'},
-]
+];
 
 
 @Component({
@@ -98,18 +79,18 @@ export class JefeDeCarreraComponent implements OnInit {
 
 
   displayedColumnsMaterias: string[]=['materia','docente','inicio','fin','silaboSubido', 'aulaRevisada', 'examenRevisado'];
-  dataSourceMaterias =  new MatTableDataSource(MATERIAS);
+  //dataSourceMaterias =  new MatTableDataSource(MATERIAS);
   selectionMaterias = new SelectionModel(true,[]);
 
   displayedColumnsDocentes: string[]=['docente','materiasAsignadas','horasDePlanta','horasCubiertas','horasFaltantes', 'evaluacionPorPares'];
-  dataSourceDocentes =  new MatTableDataSource(DOCENTES);
+  dataSourceDocentes;
   selectionDocentes = new SelectionModel(true,[]);
 
-
-
   displayedColumnsSeguimiento: string[]=['materia','docente','inicio','fin', 'silaboSubido','aulaRevisada', 'examenRevisado', 'contratoImpreso', 'contratoFirmado', 'planillaFirmada', 'chequeSolicitado', 'chequeRecibido','chequeEntregado'];
+  dataSourceMaterias;
   selectionSeguimiento = new SelectionModel(true,[]);
-  dataSourceSeguimiento;
+
+
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
   dataSourceConfiguracion =  new MatTableDataSource(CONFIGURACION);
   selectionConfiguracion = new SelectionModel(true,[]);
@@ -118,9 +99,19 @@ export class JefeDeCarreraComponent implements OnInit {
   getMaterias(){
     this.materiaService.getMaterias().subscribe(
       res => {
-        this.dataSourceSeguimiento = res.materias;
+        this.dataSourceMaterias = res.materias;
       }, err => {
         console.log(err);
+      }
+    );
+  }
+
+  getDocentes(){
+    this.materiaService.getDocentes().subscribe(
+      res=>{
+        this.dataSourceDocentes = res.docentes;
+      },err=>{
+
       }
     );
   }
@@ -128,6 +119,7 @@ export class JefeDeCarreraComponent implements OnInit {
 
   ngOnInit() {
     this.getMaterias();
+    this.getDocentes();
   }
 
 }

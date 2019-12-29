@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http'
+import {HttpBackend, HttpClient, HttpHeaders} from '@angular/common/http'
 import {Materias} from '../models/materias'
+import {Docentes} from '../models/docentes'
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -10,33 +11,41 @@ export class MateriasService {
 
 
   materias  : Materias[];
-  readonly URL_API = "http://skynet.lp.upb.edu:7875/api/materias";
+  docentes : Docentes[];
+  readonly URL_API_DOCENTES = "http://skynet.lp.upb.edu:7875/api/docentes";
+  readonly URL_API_DOCENTE = "http://skynet.lp.upb.edu:7875/api/docente";
+  readonly URL_API_MATERIAS = "http://skynet.lp.upb.edu:7875/api/materias";
   readonly URL_API_MATERIA ="http://skynet.lp.upb.edu:7875/api/materia";
   constructor(private http: HttpClient) {
 
   }
 
-  getMaterias():Observable<any>{
-    console.log('prueba');
-    return this.http.get(this.URL_API);
+  getDocentes():Observable<any>{
+    return this.http.get(this.URL_API_DOCENTES)
+  }
+  postDocente(docente: Docentes){
+    let params = JSON.stringify(docente);
+    let headers = new HttpHeaders().set('Content-Type', "application/json");
+    return this.http.put(this.URL_API_DOCENTE,params,{headers:headers})
   }
 
-  createMateria(materia: Materias){
+  getMaterias():Observable<any>{
+    return this.http.get(this.URL_API_MATERIAS);
+  }
+
+  postMateria(materia: Materias){
     let params = JSON.stringify(materia);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
     return this.http.put(this.URL_API_MATERIA,params,{headers: headers});
   }
 
-  postMateria(Materia: Materias){
-    return this.http.put(this.URL_API, Materia);
-  }
 
   putMateria(Materia: Materias){
-    return this.http.post(this.URL_API+`/${Materia._id}`, Materia);
+    return this.http.post(this.URL_API_MATERIAS+`/${Materia._id}`, Materia);
   }
 
   deleteMateria(Materia: Materias){
-    return this.http.delete(this.URL_API+`/${Materia._id}`);
+    return this.http.delete(this.URL_API_MATERIAS+`/${Materia._id}`);
   }
 
 }

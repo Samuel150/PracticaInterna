@@ -24,7 +24,7 @@ export class AddMateriaComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     console.log(form.value);
-    this.materiasService.createMateria(this.materia).subscribe(
+    this.materiasService.postMateria(this.materia).subscribe(
       response=>{console.log(response);},
         error=>{console.log(error);}
         );

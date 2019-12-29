@@ -1,16 +1,12 @@
 h2 {
   margin: 20px;
 }
-#grid{
-  margin: 30px;
+.grid {
+  margin-left: 40px;
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: 1fr 1fr;
 }
-#grid2{
-  margin: 30px;
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-}
+
 
 .form {
   width: 50%;
@@ -18,5 +14,4 @@ h2 {
 
 .add{
   width: 50%;
-  height: 100%;
 }
