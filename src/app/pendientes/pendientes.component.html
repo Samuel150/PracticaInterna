@@ -32,7 +32,7 @@
           </mat-checkbox>
         </td>
       </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumnsPendientes"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsPendientes; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumnsPendientes;">
       </tr>
     </table>

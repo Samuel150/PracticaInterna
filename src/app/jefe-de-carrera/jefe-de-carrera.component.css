@@ -1,36 +1,27 @@
+.allTable{
+  align-self: center;
+  margin: 20px;
+  height: 450px;
+}
+.Table{
+  align-self: center;
+  margin: 20px;
+  height: 450px;
+  min-width: 1800px;
+}
 .mat-table {
   width: 100%;
   margin: auto;
   align-items: center;
   text-align: center;
 }
-.allTable{
-  align-self: center;
-  margin: 20px;
-}
-.Table{
-  align-self: center;
-  margin: 20px;
-  min-width: 1800px;
-  height: 450px;
-
-}
 .mat-header-cell {
   text-align: center;
   font-size: medium;
-}
-.mat-header-row{
-
 }
 .mat-cell{
   word-wrap:break-word;
   padding-top: 5px;
   padding-bottom: 5px;
-}
-th {
-  margin: auto;
-}
-html {
-  overflow-y:scroll;
 }
 
