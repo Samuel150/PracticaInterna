@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
+import {MateriasService} from "../services/materias.service";
+import {NgForm} from "@angular/forms";
+import {Docentes} from "../models/docentes";
 @Component({
   selector: 'app-add-docente',
   templateUrl: './add-docente.component.html',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddDocenteComponent implements OnInit {
 
-  constructor() { }
+  public docente:Docentes;
+
+  constructor(private materiasService: MateriasService) {
+    this.docente= new Docentes('','','','','',0,0,0,0);
+  }
 
   ngOnInit() {
   }
 
+  onSubmit(form: NgForm) {
+    console.log(form.value);
+    this.materiasService.postDocente(this.docente).subscribe(
+      response=>{console.log(response);},
+      error => {console.log(error);}
+    );
+  }
 }

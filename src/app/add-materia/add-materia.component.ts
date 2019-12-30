@@ -27,6 +27,6 @@ export class AddMateriaComponent implements OnInit {
     this.materiasService.postMateria(this.materia).subscribe(
       response=>{console.log(response);},
         error=>{console.log(error);}
-        );
+    );
   }
 }
