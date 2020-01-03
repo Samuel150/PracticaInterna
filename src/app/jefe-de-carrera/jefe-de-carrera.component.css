@@ -1,13 +1,22 @@
 .allTable{
   align-self: center;
-  margin: 20px;
-  height: 450px;
+  margin: 10px;
+  height: 500px;
 }
 .Table{
   align-self: center;
-  margin: 20px;
-  height: 450px;
+  margin: 10px;
+  height: 500px;
   min-width: 1800px;
+}
+.Table > form{
+  min-width: 1800px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-bottom: 10px;
+}
+.Table > form > mat-checkbox{
+  margin: 15px;
 }
 .mat-table {
   width: 100%;
