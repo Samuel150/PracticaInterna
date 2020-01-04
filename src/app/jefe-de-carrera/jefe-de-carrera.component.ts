@@ -9,39 +9,9 @@ import {AddMateriaComponent} from "../add-materia/add-materia.component";
 import {AddDocenteComponent} from "../add-docente/add-docente.component";
 
 
-// export interface Materia {
-//   materia : string;
-//   docente : string;
-//   inicio : string;
-//   fin : string;
-//   silaboSubido: boolean;
-//   aulaRevisada: boolean;
-//   examenRevisado: boolean;
-// }
-// export interface Docentes {
-//   docente : string;
-//   materiasAsignadas: number;
-//   horasDePlanta: number;
-//   horasCubiertas: number;
-//   horasFaltantes: number;
-//   evaluacionPorPares: boolean;
-// }
 export interface Configuracion {
   opcion: String
 }
-
-// const MATERIAS: Materia[] = [
-//   {materia: 'Materia1', docente: 'Docente14', inicio: '12/3/20', fin: '3/5/20', silaboSubido: false, aulaRevisada: false, examenRevisado: false},
-//   {materia: 'Materia2', docente: 'Docente1', inicio: '12/3/20', fin: '3/5/20', silaboSubido: false, aulaRevisada: false, examenRevisado: false},
-//   {materia: 'Materia3', docente: 'Docente5', inicio: '12/3/20', fin: '3/5/20', silaboSubido: false, aulaRevisada: false, examenRevisado: false},
-// ];
-//
-// const DOCENTES: Docentes[] = [
-//   {docente: 'Docente14', materiasAsignadas: 4, horasDePlanta: 8, horasCubiertas: 2,horasFaltantes: 6, evaluacionPorPares: false},
-//   {docente: 'Docente1', materiasAsignadas: 6, horasDePlanta: 16, horasCubiertas: 8,horasFaltantes: 8, evaluacionPorPares: true},
-//   {docente: 'Docente5', materiasAsignadas: 1, horasDePlanta: 4, horasCubiertas: 2,horasFaltantes: 2, evaluacionPorPares: true},
-// ];
-
 
 const CONFIGURACION: Configuracion[] = [
   {opcion: 'Mostrar pendientes de subida de silabo'},
@@ -50,11 +20,6 @@ const CONFIGURACION: Configuracion[] = [
   {opcion: 'Mostrar pendientes de evaluacion de docentes'},
 ];
 
-
-export interface DialogData {
-
-}
-
 @Component({
   selector: 'app-pending',
   templateUrl: './jefe-de-carrera.component.html',
@@ -62,10 +27,14 @@ export interface DialogData {
 })
 export class JefeDeCarreraComponent implements AfterViewInit {
 
-
-
   constructor(private materiaService: MateriasService, public dialogMaterias: MatDialog) {
 
+  }
+
+
+  ngOnInit() {
+    this.getMaterias();
+    this.getDocentes();
   }
 
   openAddMaterias() {
@@ -76,15 +45,11 @@ export class JefeDeCarreraComponent implements AfterViewInit {
     });
   }
   openAddDocentes() {
-    let dialogRef = this.dialogMaterias.open(AddDocenteComponent, {width:'750px', height:'450px'});
+    let dialogRef = this.dialogMaterias.open(AddDocenteComponent, {width:'750px'});
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Dialog cerrado');
     });
-  }
-  ngOnInit() {
-    this.getMaterias();
-    this.getDocentes();
   }
 
   displayedColumnsMaterias: string[]=['materia','docente','inicio','fin','silaboSubido', 'aulaRevisada', 'examenRevisado'];
@@ -115,7 +80,7 @@ export class JefeDeCarreraComponent implements AfterViewInit {
       res=>{
         this.dataSourceDocentes = res.docentes;
       },err=>{
-
+        console.log(err);
       }
     );
   }
@@ -133,7 +98,6 @@ export class JefeDeCarreraComponent implements AfterViewInit {
     planilla_firmada: new FormControl(false),
     cheque_solicitado: new FormControl(false),
     cheque_recibido: new FormControl(false)
-
   });
 
   nombre = this.form.get('nombre');
@@ -181,7 +145,6 @@ export class JefeDeCarreraComponent implements AfterViewInit {
     let o10:Observable<boolean> = this.planilla_firmada.valueChanges;
     let o11:Observable<boolean> = this.cheque_solicitado.valueChanges;
     let o12:Observable<boolean> = this.cheque_recibido.valueChanges;
-
     merge(o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12).subscribe( v=>{
       this.columnDefinitions[0].hide = this.nombre.value;
       this.columnDefinitions[1].hide = this.id_docente.value;

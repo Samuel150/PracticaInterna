@@ -21,7 +21,7 @@ export class MateriasService {
   }
 
   getDocentes():Observable<any>{
-    return this.http.get(this.URL_API_DOCENTES)
+    return this.http.get(this.URL_API_DOCENTES);
   }
   postDocente(docente: Docentes){
     let params = JSON.stringify(docente);

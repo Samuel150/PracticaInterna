@@ -7,6 +7,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 
 const MaterialComponents = [
@@ -17,7 +18,8 @@ const MaterialComponents = [
   MatSlideToggleModule,
   MatInputModule,
   MatDialogModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatAutocompleteModule
 ];
 
 @NgModule({

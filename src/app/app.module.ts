@@ -1,5 +1,5 @@
 
-import { NgModule } from '@angular/core';
+ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
@@ -16,11 +16,9 @@ import { AddMateriaComponent } from './add-materia/add-materia.component';
 import { AddDocenteComponent } from './add-docente/add-docente.component';
 import { AddCuentaComponent } from './add-cuenta/add-cuenta.component';
 import {HttpClientModule} from "@angular/common/http";
-
-
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { GoogleLogInComponent } from './google-log-in/google-log-in.component';
-import {MatDialogRef} from "@angular/material/dialog";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 const config = new AuthServiceConfig([
   {
@@ -48,16 +46,17 @@ export function provideConfig() {
     AddCuentaComponent,
     GoogleLogInComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        HttpClientModule,
-        FormsModule,
-        SocialLoginModule,
-        ReactiveFormsModule,
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    HttpClientModule,
+    FormsModule,
+    SocialLoginModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+  ],
     entryComponents:[
       AddMateriaComponent,
       AddDocenteComponent
