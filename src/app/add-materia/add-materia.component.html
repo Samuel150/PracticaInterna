@@ -16,12 +16,16 @@
       </div>
       <div>
         <mat-form-field class="form">
-          <input type="text" id="inicio" matInput placeholder="Inicio" name="inicio"  #inicio = "ngModel" [(ngModel)]="materia.inicio">
+          <input type="text" id="inicio" matInput placeholder="Fecha de Inicio" [matDatepicker]="datepickerRef" name="inicio" ngModel #inicio="ngModel" [(ngModel)]="materia.inicio" required readonly/>
+          <mat-datepicker-toggle [for]="datepickerRef" matSuffix></mat-datepicker-toggle>
+          <mat-datepicker #datepickerRef></mat-datepicker>
         </mat-form-field>
       </div>
       <div>
         <mat-form-field class="form">
-          <input type="text" id="fin" matInput placeholder="Fin" name="fin" #fin="ngModel" [(ngModel)]="materia.fin">
+          <input type="text" id="fin" matInput placeholder="Fecha de Fin" [matDatepicker]="datepickerRef2" name="fin" ngModel #fin="ngModel" [(ngModel)]="materia.fin" required readonly/>
+          <mat-datepicker-toggle [for]="datepickerRef2" matSuffix></mat-datepicker-toggle>
+          <mat-datepicker #datepickerRef2></mat-datepicker>
         </mat-form-field>
       </div>
       <div>

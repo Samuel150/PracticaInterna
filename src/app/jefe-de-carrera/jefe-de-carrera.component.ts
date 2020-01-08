@@ -68,7 +68,7 @@ export class JefeDeCarreraComponent implements AfterViewInit {
   getMaterias(){
     this.materiaService.getMaterias().subscribe(
       res => {
-        this.dataSourceMaterias = res.materias;
+        this.dataSourceMaterias = res;
       }, err => {
         console.log(err);
       }
@@ -78,7 +78,7 @@ export class JefeDeCarreraComponent implements AfterViewInit {
   getDocentes(){
     this.materiaService.getDocentes().subscribe(
       res=>{
-        this.dataSourceDocentes = res.docentes;
+        this.dataSourceDocentes = res;
       },err=>{
         console.log(err);
       }

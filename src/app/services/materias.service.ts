@@ -12,10 +12,10 @@ export class MateriasService {
 
   materias  : Materias[];
   docentes : Docentes[];
-  readonly URL_API_DOCENTES = "http://skynet.lp.upb.edu:7875/api/docentes";
-  readonly URL_API_DOCENTE = "http://skynet.lp.upb.edu:7875/api/docente";
-  readonly URL_API_MATERIAS = "http://skynet.lp.upb.edu:7875/api/materias";
-  readonly URL_API_MATERIA ="http://skynet.lp.upb.edu:7875/api/materia";
+  readonly URL_API_DOCENTES = "http://skynet.lp.upb.edu:7875/docentes";
+  readonly URL_API_DOCENTE = "http://skynet.lp.upb.edu:7875/docente";
+  readonly URL_API_MATERIAS = "http://skynet.lp.upb.edu:7875/materias";
+  readonly URL_API_MATERIA ="http://skynet.lp.upb.edu:7875/materia";
   constructor(private http: HttpClient) {
 
   }

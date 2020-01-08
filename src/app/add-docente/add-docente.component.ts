@@ -14,9 +14,9 @@ import {map, startWith} from "rxjs/operators";
 export class AddDocenteComponent implements OnInit {
 
   public docente:Docentes;
-  public dataSourceDocentes;
-  public docentes : string[] = ["John Candy ", "Alexis Marechal", "Alexis Marechal", "Jose Vera"];
-
+  public dataSourceDocentes=[];
+  public docentes=[];
+  public docentes2;
   constructor(private materiaService: MateriasService) {
     this.docente= new Docentes('','','','','',0,0,0,0);
   }
@@ -36,7 +36,12 @@ export class AddDocenteComponent implements OnInit {
   getDocentes(){
     this.materiaService.getDocentes().subscribe(
       res => {
-        this.dataSourceDocentes = res.docentes;
+        this.dataSourceDocentes = res;
+        this.docentes2 = res;
+        for(let i = 0; i< this.docentes2.length;i++){
+          this.docentes[i]=this.docentes2[i].nombre.toString();
+        }
+        console.log(this.docentes);
       }, err => {
         console.log(err);
       }
@@ -57,11 +62,13 @@ export class AddDocenteComponent implements OnInit {
   }
 
   displayDocente(subject) {
-    return subject ? subject.nombre : undefined;
+    return subject ? subject : undefined;
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.docentes.filter(option=>option.toLowerCase().includes(filterValue));
+    console.log(this.dataSourceDocentes.map(res=>res.nombre));
+    return this.dataSourceDocentes;
+
   }
 }

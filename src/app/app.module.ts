@@ -19,6 +19,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { GoogleLogInComponent } from './google-log-in/google-log-in.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+ import {MatDatepickerModule} from "@angular/material/datepicker";
 
 const config = new AuthServiceConfig([
   {
@@ -56,6 +57,7 @@ export function provideConfig() {
     SocialLoginModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
+    MatDatepickerModule,
   ],
     entryComponents:[
       AddMateriaComponent,
