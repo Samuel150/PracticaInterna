@@ -44,11 +44,11 @@
   <h2 mat-dialog-title>Asignar Docente a Materia</h2>
   <form mat-dialog-content class="grid" #form="ngForm" (ngSubmit)="onSubmitAsign(form)">
     <div>
-      <mat-form-field>
+      <mat-form-field class="form">
         <input type="text" matInput [matAutocomplete]="auto" [formControl]="myControl" placeholder="Docente" >
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayDocente">
-          <mat-option *ngFor="let option of filterOptions | async" [value]="option">
-            {{option}}
+        <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente">
+          <mat-option class="option"  *ngFor="let option of filterOptions | async" [value]="option">
+            {{option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

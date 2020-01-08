@@ -12,11 +12,9 @@ import {map, startWith} from "rxjs/operators";
   styleUrls: ['./add-docente.component.css']
 })
 export class AddDocenteComponent implements OnInit {
-
+  idDocente;
   public docente:Docentes;
   public dataSourceDocentes=[];
-  public docentes=[];
-  public docentes2;
   constructor(private materiaService: MateriasService) {
     this.docente= new Docentes('','','','','',0,0,0,0);
   }
@@ -28,7 +26,7 @@ export class AddDocenteComponent implements OnInit {
     this.getDocentes();
     this.filterOptions = this.myControl.valueChanges.pipe(
       startWith(''),
-      map(value=>this._filter(value))
+      map(value=>this._filter(value.toString()))
     );
   }
 
@@ -37,11 +35,6 @@ export class AddDocenteComponent implements OnInit {
     this.materiaService.getDocentes().subscribe(
       res => {
         this.dataSourceDocentes = res;
-        this.docentes2 = res;
-        for(let i = 0; i< this.docentes2.length;i++){
-          this.docentes[i]=this.docentes2[i].nombre.toString();
-        }
-        console.log(this.docentes);
       }, err => {
         console.log(err);
       }
@@ -61,14 +54,16 @@ export class AddDocenteComponent implements OnInit {
 
   }
 
-  displayDocente(subject) {
-    return subject ? subject : undefined;
+  displayDocente(subject: Docentes) {
+    if(subject!=null){
+      this.idDocente=subject._id;
+      console.log(this.idDocente);
+    }
+    return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
   }
 
-  private _filter(value: string): string[] {
+  private _filter(value: string) {
     const filterValue = value.toLowerCase();
-    console.log(this.dataSourceDocentes.map(res=>res.nombre));
-    return this.dataSourceDocentes;
-
+    return this.dataSourceDocentes.filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
   }
 }

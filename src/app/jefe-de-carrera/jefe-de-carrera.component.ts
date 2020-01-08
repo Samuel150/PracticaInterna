@@ -41,14 +41,12 @@ export class JefeDeCarreraComponent implements AfterViewInit {
     let dialogRef = this.dialogMaterias.open(AddMateriaComponent, {width:'750px', height:'450px'});
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Dialog cerrado');
     });
   }
   openAddDocentes() {
     let dialogRef = this.dialogMaterias.open(AddDocenteComponent, {width:'750px'});
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Dialog cerrado');
     });
   }
 
