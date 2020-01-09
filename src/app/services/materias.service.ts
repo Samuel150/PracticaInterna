@@ -23,10 +23,14 @@ export class MateriasService {
   getDocentes():Observable<any>{
     return this.http.get(this.URL_API_DOCENTES);
   }
+  getDocente(docente: string){
+    let headers = new HttpHeaders().set('Content-Type', "application/json");
+    return this.http.get<Docentes>(this.URL_API_DOCENTE+`/${docente}`,{headers:headers});
+  }
   postDocente(docente: Docentes){
     let params = JSON.stringify(docente);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
-    return this.http.put(this.URL_API_DOCENTE,params,{headers:headers})
+    return this.http.post(this.URL_API_DOCENTE,params,{headers:headers})
   }
 
   getMaterias():Observable<any>{
@@ -36,12 +40,12 @@ export class MateriasService {
   postMateria(materia: Materias){
     let params = JSON.stringify(materia);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
-    return this.http.put(this.URL_API_MATERIA,params,{headers: headers});
+    return this.http.post(this.URL_API_MATERIA,params,{headers: headers});
   }
 
 
   putMateria(Materia: Materias){
-    return this.http.post(this.URL_API_MATERIAS+`/${Materia._id}`, Materia);
+    return this.http.put(this.URL_API_MATERIAS+`/${Materia._id}`, Materia);
   }
 
   deleteMateria(Materia: Materias){

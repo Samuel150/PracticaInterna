@@ -1,12 +1,15 @@
-import {AfterViewInit, Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {SelectionModel} from '@angular/cdk/collections';
 import {MateriasService} from "../services/materias.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {merge, Observable} from "rxjs";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {AddMateriaComponent} from "../add-materia/add-materia.component";
 import {AddDocenteComponent} from "../add-docente/add-docente.component";
+import {MatSort} from '@angular/material/sort';
+import {Docentes} from "../models/docentes";
+import {Materias} from "../models/materias";
 
 
 export interface Configuracion {
@@ -25,48 +28,34 @@ const CONFIGURACION: Configuracion[] = [
   templateUrl: './jefe-de-carrera.component.html',
   styleUrls: ['./jefe-de-carrera.component.css']
 })
-export class JefeDeCarreraComponent implements AfterViewInit {
-
+export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   constructor(private materiaService: MateriasService, public dialogMaterias: MatDialog) {
 
   }
 
-
-  ngOnInit() {
-    this.getMaterias();
-    this.getDocentes();
-  }
-
-  openAddMaterias() {
-    let dialogRef = this.dialogMaterias.open(AddMateriaComponent, {width:'750px', height:'450px'});
-
-    dialogRef.afterClosed().subscribe(result => {
-    });
-  }
-  openAddDocentes() {
-    let dialogRef = this.dialogMaterias.open(AddDocenteComponent, {width:'750px'});
-
-    dialogRef.afterClosed().subscribe(result => {
-    });
-  }
-
   displayedColumnsMaterias: string[]=['materia','docente','inicio','fin','silaboSubido', 'aulaRevisada', 'examenRevisado'];
-
   displayedColumnsDocentes: string[]=['docente','materiasAsignadas','horasDePlanta','horasCubiertas','horasFaltantes', 'evaluacionPorPares'];
-
-  displayedColumnsSeguimiento: string[]=['materia','docente','inicio','fin', 'silaboSubido','aulaRevisada', 'examenRevisado', 'contratoImpreso', 'contratoFirmado', 'planillaFirmada', 'chequeSolicitado', 'chequeRecibido','chequeEntregado'];
-
-  dataSourceDocentes;
-  dataSourceMaterias;
+  //displayedColumnsSeguimiento: string[]=['materia','docente','inicio','fin', 'silaboSubido','aulaRevisada', 'examenRevisado', 'contratoImpreso', 'contratoFirmado', 'planillaFirmada', 'chequeSolicitado', 'chequeRecibido','chequeEntregado'];
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
   dataSourceConfiguracion =  new MatTableDataSource(CONFIGURACION);
   selectionConfiguracion = new SelectionModel(true,[]);
 
+  dataSourceDocentes;
+  dataSourceMaterias;
+
+  @ViewChild(MatSort, {static: true}) sort : MatSort;
+
+  async ngOnInit() {
+    this.getMaterias();
+    this.getDocentes();
+    //await this.sortFunc();
+  }
+
   getMaterias(){
     this.materiaService.getMaterias().subscribe(
       res => {
-        this.dataSourceMaterias = res;
+        this.dataSourceMaterias = new MatTableDataSource(res);
       }, err => {
         console.log(err);
       }
@@ -76,11 +65,27 @@ export class JefeDeCarreraComponent implements AfterViewInit {
   getDocentes(){
     this.materiaService.getDocentes().subscribe(
       res=>{
-        this.dataSourceDocentes = res;
+        this.dataSourceDocentes = new MatTableDataSource(res);
       },err=>{
         console.log(err);
       }
     );
+  }
+
+  sortFunc(){
+    this.dataSourceMaterias.sort = this.sort
+  }
+
+  openAddMaterias() {
+    let dialogRef = this.dialogMaterias.open(AddMateriaComponent, {width:'750px', height:'450px'});
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  openAddDocentes() {
+    let dialogRef = this.dialogMaterias.open(AddDocenteComponent, {width:'750px'});
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 
   form:FormGroup = new FormGroup({
@@ -95,7 +100,8 @@ export class JefeDeCarreraComponent implements AfterViewInit {
     contrato_firmado: new FormControl(false),
     planilla_firmada: new FormControl(false),
     cheque_solicitado: new FormControl(false),
-    cheque_recibido: new FormControl(false)
+    cheque_recibido: new FormControl(false),
+    cheque_entregado: new FormControl(false),
   });
 
   nombre = this.form.get('nombre');
@@ -110,6 +116,7 @@ export class JefeDeCarreraComponent implements AfterViewInit {
   planilla_firmada = this.form.get('planilla_firmada');
   cheque_solicitado = this.form.get('cheque_solicitado');
   cheque_recibido = this.form.get('cheque_recibido');
+  cheque_entregado = this.form.get('cheque_entregado');
 
   columnDefinitions =
     [{def: 'nombre', label: 'Materia', hide: this.nombre.value},
@@ -123,18 +130,19 @@ export class JefeDeCarreraComponent implements AfterViewInit {
       {def: 'contrato_firmado', label: 'Contrato Firmado', hide: this.contrato_firmado.value},
       {def: 'planilla_firmada', label: 'Planilla Firmada', hide: this.planilla_firmada.value},
       {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: this.cheque_solicitado.value},
-      {def: 'cheque_recibido', label: 'Cheque Recibido', hide: this.cheque_recibido.value}
+      {def: 'cheque_recibido', label: 'Cheque Recibido', hide: this.cheque_recibido.value},
+      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: this.cheque_entregado.value}
     ];
+
+  neededColumnDefinitions(){
+    return this.columnDefinitions.filter(res=>(res.label != "Materia" && res.label != "Docente" && res.label != "Inicio" && res.label != "Fin"));
+  }
 
   getDisplayedColumns():string[] {
     return this.columnDefinitions.filter(cd=>!cd.hide).map(cd=>cd.def);
   }
 
   ngAfterViewInit(){
-    let o1:Observable<boolean> = this.nombre.valueChanges;
-    let o2:Observable<boolean> = this.id_docente.valueChanges;
-    let o3:Observable<boolean> = this.inicio.valueChanges;
-    let o4:Observable<boolean> = this.fin.valueChanges;
     let o5:Observable<boolean> = this.silabo_subido.valueChanges;
     let o6:Observable<boolean> = this.aula_revisada.valueChanges;
     let o7:Observable<boolean> = this.examen_revisado.valueChanges;
@@ -143,11 +151,8 @@ export class JefeDeCarreraComponent implements AfterViewInit {
     let o10:Observable<boolean> = this.planilla_firmada.valueChanges;
     let o11:Observable<boolean> = this.cheque_solicitado.valueChanges;
     let o12:Observable<boolean> = this.cheque_recibido.valueChanges;
-    merge(o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12).subscribe( v=>{
-      this.columnDefinitions[0].hide = this.nombre.value;
-      this.columnDefinitions[1].hide = this.id_docente.value;
-      this.columnDefinitions[2].hide = this.inicio.value;
-      this.columnDefinitions[3].hide = this.fin.value;
+    let o13:Observable<boolean> = this.cheque_entregado.valueChanges;
+    merge(o5,o6,o7,o8,o9,o10,o11,o12,o13).subscribe( v=>{
       this.columnDefinitions[4].hide = this.silabo_subido.value;
       this.columnDefinitions[5].hide = this.aula_revisada.value;
       this.columnDefinitions[6].hide = this.examen_revisado.value;
@@ -156,9 +161,32 @@ export class JefeDeCarreraComponent implements AfterViewInit {
       this.columnDefinitions[9].hide = this.planilla_firmada.value;
       this.columnDefinitions[10].hide = this.cheque_solicitado.value;
       this.columnDefinitions[11].hide = this.cheque_recibido.value;
-      console.log(this.columnDefinitions)
+      this.columnDefinitions[12].hide = this.cheque_entregado.value;
     })
   }
 
+  displayDocente(docente) {
+    if(this.dataSourceDocentes!=null){
+      var docenteFilter = this.dataSourceDocentes.filteredData;
+      var docenteAc = docenteFilter.find(res=>res._id==docente);
+      return docenteAc.nombre+" "+docenteAc.apellido_paterno;
+    }
+  }
+
+  displayDate(inicio) {
+    if(inicio!=null) {
+      return inicio.substr(0, 10);
+    }
+  }
+
+  applyFilterMaterias(filterValue: string) {
+    this.dataSourceMaterias.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilterDocentes(filterValue: string) {
+    this.dataSourceDocentes.filter = filterValue.trim().toLowerCase();
+  }
+
 }
+
 

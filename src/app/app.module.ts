@@ -19,9 +19,10 @@ import {HttpClientModule} from "@angular/common/http";
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { GoogleLogInComponent } from './google-log-in/google-log-in.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
- import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatSortModule} from "@angular/material/sort";
 
-const config = new AuthServiceConfig([
+ const config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider('602723697704-ucdbgn6m678gf5rkj02npjl2rrcak250.apps.googleusercontent.com')
@@ -46,6 +47,7 @@ export function provideConfig() {
     AddDocenteComponent,
     AddCuentaComponent,
     GoogleLogInComponent
+
   ],
   imports: [
     BrowserModule,
@@ -58,6 +60,7 @@ export function provideConfig() {
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatDatepickerModule,
+    MatSortModule
   ],
     entryComponents:[
       AddMateriaComponent,

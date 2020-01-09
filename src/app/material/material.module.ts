@@ -8,7 +8,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
-
+import {MatSortModule} from "@angular/material/sort";
 
 const MaterialComponents = [
   MatButtonModule,
@@ -19,7 +19,8 @@ const MaterialComponents = [
   MatInputModule,
   MatDialogModule,
   MatCheckboxModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatSortModule
 ];
 
 @NgModule({

@@ -14,6 +14,9 @@ export class Materias {
   public planilla_firmada: boolean,
   public cheque_solicitado: boolean,
   public cheque_recibido: boolean,
+  public cheque_entregado: boolean,
+  public horas_totales: number,
+  public horas_planta: number,
   public __v: number){
 
   }

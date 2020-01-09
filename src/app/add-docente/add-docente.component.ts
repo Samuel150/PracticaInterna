@@ -16,7 +16,7 @@ export class AddDocenteComponent implements OnInit {
   public docente:Docentes;
   public dataSourceDocentes=[];
   constructor(private materiaService: MateriasService) {
-    this.docente= new Docentes('','','','','',0,0,0,0);
+    this.docente= new Docentes('','','','','',0,0,0,false,0);
   }
 
   myControl = new FormControl();
@@ -57,7 +57,6 @@ export class AddDocenteComponent implements OnInit {
   displayDocente(subject: Docentes) {
     if(subject!=null){
       this.idDocente=subject._id;
-      console.log(this.idDocente);
     }
     return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
   }

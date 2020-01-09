@@ -43,7 +43,7 @@ export class AddMateriaComponent implements OnInit {
   public materia:Materias;
 
   constructor(private materiasService: MateriasService) {
-    this.materia = new Materias('','','','','',false,false,false,false,false,false,false,false,5);
+    this.materia = new Materias('','','','','',false,false,false,false,false,false,false,false,false,0,0,0);
   }
 
   ngOnInit() {
