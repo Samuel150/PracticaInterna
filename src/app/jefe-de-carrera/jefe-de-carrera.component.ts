@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {SelectionModel} from '@angular/cdk/collections';
 import {MateriasService} from "../services/materias.service";
@@ -41,39 +41,36 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   dataSourceConfiguracion =  new MatTableDataSource(CONFIGURACION);
   selectionConfiguracion = new SelectionModel(true,[]);
 
-  dataSourceDocentes;
-  dataSourceMaterias;
-
+  dataSourceDocentes: MatTableDataSource<Docentes>;
   @ViewChild(MatSort, {static: true}) sort : MatSort;
 
+  dataSourceMaterias: MatTableDataSource<Materias>;
+
   async ngOnInit() {
-    this.getMaterias();
+
     this.getDocentes();
-    //await this.sortFunc();
+    this.getMaterias();
   }
-
-  getMaterias(){
-    this.materiaService.getMaterias().subscribe(
-      res => {
-        this.dataSourceMaterias = new MatTableDataSource(res);
-      }, err => {
-        console.log(err);
-      }
-    );
-  }
-
   getDocentes(){
     this.materiaService.getDocentes().subscribe(
       res=>{
         this.dataSourceDocentes = new MatTableDataSource(res);
+        //this.dataSourceDocentes.sort = this.sort;
       },err=>{
         console.log(err);
       }
     );
   }
 
-  sortFunc(){
-    this.dataSourceMaterias.sort = this.sort
+  getMaterias(){
+    this.materiaService.getMaterias().subscribe(
+      res => {
+        this.dataSourceMaterias = new MatTableDataSource(res);
+        this.dataSourceMaterias.sort = this.sort;
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   openAddMaterias() {

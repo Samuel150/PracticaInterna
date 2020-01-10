@@ -28,6 +28,10 @@
   text-align: center;
   font-size: medium;
 }
+.mat-sort-header {
+  text-align: center;
+  font-size: medium;
+}
 .mat-cell{
   word-wrap:break-word;
   padding-top: 5px;
