@@ -21,6 +21,7 @@ import { GoogleLogInComponent } from './google-log-in/google-log-in.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatSortModule} from "@angular/material/sort";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
  const config = new AuthServiceConfig([
   {
@@ -60,7 +61,8 @@ export function provideConfig() {
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatDatepickerModule,
-    MatSortModule
+    MatSortModule,
+    MatPaginatorModule
   ],
     entryComponents:[
       AddMateriaComponent,

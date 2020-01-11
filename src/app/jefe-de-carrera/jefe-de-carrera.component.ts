@@ -10,6 +10,7 @@ import {AddDocenteComponent} from "../add-docente/add-docente.component";
 import {MatSort} from '@angular/material/sort';
 import {Docentes} from "../models/docentes";
 import {Materias} from "../models/materias";
+import {MatPaginator} from "@angular/material/paginator";
 
 
 export interface Configuracion {
@@ -34,40 +35,43 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   }
 
   displayedColumnsMaterias: string[]=['materia','docente','inicio','fin','silaboSubido', 'aulaRevisada', 'examenRevisado'];
-  displayedColumnsDocentes: string[]=['docente','materiasAsignadas','horasDePlanta','horasCubiertas','horasFaltantes', 'evaluacionPorPares'];
+  displayedColumnsDocentes: string[]=['nombre','materias_asignadas','horas_planta','horas_cubiertas','horas_faltantes', 'evaluacion_pares'];
   //displayedColumnsSeguimiento: string[]=['materia','docente','inicio','fin', 'silaboSubido','aulaRevisada', 'examenRevisado', 'contratoImpreso', 'contratoFirmado', 'planillaFirmada', 'chequeSolicitado', 'chequeRecibido','chequeEntregado'];
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
   dataSourceConfiguracion =  new MatTableDataSource(CONFIGURACION);
   selectionConfiguracion = new SelectionModel(true,[]);
 
-  dataSourceDocentes: MatTableDataSource<Docentes>;
-  @ViewChild(MatSort, {static: true}) sort : MatSort;
+  public dataSourceMaterias: MatTableDataSource<Materias>;
+  public dataSourceDocentes: MatTableDataSource<Docentes>;
+  @ViewChild('sortGeneral', {read: MatSort, static: false}) public sort1 : MatSort;
+  @ViewChild('sortGeneral2', {read: MatSort, static: false}) public sort2 : MatSort;
 
-  dataSourceMaterias: MatTableDataSource<Materias>;
-
-  async ngOnInit() {
-
-    this.getDocentes();
+  @ViewChild(MatPaginator,{static: true}) public paginator: MatPaginator;
+  ngOnInit() {
     this.getMaterias();
+    this.getDocentes();
+
   }
-  getDocentes(){
-    this.materiaService.getDocentes().subscribe(
-      res=>{
-        this.dataSourceDocentes = new MatTableDataSource(res);
-        //this.dataSourceDocentes.sort = this.sort;
-      },err=>{
+
+
+  private getMaterias(){
+    this.materiaService.getMaterias().subscribe(
+      res => {
+        this.dataSourceMaterias = new MatTableDataSource(res);
+        this.dataSourceMaterias.sort = this.sort1;
+        this.dataSourceMaterias.paginator = this.paginator;
+      }, err => {
         console.log(err);
       }
     );
   }
-
-  getMaterias(){
-    this.materiaService.getMaterias().subscribe(
-      res => {
-        this.dataSourceMaterias = new MatTableDataSource(res);
-        this.dataSourceMaterias.sort = this.sort;
-      }, err => {
+  private getDocentes(){
+    this.materiaService.getDocentes().subscribe(
+      res=>{
+        this.dataSourceDocentes = new MatTableDataSource(res);
+        this.dataSourceDocentes.sort = this.sort2;
+      },err=>{
         console.log(err);
       }
     );

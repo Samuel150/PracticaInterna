@@ -9,6 +9,7 @@ export class Docentes {
     public materias_asignadas: number,
     public horas_planta: number,
     public horas_cubiertas: number,
+    public horas_faltantes: number,
     public evaluacion_pares: boolean,
     public __v: number){
 

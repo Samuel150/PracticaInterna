@@ -16,7 +16,7 @@ export class AddDocenteComponent implements OnInit {
   public docente:Docentes;
   public dataSourceDocentes=[];
   constructor(private materiaService: MateriasService) {
-    this.docente= new Docentes('','','','','',0,0,0,false,0);
+    this.docente= new Docentes('','','','','',0,0,0,0,false,0);
   }
 
   myControl = new FormControl();
