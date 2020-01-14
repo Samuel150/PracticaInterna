@@ -23,17 +23,7 @@
     </div>
     <div>
       <mat-form-field class="form">
-        <input type="text" id="materiasAsignadas" matInput placeholder="Materias Asignadas" name="materiasAsignadas" #materiasAsignadas="ngModel" [(ngModel)]="docente.materias_asignadas">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="form">
         <input type="text" id="horasPlanta" matInput placeholder="Horas de Planta" name="horasPlanta" #horasPlanta="ngModel" [(ngModel)]="docente.horas_planta">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="form">
-        <input type="text" id="horasCubiertas" matInput placeholder="Horas Cubiertas" name="horasCubiertas" #horasCubiertas="ngModel" [(ngModel)]="docente.horas_cubiertas">
       </mat-form-field>
     </div>
     <div>
@@ -45,7 +35,8 @@
   <form mat-dialog-content class="grid" #form="ngForm" (ngSubmit)="onSubmitAsign(form)">
     <div>
       <mat-form-field class="form">
-        <input type="text" matInput [matAutocomplete]="auto" [formControl]="myControl" placeholder="Docente" >
+        <input type="text" name="_id" [(ngModel)]="materia.id_docente" matInput [matAutocomplete]="auto"
+               [formControl]="myControl" placeholder="Docente">
         <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente">
           <mat-option class="option"  *ngFor="let option of filterOptions | async" [value]="option">
             {{option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno}}
@@ -55,7 +46,12 @@
     </div>
     <div>
       <mat-form-field class="form">
-        <input matInput placeholder="Materia">
+        <input type="text" name="_id" [(ngModel)]="materia._id" matInput [matAutocomplete]="auto2" [formControl]="myControlMaterias" placeholder="Materias" >
+        <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayMateria">
+          <mat-option class="option"  *ngFor="let option of filterOptionsMaterias | async" [value]="option">
+            {{option.nombre+" "+displayDate(option.inicio)+" "+displayDate(option.fin)}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
     </div>
     <div>

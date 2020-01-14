@@ -11,6 +11,7 @@ export class Materias {
   public examen_revisado: boolean,
   public contrato_impreso: boolean,
   public contrato_firmado: boolean,
+  public planilla_lista: boolean,
   public planilla_firmada: boolean,
   public cheque_solicitado: boolean,
   public cheque_recibido: boolean,

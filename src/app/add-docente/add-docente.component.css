@@ -18,3 +18,7 @@ h2 {
   width: 500px;
 }
 
+mat-autocomplete{
+  width: auto;
+}
+

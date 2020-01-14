@@ -25,7 +25,7 @@ export class MateriasService {
   }
   getDocente(docente: string){
     let headers = new HttpHeaders().set('Content-Type', "application/json");
-    return this.http.get(this.URL_API_DOCENTE+`/${docente}`,{headers:headers});
+    return this.http.get<Docentes>(this.URL_API_DOCENTE+`/${docente}`,{headers:headers});
   }
   postDocente(docente: Docentes){
     let params = JSON.stringify(docente);
@@ -39,6 +39,7 @@ export class MateriasService {
 
   postMateria(materia: Materias){
     let params = JSON.stringify(materia);
+    console.log(params);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
     return this.http.post(this.URL_API_MATERIA,params,{headers: headers});
   }

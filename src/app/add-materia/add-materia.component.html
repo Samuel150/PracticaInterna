@@ -1,17 +1,21 @@
 <div class="add_docente">
   <h2>Añadir Materia</h2>
 
-
   <div>
     <form class = "grid" #form="ngForm" (ngSubmit)="onSubmit(form)">
       <div>
       <mat-form-field  class="form" >
-        <input type="text" id="nombre"  matInput  placeholder="Nombre" name="nombre" #nombre="ngModel" [(ngModel)]="materia.nombre">
+        <input type="text" id="nombre"  matInput  placeholder="Materia" name="nombre" #nombre="ngModel" [(ngModel)]="materia.nombre">
       </mat-form-field>
       </div>
       <div>
         <mat-form-field class="form">
-          <input type="text" id="docente" matInput placeholder="Docente" name="docente" #docente="ngModel" [(ngModel)]="materia.id_docente">
+          <input  [matAutocomplete]="auto" [formControl]="myControlDocentes" type="text" matInput placeholder="Docente" name="id_docente"  [(ngModel)]="materia.id_docente">
+          <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente">
+            <mat-option class="option"  *ngFor="let option of filterOptionsDocentes | async" [value]="option._id">
+              {{option.nombre+" "+option.apellido_paterno+" "+option.apellido_paterno}}
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
       <div>
@@ -33,8 +37,6 @@
       </div>
     </form>
   </div>
-
-
 
   <hr>
 
