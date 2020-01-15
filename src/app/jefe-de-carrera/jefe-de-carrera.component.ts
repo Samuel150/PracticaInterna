@@ -51,9 +51,9 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   @ViewChild('sortDocentes', {read: MatSort, static: false}) public sort2 : MatSort;
   @ViewChild('sortMaterias', {read: MatSort, static: false}) public sort3 : MatSort;
 
-  @ViewChild('paginatorGeneral',{read:MatPaginator,static: true}) public paginator: MatPaginator;
-  @ViewChild('paginatorDocentes',{read:MatPaginator,static: true}) public paginator2: MatPaginator;
-  @ViewChild('paginatorMaterias',{read:MatPaginator,static: true}) public paginator3: MatPaginator;
+  @ViewChild('paginatorDocentes',{read:MatPaginator,static: false}) public paginator2: MatPaginator;
+  @ViewChild('paginatorMaterias',{read:MatPaginator,static: false}) public paginator3: MatPaginator;
+  @ViewChild('paginatorGeneral',{read:MatPaginator,static: false}) public paginator1: MatPaginator;
 
   form:FormGroup = new FormGroup({
     nombre: new FormControl(true),
@@ -266,12 +266,12 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   private getMaterias(){
     this.materiaService.getMaterias().subscribe(
       res => {
-        this.dataSourceMaterias = new MatTableDataSource(res);
-        this.dataSourceMaterias.sort = this.sort1;
-        this.dataSourceMaterias.paginator = this.paginator;
         this.dataSourceMaterias2 = new MatTableDataSource(res);
         this.dataSourceMaterias2.sort = this.sort3;
         this.dataSourceMaterias2.paginator = this.paginator3;
+        this.dataSourceMaterias = new MatTableDataSource(res);
+        this.dataSourceMaterias.sort = this.sort1;
+        this.dataSourceMaterias.paginator = this.paginator1;
       }, err => {
         console.log(err);
       }
@@ -355,6 +355,30 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   applyFilterDocentes(filterValue: string) {
     this.dataSourceDocentes.filter = filterValue.trim().toLowerCase();
   }
+
+  setCheckbox(idMateria,body) {
+    this.materiaService.putMateria(idMateria,body).subscribe(
+      res=>{
+        console.log(res);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  setEvalPares(idDocente,body) {
+    this.materiaService.putDocente(idDocente,body).subscribe(
+      res=>{
+        console.log(res);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+
 
 }
 

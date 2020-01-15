@@ -41,6 +41,7 @@ export class MateriasService {
   }
 
   postMateria(materia: Materias){
+    console.log(materia);
     let params = JSON.stringify(materia);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
     return this.http.post(this.URL_API_MATERIA_POST,params,{headers: headers});
@@ -50,8 +51,10 @@ export class MateriasService {
     let headers = new HttpHeaders().set('Content-Type', "application/json");
     return this.http.put(this.URL_API_DOCENTE+`/${docenteID}`,body,{headers: headers});
   }
-  putMateria(Materia: Materias){
-    return this.http.put(this.URL_API_MATERIAS+`/${Materia._id}`, Materia);
+  putMateria(materiaId,body){
+    console.log(body);
+    let headers = new HttpHeaders().set('Content-Type', "application/json");
+    return this.http.put(this.URL_API_MATERIA+`/${materiaId}`, body,{headers: headers});
   }
 
   deleteMateria(Materia: Materias){

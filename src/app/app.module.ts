@@ -8,9 +8,6 @@ import { LogInButtonComponent } from './log-in-button/log-in-button.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from "./material/material.module";
 import { JefeDeCarreraComponent } from './jefe-de-carrera/jefe-de-carrera.component';
-import { ContabilidadComponent } from './contabilidad/contabilidad.component';
-import { AsistenteAdministrativoComponent } from './asistente-administrativo/asistente-administrativo.component';
-import { EncargadaRegistrosComponent } from './encargada-registros/encargada-registros.component';
 import { PendientesComponent } from './pendientes/pendientes.component';
 import { AddMateriaComponent } from './add-materia/add-materia.component';
 import { AddDocenteComponent } from './add-docente/add-docente.component';
@@ -40,15 +37,11 @@ export function provideConfig() {
     AppComponent,
     LogInButtonComponent,
     JefeDeCarreraComponent,
-    ContabilidadComponent,
-    AsistenteAdministrativoComponent,
-    EncargadaRegistrosComponent,
     PendientesComponent,
     AddMateriaComponent,
     AddDocenteComponent,
     AddCuentaComponent,
     GoogleLogInComponent
-
   ],
   imports: [
     BrowserModule,

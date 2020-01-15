@@ -43,7 +43,7 @@
             Silabo subido
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.silabo_subido">
+            <mat-checkbox color="primary" (click)="setCheckbox(element._id,{'silabo_subido':!element.silabo_subido})" [checked]="element.silabo_subido">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -52,7 +52,7 @@
             Aula Revisada
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.aula_revisada">
+            <mat-checkbox color="primary" (click)="setCheckbox(element._id,{'aula_revisada':!element.aula_revisada})" [checked]="element.aula_revisada">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -61,7 +61,7 @@
             Exámenes Revisados
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.examen_revisado">
+            <mat-checkbox color="primary" (click)="setCheckbox(element._id,{'examen_revisado':!element.examen_revisado})" [checked]="element.examen_revisado">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -70,7 +70,7 @@
             Contrato impreso
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox  color="primary" [checked]="element.contrato_impreso">
+            <mat-checkbox  color="primary" (click)="setCheckbox(element._id,{'contrato_impreso':!element.contrato_impreso})"  [checked]="element.contrato_impreso">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -79,7 +79,7 @@
             Contrato firmado
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox  color="primary" [checked]="element.contrato_firmado">
+            <mat-checkbox  color="primary" (click)="setCheckbox(element._id,{'contrato_firmado':!element.contrato_firmado})"  [checked]="element.contrato_firmado">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -88,7 +88,7 @@
             Planilla lista
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox  color="primary" [checked]="element.planilla_lista">
+            <mat-checkbox  color="primary" (click)="setCheckbox(element._id,{'planilla_lista':!element.planilla_lista})" [checked]="element.planilla_lista">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -97,7 +97,7 @@
             Planilla firmada
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox [disabled]="contabilidad" color="primary" [checked]="element.planilla_firmada">
+            <mat-checkbox [disabled]="contabilidad" (click)="setCheckbox(element._id,{'planilla_firmada':!element.planilla_firmada})" color="primary" [checked]="element.planilla_firmada">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -106,7 +106,7 @@
             Cheque solicitado
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox  color="primary" [checked]="element.cheque_solicitado">
+            <mat-checkbox  color="primary" (click)="setCheckbox(element._id,{'cheque_solicitado':!element.cheque_solicitado})" [checked]="element.cheque_solicitado">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -115,7 +115,7 @@
             Cheque recibido
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox  color="primary" [checked]="element.cheque_recibido" >
+            <mat-checkbox  color="primary" (click)="setCheckbox(element._id,{'cheque_recibido':!element.cheque_recibido})" [checked]="element.cheque_recibido" >
             </mat-checkbox>
           </td>
         </ng-container>
@@ -124,7 +124,7 @@
             Cheque entregado
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.cheque_entregado">
+            <mat-checkbox color="primary" (click)="setCheckbox(element._id,{'cheque_entregado':!element.cheque_entregado})" [checked]="element.cheque_entregado">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -134,7 +134,7 @@
       </table>
     </div>
     <div>
-      <mat-paginator style="align: auto" #paginatorMaterias [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginatorMaterias [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-tab>
   <mat-tab label="Docentes" *ngIf="admin||jefe">
@@ -175,7 +175,7 @@
             Evaluación por pares
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]=element.evaluacionPorPares>
+            <mat-checkbox color="primary" (click)="setEvalPares(element._id,{'evaluacion_pares':!element.evaluacion_pares})" [checked]=element.evaluacion_pares>
             </mat-checkbox>
           </td>
         </ng-container>
@@ -185,7 +185,7 @@
       </table>
     </div>
     <div>
-      <mat-paginator style="align: auto" #paginatorDocentes [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginatorDocentes [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-tab>
   <mat-tab label="Seguimiento General" *ngIf="admin||jefe">
@@ -217,7 +217,7 @@
             Silabo subido
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.silabo_subido">
+            <mat-checkbox color="primary" (click)="setCheckbox(element._id,{'silabo_subido':!element.silabo_subido})" [checked]="element.silabo_subido">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -226,7 +226,7 @@
             Aula Revisada
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.aula_revisada">
+            <mat-checkbox color="primary" (click)="setCheckbox(element._id,{'aula_revisada':!element.aula_revisada})" [checked]="element.aula_revisada">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -235,7 +235,7 @@
             Exámenes Revisados
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.examen_revisado">
+            <mat-checkbox color="primary" (click)="setCheckbox(element._id,{'examen_revisado':!element.examen_revisado})" [checked]="element.examen_revisado">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -308,7 +308,7 @@
       </table>
     </div>
     <div>
-      <mat-paginator #paginatorGeneral style="align: auto"   [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginatorGeneral  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-tab>
   <mat-tab label="Crear Cuenta" *ngIf="admin">
