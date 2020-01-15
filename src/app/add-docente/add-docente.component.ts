@@ -6,6 +6,7 @@ import {FormControl} from "@angular/forms";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {Materias} from "../models/materias";
+import {DocentesPost} from "../models/docentesPost";
 
 @Component({
   selector: 'app-add-docente',
@@ -15,12 +16,12 @@ import {Materias} from "../models/materias";
 export class AddDocenteComponent implements OnInit {
   idDocente;
   idMateria;
-  public docente:Docentes;
+  public docente:DocentesPost;
   public materia:Materias;
   public dataSourceDocentes=[];
   public dataSourceMaterias=[];
   constructor(private materiaService: MateriasService) {
-    this.docente= new Docentes('','','','','',0,0,0,0,false,0);
+    this.docente= new DocentesPost('','','','',0,0,0,0,false);
     this.materia= new Materias('','','','','',false,false,false,false,false,false,false,false,false,false,0,0,0);
   }
 
@@ -65,7 +66,7 @@ export class AddDocenteComponent implements OnInit {
 
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
+    console.log(this.docente);
     this.materiaService.postDocente(this.docente).subscribe(
       response=>{
         console.log(response);},

@@ -5,9 +5,10 @@ import {Materias} from "../models/materias";
 import { NativeDateAdapter } from "@angular/material";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {Docentes} from "../models/docentes";
-import {Observable} from "rxjs";
+import {Observable, Subscriber} from "rxjs";
 import {map, startWith} from "rxjs/operators";
-import {MatTableDataSource} from "@angular/material/table";
+import {MateriasPost} from "../models/materiasPost";
+import {DocentesPost} from "../models/docentesPost";
 
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
@@ -44,12 +45,14 @@ export class AppDateAdapter extends NativeDateAdapter {
 })
 export class AddMateriaComponent implements OnInit {
 
-  public idDocente: string;
-  public materia:Materias;
-  public dataSourceDocentes=[];
+  public materia:MateriasPost = new MateriasPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
 
+  public docente:Docentes;
+  public docentePost:DocentesPost;
+  public dataSourceDocentes=[];
   constructor(private materiaService: MateriasService) {
-    this.materia = new Materias('','','','','',false,false,false,false,false,false,false,false,false,false,0,0,0);
+    this.docente = new Docentes('','','','','',0,0,0,0,false,0);
+    this.docentePost = new DocentesPost('','','','',0,0,0,0,false);
   }
 
   ngOnInit() {
@@ -61,7 +64,7 @@ export class AddMateriaComponent implements OnInit {
 
   }
 
-  getDocentes(){
+  getDocentes() {
     this.materiaService.getDocentes().subscribe(
       res => {
         this.dataSourceDocentes = res;
@@ -70,21 +73,48 @@ export class AddMateriaComponent implements OnInit {
       }
     );
   }
-
   myControlDocentes = new FormControl();
   filterOptionsDocentes: Observable<string[]>;
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
-    console.log(this.materia);
-    // this.materiaService.postMateria(this.materia).subscribe(
-    //   response=>{
-    //     console.log(response);
-    //     },
-    //     error=>{
-    //       console.log(error);
-    //     }
-    // );
+    let materia2: any = this.materia;
+    let docente: any = this.materia.id_docente;
+    this.docente = docente;
+    if (this.docente) {
+      materia2.id_docente = (this.materia.id_docente as unknown as Docentes)._id;
+      this.docente.materias_asignadas = this.docente.materias_asignadas + 1;
+      let horasPlanta = this.docente.horas_planta;
+      let horasCubiertas = this.docente.horas_cubiertas;
+      let horasMateria = materia2.horas_totales;
+      if (horasPlanta - horasCubiertas - horasMateria >= 0) {
+        this.docente.horas_cubiertas = parseInt(String(horasCubiertas)) + parseInt(String(horasMateria));
+        materia2.horas_planta = horasMateria;
+      } else {
+        this.docente.horas_cubiertas = horasPlanta;
+        materia2.horas_planta = parseInt(String(horasPlanta)) - parseInt(String(horasCubiertas));
+      }
+      let idDocente = this.docente._id;
+      this.materiaService.putDocente(idDocente,{"materias_asignadas": this.docente.materias_asignadas,"horas_cubiertas": this.docente.horas_cubiertas}).subscribe(
+        res=>{
+          console.log(res)
+        },error => {
+          console.log(error)
+        }
+      )
+    }else{
+      materia2.id_docente = "";
+    }
+    // console.log({"materias_asignadas": this.docente.materias_asignadas,
+    //             "horas_cubiertas": this.docente.horas_cubiertas});
+    // console.log(materia2);
+
+    this.materiaService.postMateria(materia2).subscribe(
+      res=>{
+        console.log(res)
+      },error => {
+        console.log(error)
+      }
+    );
   }
 
   private _filterDocentes(value: string) {
@@ -92,23 +122,14 @@ export class AddMateriaComponent implements OnInit {
     return this.dataSourceDocentes.filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
   }
 
-  displayDocente(subject) {
-    return this.materiaService.getDocente(subject).then(
-      res=>{
-        this.idDocente = res._id;
-        return this.idDocente;
-      },
-        error => {
-        console.log(error);
-      }
-    )
-
-
-    //return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
+  displayDocente(subject) : string {
+    return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
   }
 
-
-
-
+  displayDocente2(subject: Docentes) {
+    if(subject) {
+      return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno;
+    }
+  }
 }
 

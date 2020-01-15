@@ -1,6 +1,5 @@
 <div class="add_docente">
   <h2>Añadir Materia</h2>
-
   <div>
     <form class = "grid" #form="ngForm" (ngSubmit)="onSubmit(form)">
       <div>
@@ -10,10 +9,10 @@
       </div>
       <div>
         <mat-form-field class="form">
-          <input  [matAutocomplete]="auto" [formControl]="myControlDocentes" type="text" matInput placeholder="Docente" name="id_docente"  [(ngModel)]="materia.id_docente">
-          <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente">
-            <mat-option class="option"  *ngFor="let option of filterOptionsDocentes | async" [value]="option._id">
-              {{option.nombre+" "+option.apellido_paterno+" "+option.apellido_paterno}}
+          <input  [matAutocomplete]="auto" [formControl]="myControlDocentes" type="text" matInput placeholder="Docente" name="id_docente" [(ngModel)]="materia.id_docente">
+          <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente2" >
+            <mat-option *ngFor="let option of filterOptionsDocentes | async" [value]="option">
+              {{displayDocente(option)}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
@@ -30,6 +29,11 @@
           <input type="text" id="fin" matInput placeholder="Fecha de Fin" [matDatepicker]="datepickerRef2" name="fin" ngModel #fin="ngModel" [(ngModel)]="materia.fin" required readonly/>
           <mat-datepicker-toggle [for]="datepickerRef2" matSuffix></mat-datepicker-toggle>
           <mat-datepicker #datepickerRef2></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  class="form" >
+          <input type="text" matInput  placeholder="Horas Totales" name="horas_totales" #horas_totales="ngModel" [(ngModel)]="materia.horas_totales">
         </mat-form-field>
       </div>
       <div>
