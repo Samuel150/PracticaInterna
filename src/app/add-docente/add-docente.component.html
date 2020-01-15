@@ -46,7 +46,7 @@
     </div>
     <div>
       <mat-form-field class="form">
-        <input type="text" name="nombre"  [(ngModel)]="materia.nombre" matInput [matAutocomplete]="auto2" [formControl]="myControlMaterias" placeholder="Materias" >
+        <input type="text" name="nombre"  [(ngModel)]="materia.nombre" matInput [matAutocomplete]="auto2" [formControl]="myControlMaterias" placeholder="Materia" >
         <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayMateria">
           <mat-option class="option"  *ngFor="let option2 of filterOptionsMaterias | async" [value]="option2">
             {{displayMateria2(option2)}}

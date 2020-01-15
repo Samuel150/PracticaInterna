@@ -1,7 +1,7 @@
-import { Materias } from './materias';
+import { Materia } from './materia';
 
-// describe('Materias', () => {
+// describe('Materia', () => {
 //   it('should create an instance', () => {
-//     expect(new Materias()).toBeTruthy();
+//     expect(new Materia()).toBeTruthy();
 //   });
 // });

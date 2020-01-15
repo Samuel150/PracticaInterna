@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {MateriasService} from "../services/materias.service";
 import {FormControl, NgForm} from "@angular/forms";
-import {Materias} from "../models/materias";
+import {Materia} from "../models/materia";
 import { NativeDateAdapter } from "@angular/material";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
-import {Docentes} from "../models/docentes";
+import {Docente} from "../models/docente";
 import {Observable, Subscriber} from "rxjs";
 import {map, startWith} from "rxjs/operators";
-import {MateriasPost} from "../models/materiasPost";
-import {DocentesPost} from "../models/docentesPost";
+import {MateriaPost} from "../models/materiaPost";
+import {DocentePost} from "../models/docentePost";
 
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
@@ -45,14 +45,14 @@ export class AppDateAdapter extends NativeDateAdapter {
 })
 export class AddMateriaComponent implements OnInit {
 
-  public materia:MateriasPost = new MateriasPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
+  public materia:MateriaPost = new MateriaPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
 
-  public docente:Docentes;
-  public docentePost:DocentesPost;
+  public docente:Docente;
+  public docentePost:DocentePost;
   public dataSourceDocentes=[];
   constructor(private materiaService: MateriasService) {
-    this.docente = new Docentes('','','','','',0,0,0,0,false,0);
-    this.docentePost = new DocentesPost('','','','',0,0,0,0,false);
+    this.docente = new Docente('','','','','',0,0,0,0,false,0);
+    this.docentePost = new DocentePost('','','','',0,0,0,0,false);
   }
 
   ngOnInit() {
@@ -81,7 +81,7 @@ export class AddMateriaComponent implements OnInit {
     let docente: any = this.materia.id_docente;
     this.docente = docente;
     if (this.docente) {
-      materia2.id_docente = (this.materia.id_docente as unknown as Docentes)._id;
+      materia2.id_docente = (this.materia.id_docente as unknown as Docente)._id;
       this.docente.materias_asignadas = this.docente.materias_asignadas + 1;
       let horasPlanta = this.docente.horas_planta;
       let horasCubiertas = this.docente.horas_cubiertas;
@@ -125,7 +125,7 @@ export class AddMateriaComponent implements OnInit {
     return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
   }
 
-  displayDocente2(subject: Docentes) {
+  displayDocente2(subject: Docente) {
     if(subject) {
       return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno;
     }

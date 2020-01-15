@@ -1,4 +1,4 @@
-export class Materias {
+export class Materia {
 
   constructor(
   public _id: string,

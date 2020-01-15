@@ -1,4 +1,4 @@
-export class MateriasPost {
+export class MateriaPost {
   constructor(
     public nombre: string,
     public id_docente: string,

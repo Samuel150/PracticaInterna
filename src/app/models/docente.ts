@@ -1,5 +1,7 @@
-export class DocentesPost {
+export class Docente {
+
   constructor(
+    public _id: string,
     public nombre: string,
     public segundo_nombre: string,
     public apellido_paterno: string,
@@ -8,8 +10,8 @@ export class DocentesPost {
     public horas_planta: number,
     public horas_cubiertas: number,
     public horas_faltantes: number,
-    public evaluacion_pares: boolean
-  ){
+    public evaluacion_pares: boolean,
+    public __v: number){
 
   }
 }

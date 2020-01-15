@@ -7,6 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LogInButtonComponent {
 
-  description = 'Modulo de Seguimiento de Docentes';
+  description = 'Modulo de Seguimiento de Docente';
 
 }

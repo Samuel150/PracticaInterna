@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {MateriasService} from "../services/materias.service";
 import {NgForm} from "@angular/forms";
-import {Docentes} from "../models/docentes";
+import {Docente} from "../models/docente";
 import {FormControl} from "@angular/forms";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
-import {Materias} from "../models/materias";
-import {DocentesPost} from "../models/docentesPost";
-import {MateriasPost} from "../models/materiasPost";
+import {Materia} from "../models/materia";
+import {DocentePost} from "../models/docentePost";
+import {MateriaPost} from "../models/materiaPost";
 
 @Component({
   selector: 'app-add-docente',
@@ -17,17 +17,17 @@ import {MateriasPost} from "../models/materiasPost";
 export class AddDocenteComponent implements OnInit {
   idDocente;
   idMateria;
-  public docente:Docentes;
-  public docentePost:DocentesPost;
-  public materia:Materias;
-  public materiaPost:MateriasPost;
+  public docente:Docente;
+  public docentePost:DocentePost;
+  public materia:Materia;
+  public materiaPost:MateriaPost;
   public dataSourceDocentes=[];
   public dataSourceMaterias=[];
   constructor(private materiaService: MateriasService) {
-    this.docentePost= new DocentesPost('','','','',0,0,0,0,false);
-    this.materia= new Materias('','','','','',false,false,false,false,false,false,false,false,false,false,0,0,0);
-    this.materiaPost = new MateriasPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
-    this.docente = new Docentes('','','','','',0,0,0,0,false,0);
+    this.docentePost= new DocentePost('','','','',0,0,0,0,false);
+    this.materia= new Materia('','','','','',false,false,false,false,false,false,false,false,false,false,0,0,0);
+    this.materiaPost = new MateriaPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
+    this.docente = new Docente('','','','','',0,0,0,0,false,0);
   }
 
   myControl = new FormControl();

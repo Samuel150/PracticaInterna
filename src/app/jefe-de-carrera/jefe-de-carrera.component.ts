@@ -8,8 +8,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {AddMateriaComponent} from "../add-materia/add-materia.component";
 import {AddDocenteComponent} from "../add-docente/add-docente.component";
 import {MatSort} from '@angular/material/sort';
-import {Docentes} from "../models/docentes";
-import {Materias} from "../models/materias";
+import {Docente} from "../models/docente";
+import {Materia} from "../models/materia";
 import {MatPaginator} from "@angular/material/paginator";
 
 
@@ -44,9 +44,9 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   selectionConfiguracion = new SelectionModel(true,[]);
 
 
-  public dataSourceMaterias: MatTableDataSource<Materias>;
-  public dataSourceMaterias2: MatTableDataSource<Materias>;
-  public dataSourceDocentes: MatTableDataSource<Docentes>;
+  public dataSourceMaterias: MatTableDataSource<Materia>;
+  public dataSourceMaterias2: MatTableDataSource<Materia>;
+  public dataSourceDocentes: MatTableDataSource<Docente>;
   @ViewChild('sortGeneral', {read: MatSort, static: false}) public sort1 : MatSort;
   @ViewChild('sortDocentes', {read: MatSort, static: false}) public sort2 : MatSort;
   @ViewChild('sortMaterias', {read: MatSort, static: false}) public sort3 : MatSort;
@@ -182,7 +182,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
 
   displayedColumnsDocentes =
     [{def: 'nombre', label: 'Docente', hide: this.nombre3.value},
-      {def: 'materias_asignadas',label: 'Materias Asignadas',hide: this.materias_asignadas3.value},
+      {def: 'materias_asignadas',label: 'Materia Asignadas',hide: this.materias_asignadas3.value},
       {def:'horas_planta',label: 'Horas de Planta',hide: this.horas_planta3.value},
       {def:'horas_cubiertas',label: 'Horas Cubiertas',hide: this.horas_cubiertas3.value},
       {def:'horas_faltantes',label: 'Horas Faltantes',hide: this.horas_faltantes3.value},
@@ -205,7 +205,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     let o12:Observable<boolean> = this.cheque_solicitado.valueChanges;
     let o13:Observable<boolean> = this.cheque_recibido.valueChanges;
     let o14:Observable<boolean> = this.cheque_entregado.valueChanges;
-    //Materias
+    //Materia
     let o15:Observable<boolean> = this.horas_planta2.valueChanges;
     let o16:Observable<boolean> = this.horas_totales2.valueChanges;
     let o17:Observable<boolean> = this.silabo_subido2.valueChanges;
@@ -218,7 +218,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     let o24:Observable<boolean> = this.cheque_solicitado2.valueChanges;
     let o25:Observable<boolean> = this.cheque_recibido2.valueChanges;
     let o26:Observable<boolean> = this.cheque_entregado2.valueChanges;
-    //Docentes
+    //Docente
     let o27: Observable<boolean> = this.materias_asignadas3.valueChanges;
     let o28: Observable<boolean> = this.horas_planta3.valueChanges;
     let o29: Observable<boolean> = this.horas_cubiertas3.valueChanges;
@@ -236,7 +236,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       this.columnDefinitions[11].hide = this.cheque_solicitado.value;
       this.columnDefinitions[12].hide = this.cheque_recibido.value;
       this.columnDefinitions[13].hide = this.cheque_entregado.value;
-      //Materias
+      //Materia
       this.displayedColumnsMaterias[4].hide = this.horas_planta2.value;
       this.displayedColumnsMaterias[5].hide = this.horas_totales2.value;
       this.displayedColumnsMaterias[6].hide = this.silabo_subido2.value;
@@ -249,7 +249,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       this.displayedColumnsMaterias[13].hide = this.cheque_solicitado2.value;
       this.displayedColumnsMaterias[14].hide = this.cheque_recibido2.value;
       this.displayedColumnsMaterias[15].hide = this.cheque_entregado2.value;
-      //Docentes
+      //Docente
       this.displayedColumnsDocentes[1].hide = this.materias_asignadas3.value;
       this.displayedColumnsDocentes[2].hide = this.horas_planta3.value;
       this.displayedColumnsDocentes[3].hide = this.horas_cubiertas3.value;
