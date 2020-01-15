@@ -330,7 +330,12 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     if(this.dataSourceDocentes!=null){
       let docenteFilter = this.dataSourceDocentes.filteredData;
       let docenteAc = docenteFilter.find(res=>res._id==docente);
-      return docenteAc.nombre+" "+docenteAc.apellido_paterno;
+      if(docenteAc){
+        return docenteAc.nombre+" "+docenteAc.apellido_paterno;
+      }else{
+        return "";
+      }
+
     }
   }
 

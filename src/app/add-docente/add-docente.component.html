@@ -3,27 +3,27 @@
   <form mat-dialog-content class="grid" #form="ngForm" (ngSubmit)="onSubmit(form)" >
     <div>
       <mat-form-field class="form">
-        <input type="text" id="nombre" matInput placeholder="Nombre" name="nombre" #nombre="ngModel" [(ngModel)]="docente.nombre">
+        <input type="text" id="nombre" matInput placeholder="Nombre" name="nombre" #nombre="ngModel" [(ngModel)]="docentePost.nombre">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="form">
-        <input type="text" id="segundoNombre" matInput placeholder="Segundo Nombre" name="segundoNombre" #segundoNombre = "ngModel" [(ngModel)]="docente.segundo_nombre">
+        <input type="text" id="segundoNombre" matInput placeholder="Segundo Nombre" name="segundoNombre" #segundoNombre = "ngModel" [(ngModel)]="docentePost.segundo_nombre">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="form">
-        <input type="text" id="apellidoPaterno" matInput placeholder="Apellido Paterno" name="apellidoPaterno" #apellidoPaterno="ngModel" [(ngModel)]="docente.apellido_paterno">
+        <input type="text" id="apellidoPaterno" matInput placeholder="Apellido Paterno" name="apellidoPaterno" #apellidoPaterno="ngModel" [(ngModel)]="docentePost.apellido_paterno">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="form">
-        <input type="text" id="apellidoMaterno" matInput placeholder="Apellido Materno" name="apellidoMaterno" #apellidoMaterno="ngModel" [(ngModel)]="docente.apellido_materno">
+        <input type="text" id="apellidoMaterno" matInput placeholder="Apellido Materno" name="apellidoMaterno" #apellidoMaterno="ngModel" [(ngModel)]="docentePost.apellido_materno">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="form">
-        <input type="text" id="horasPlanta" matInput placeholder="Horas de Planta" name="horasPlanta" #horasPlanta="ngModel" [(ngModel)]="docente.horas_planta">
+        <input type="text" id="horasPlanta" matInput placeholder="Horas de Planta" name="horasPlanta" #horasPlanta="ngModel" [(ngModel)]="docentePost.horas_planta">
       </mat-form-field>
     </div>
     <div>
@@ -35,27 +35,27 @@
   <form mat-dialog-content class="grid" #form="ngForm" (ngSubmit)="onSubmitAsign(form)">
     <div>
       <mat-form-field class="form">
-        <input type="text" name="_id" [(ngModel)]="materia.id_docente" matInput [matAutocomplete]="auto"
+        <input type="text" name="id_docente"  [(ngModel)]="materia.id_docente" matInput [matAutocomplete]="auto"
                [formControl]="myControl" placeholder="Docente">
         <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente">
           <mat-option class="option"  *ngFor="let option of filterOptions | async" [value]="option">
-            {{option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno}}
+            {{displayDocente2(option)}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="form">
-        <input type="text" name="_id" [(ngModel)]="materia._id" matInput [matAutocomplete]="auto2" [formControl]="myControlMaterias" placeholder="Materias" >
+        <input type="text" name="nombre"  [(ngModel)]="materia.nombre" matInput [matAutocomplete]="auto2" [formControl]="myControlMaterias" placeholder="Materias" >
         <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayMateria">
-          <mat-option class="option"  *ngFor="let option of filterOptionsMaterias | async" [value]="option">
-            {{option.nombre+" "+displayDate(option.inicio)+" "+displayDate(option.fin)}}
+          <mat-option class="option"  *ngFor="let option2 of filterOptionsMaterias | async" [value]="option2">
+            {{displayMateria2(option2)}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
     </div>
     <div>
-      <button class="add" mat-raised-button color="warn">Asignar</button>
+      <button  class="add" mat-raised-button color="warn">Asignar</button>
     </div>
   </form>
 </div>

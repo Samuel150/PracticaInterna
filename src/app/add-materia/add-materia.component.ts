@@ -107,7 +107,6 @@ export class AddMateriaComponent implements OnInit {
     // console.log({"materias_asignadas": this.docente.materias_asignadas,
     //             "horas_cubiertas": this.docente.horas_cubiertas});
     // console.log(materia2);
-
     this.materiaService.postMateria(materia2).subscribe(
       res=>{
         console.log(res)

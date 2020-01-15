@@ -7,6 +7,7 @@ import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {Materias} from "../models/materias";
 import {DocentesPost} from "../models/docentesPost";
+import {MateriasPost} from "../models/materiasPost";
 
 @Component({
   selector: 'app-add-docente',
@@ -16,13 +17,17 @@ import {DocentesPost} from "../models/docentesPost";
 export class AddDocenteComponent implements OnInit {
   idDocente;
   idMateria;
-  public docente:DocentesPost;
+  public docente:Docentes;
+  public docentePost:DocentesPost;
   public materia:Materias;
+  public materiaPost:MateriasPost;
   public dataSourceDocentes=[];
   public dataSourceMaterias=[];
   constructor(private materiaService: MateriasService) {
-    this.docente= new DocentesPost('','','','',0,0,0,0,false);
+    this.docentePost= new DocentesPost('','','','',0,0,0,0,false);
     this.materia= new Materias('','','','','',false,false,false,false,false,false,false,false,false,false,0,0,0);
+    this.materiaPost = new MateriasPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
+    this.docente = new Docentes('','','','','',0,0,0,0,false,0);
   }
 
   myControl = new FormControl();
@@ -66,8 +71,7 @@ export class AddDocenteComponent implements OnInit {
 
 
   onSubmit(form: NgForm) {
-    console.log(this.docente);
-    this.materiaService.postDocente(this.docente).subscribe(
+    this.materiaService.postDocente(this.docentePost).subscribe(
       response=>{
         console.log(response);},
       error => {
@@ -76,22 +80,21 @@ export class AddDocenteComponent implements OnInit {
     );
   }
 
-  onSubmitAsign(form: NgForm) {
+  onSubmitAsign(form) {
     console.log(this.materia);
   }
 
-  displayDocente(subject: Docentes) {
-    if(subject!=null){
-      this.idDocente=subject._id;
+  displayDocente(subject) {
+    if(subject) {
+      this.idDocente = subject._id;
+      return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno;
     }
-    return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
   }
-  displayMateria(subject: Materias){
-    if(subject!=null){
+  displayMateria(subject){
+    if(subject){
       this.idMateria=subject._id;
-      console.log(this.idMateria);
+      return subject.nombre+" "+subject.inicio.substr(0,10)+" "+subject.fin.substr(0,10);
     }
-    return subject ? subject.nombre+" "+subject.inicio+" "+subject.fin : undefined
   }
 
   private _filter(value: string) {
@@ -101,11 +104,34 @@ export class AddDocenteComponent implements OnInit {
 
   private _filterMaterias(value: string) {
     const filterValue = value.toLowerCase();
-    return this.dataSourceMaterias.filter(option=>(option.nombre+" "+option.inicio+" "+option.fin).toLowerCase().includes(filterValue));
+    return this.dataSourceMaterias.filter(a=>a.id_docente == "").filter(option=>(option.nombre+" "+option.inicio+" "+option.fin).toLowerCase().includes(filterValue));
   }
-  displayDate(inicio) {
+  displayDate(inicio) : string {
     if(inicio!=null) {
       return inicio.substr(0, 10);
     }
+  }
+
+
+  displayMateria2(option) {
+    if (option.nombre){
+      return option.nombre + " " + this.displayDate(option.inicio) + " " + this.displayDate(option.fin);
+    }else{
+      return "";
+    }
+  }
+
+
+  displayDocente2(option) {
+    if(option.nombre){
+      return option.nombre+" "+option.apellido_paterno+" "+option.apellido_materno;
+    }else{
+      return "";
+    }
+
+  }
+
+  assigPrueba(option,option2) {
+
   }
 }
