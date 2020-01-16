@@ -4,12 +4,12 @@
     <form class = "grid" #form="ngForm" (ngSubmit)="onSubmit(form)">
       <div>
       <mat-form-field  class="form" >
-        <input required type="text" id="nombre"  matInput  placeholder="Materia" name="nombre" #nombre="ngModel" [(ngModel)]="materia.nombre">
+        <input required type="text" id="nombre"  matInput  placeholder="Materia" name="nombre" #nombre="ngModel" [(ngModel)]="super.materiaPost.nombre">
       </mat-form-field>
       </div>
       <div>
         <mat-form-field class="form">
-          <input required [matAutocomplete]="auto" [formControl]="myControlDocentes" type="text" matInput placeholder="Docente" name="id_docente" [(ngModel)]="materia.id_docente">
+          <input required [matAutocomplete]="auto" [formControl]="myControlDocentes" type="text" matInput placeholder="Docente" name="id_docente" [(ngModel)]="super.docente">
           <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente2" >
             <mat-option *ngFor="let option of filterOptionsDocentes | async" [value]="option">
               {{displayDocente(option)}}
@@ -19,21 +19,21 @@
       </div>
       <div>
         <mat-form-field class="form">
-          <input type="text" id="inicio" matInput placeholder="Fecha de Inicio" [matDatepicker]="datepickerRef" name="inicio" ngModel #inicio="ngModel" [(ngModel)]="materia.inicio" required readonly/>
+          <input type="text" id="inicio" matInput placeholder="Fecha de Inicio" [matDatepicker]="datepickerRef" name="inicio" ngModel #inicio="ngModel" [(ngModel)]="super.materiaPost.inicio" required readonly/>
           <mat-datepicker-toggle [for]="datepickerRef" matSuffix></mat-datepicker-toggle>
           <mat-datepicker #datepickerRef></mat-datepicker>
         </mat-form-field>
       </div>
       <div>
         <mat-form-field class="form">
-          <input type="text" id="fin" matInput placeholder="Fecha de Fin" [matDatepicker]="datepickerRef2" name="fin" ngModel #fin="ngModel" [(ngModel)]="materia.fin" required readonly/>
+          <input type="text" id="fin" matInput placeholder="Fecha de Fin" [matDatepicker]="datepickerRef2" name="fin" ngModel #fin="ngModel" [(ngModel)]="super.materiaPost.fin" required readonly/>
           <mat-datepicker-toggle [for]="datepickerRef2" matSuffix></mat-datepicker-toggle>
           <mat-datepicker #datepickerRef2></mat-datepicker>
         </mat-form-field>
       </div>
       <div>
         <mat-form-field  class="form" >
-          <input required type="text" matInput  placeholder="Horas Totales" name="horas_totales" #horas_totales="ngModel" [(ngModel)]="materia.horas_totales">
+          <input required type="text" matInput  placeholder="Horas Totales" name="horas_totales" #horas_totales="ngModel" [(ngModel)]="super.materiaPost.horas_totales">
         </mat-form-field>
       </div>
       <div>

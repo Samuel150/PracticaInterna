@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MateriasService} from "../services/materias.service";
 import {FormControl, NgForm} from "@angular/forms";
-import {Materia} from "../models/materia";
 import { NativeDateAdapter } from "@angular/material";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {Docente} from "../models/docente";
@@ -9,6 +8,7 @@ import {Observable, Subscriber} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {MateriaPost} from "../models/materiaPost";
 import {DocentePost} from "../models/docentePost";
+import {Super} from "../models/super";
 
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
@@ -45,14 +45,13 @@ export class AppDateAdapter extends NativeDateAdapter {
 })
 export class AddMateriaComponent implements OnInit {
 
-  public materia:MateriaPost = new MateriaPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
-
-  public docente:Docente;
-  public docentePost:DocentePost;
+  public materiaPost:MateriaPost;
+  public super: Super;
   public dataSourceDocentes=[];
   constructor(private materiaService: MateriasService) {
-    this.docente = new Docente('','','','','',0,0,0,0,false,0);
-    this.docentePost = new DocentePost('','','','',0,0,0,0,false);
+    this.materiaPost = new MateriaPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
+    this.super = new Super();
+    this.super.materiaPost = this.materiaPost;
   }
 
   ngOnInit() {
@@ -77,37 +76,31 @@ export class AddMateriaComponent implements OnInit {
   filterOptionsDocentes: Observable<string[]>;
 
   onSubmit(form: NgForm) {
-    let materia2: any = this.materia;
-    let docente: any = this.materia.id_docente;
-    this.docente = docente;
-    if (this.docente) {
-      materia2.id_docente = (this.materia.id_docente as unknown as Docente)._id;
-      this.docente.materias_asignadas = this.docente.materias_asignadas + 1;
-      let horasPlanta = this.docente.horas_planta;
-      let horasCubiertas = this.docente.horas_cubiertas;
-      let horasMateria = materia2.horas_totales;
-      if (horasPlanta - horasCubiertas - horasMateria >= 0) {
-        this.docente.horas_cubiertas = parseInt(String(horasCubiertas)) + parseInt(String(horasMateria));
-        materia2.horas_planta = horasMateria;
-      } else {
-        this.docente.horas_cubiertas = horasPlanta;
-        materia2.horas_planta = parseInt(String(horasPlanta)) - parseInt(String(horasCubiertas));
+    if(this.super.docente){
+      this.super.materiaPost.id_docente = this.super.docente._id;
+      this.super.docente.materias_asignadas+=1;
+      let horasPlantaDocente = this.super.docente.horas_planta;
+      let horasCubiertasDocente = this.super.docente.horas_cubiertas;
+      let horasTotalesMateria = this.super.materiaPost.horas_totales;
+      if(horasPlantaDocente - horasCubiertasDocente - horasTotalesMateria >= 0){
+        this.super.docente.horas_cubiertas = parseInt(String(horasCubiertasDocente)) + parseInt(String(horasTotalesMateria));
+        this.super.materiaPost.horas_planta = horasTotalesMateria;
+      }else{
+        this.super.docente.horas_cubiertas = horasPlantaDocente;
+        this.super.materiaPost.horas_planta = parseInt(String(horasPlantaDocente)) - parseInt(String(horasCubiertasDocente))
       }
-      let idDocente = this.docente._id;
-      this.materiaService.putDocente(idDocente,{"materias_asignadas": this.docente.materias_asignadas,"horas_cubiertas": this.docente.horas_cubiertas}).subscribe(
+      this.materiaService.putDocente(this.super.docente._id,{"materias_asignadas":this.super.docente.materias_asignadas,"horas_cubiertas": this.super.docente.horas_cubiertas }).subscribe(
         res=>{
           console.log(res)
         },error => {
           console.log(error)
         }
-      )
+      );
+
     }else{
-      materia2.id_docente = "";
+      this.super.materiaPost.id_docente="";
     }
-    // console.log({"materias_asignadas": this.docente.materias_asignadas,
-    //             "horas_cubiertas": this.docente.horas_cubiertas});
-    // console.log(materia2);
-    this.materiaService.postMateria(materia2).subscribe(
+    this.materiaService.postMateria(this.super.materiaPost).subscribe(
       res=>{
         console.log(res)
       },error => {

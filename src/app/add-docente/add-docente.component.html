@@ -35,7 +35,7 @@
   <form mat-dialog-content class="grid" #form="ngForm" (ngSubmit)="onSubmitAsign(form)">
     <div>
       <mat-form-field class="form">
-        <input type="text" name="id_docente"  [(ngModel)]="materia.id_docente" matInput [matAutocomplete]="auto"
+        <input type="text" name="id_docente"  [(ngModel)]="super.docente" matInput [matAutocomplete]="auto"
                [formControl]="myControl" placeholder="Docente">
         <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente">
           <mat-option class="option"  *ngFor="let option of filterOptions | async" [value]="option">
@@ -46,7 +46,7 @@
     </div>
     <div>
       <mat-form-field class="form">
-        <input type="text" name="nombre"  [(ngModel)]="materia.nombre" matInput [matAutocomplete]="auto2" [formControl]="myControlMaterias" placeholder="Materia" >
+        <input type="text" name="nombre"  [(ngModel)]="super.materia" matInput [matAutocomplete]="auto2" [formControl]="myControlMaterias" placeholder="Materia" >
         <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayMateria">
           <mat-option class="option"  *ngFor="let option2 of filterOptionsMaterias | async" [value]="option2">
             {{displayMateria2(option2)}}

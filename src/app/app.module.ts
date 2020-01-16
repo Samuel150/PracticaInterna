@@ -19,6 +19,9 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatSortModule} from "@angular/material/sort";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import { EditMateriaComponent } from './edit-materia/edit-materia.component';
+import { EditDocenteComponent } from './edit-docente/edit-docente.component';
+ import {MatIconModule} from "@angular/material/icon";
 
  const config = new AuthServiceConfig([
   {
@@ -41,22 +44,25 @@ export function provideConfig() {
     AddMateriaComponent,
     AddDocenteComponent,
     AddCuentaComponent,
-    GoogleLogInComponent
+    GoogleLogInComponent,
+    EditMateriaComponent,
+    EditDocenteComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    HttpClientModule,
-    FormsModule,
-    SocialLoginModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatDatepickerModule,
-    MatSortModule,
-    MatPaginatorModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MaterialModule,
+        HttpClientModule,
+        FormsModule,
+        SocialLoginModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatDatepickerModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatIconModule
+    ],
     entryComponents:[
       AddMateriaComponent,
       AddDocenteComponent

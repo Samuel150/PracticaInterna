@@ -4,15 +4,13 @@ import {Materia} from '../models/materia'
 import {Docente} from '../models/docente'
 import {Observable} from "rxjs";
 import {DocentePost} from "../models/docentePost";
+import {MateriaPost} from "../models/materiaPost";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MateriasService {
 
-
-  materias  : Materia[];
-  docentes : Docente[];
   readonly URL_API_DOCENTES = "http://skynet.lp.upb.edu:7875/docentes";
   readonly URL_API_DOCENTE = "http://skynet.lp.upb.edu:7875/docente";
   readonly URL_API_DOCENTE_POST = "http://skynet.lp.upb.edu:7875/docentes";
@@ -26,10 +24,7 @@ export class MateriasService {
   getDocentes():Observable<any>{
     return this.http.get(this.URL_API_DOCENTES);
   }
-  getDocente(docente){
-    let headers = new HttpHeaders().set('Content-Type', "application/json");
-    return this.http.get<Docente>(this.URL_API_DOCENTE+`/${docente}`,{headers:headers});
-  }
+
   postDocente(docente: DocentePost){
     let params = JSON.stringify(docente);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
@@ -40,8 +35,7 @@ export class MateriasService {
     return this.http.get(this.URL_API_MATERIAS);
   }
 
-  postMateria(materia: Materia){
-    console.log(materia);
+  postMateria(materia: MateriaPost){
     let params = JSON.stringify(materia);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
     return this.http.post(this.URL_API_MATERIA_POST,params,{headers: headers});
@@ -59,6 +53,11 @@ export class MateriasService {
 
   deleteMateria(Materia: Materia){
     return this.http.delete(this.URL_API_MATERIAS+`/${Materia._id}`);
+  }
+
+  getDocente(docente){
+    let headers = new HttpHeaders().set('Content-Type', "application/json");
+    return this.http.get<Docente>(this.URL_API_DOCENTE+`/${docente}`,{headers:headers});
   }
 
 }

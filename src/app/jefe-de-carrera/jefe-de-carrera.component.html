@@ -25,18 +25,17 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header > Inicio </th>
           <td style="text-align: left" mat-cell *matCellDef="let element"> {{displayDate(element.inicio)}} </td>
         </ng-container>
-
         <ng-container matColumnDef="fin">
           <th mat-header-cell *matHeaderCellDef mat-sort-header > Fin </th>
           <td style="text-align: left" mat-cell *matCellDef="let element"> {{displayDate(element.fin)}} </td>
         </ng-container>
         <ng-container matColumnDef="horas_planta">
           <th mat-header-cell *matHeaderCellDef mat-sort-header > Horas de Planta </th>
-          <td style="text-align: center" mat-cell *matCellDef="let element"> {{element.horas_planta}} </td>
+          <td style="align: center" mat-cell *matCellDef="let element"> {{element.horas_planta}} </td>
         </ng-container>
         <ng-container matColumnDef="horas_totales">
           <th mat-header-cell *matHeaderCellDef mat-sort-header > Horas Totales </th>
-          <td style="text-align: center" mat-cell *matCellDef="let element"> {{element.horas_totales}} </td>
+          <td style="align: center" mat-cell *matCellDef="let element"> {{element.horas_totales}} </td>
         </ng-container>
         <ng-container matColumnDef="silabo_subido">
           <th mat-header-cell *matHeaderCellDef>
@@ -128,6 +127,13 @@
             </mat-checkbox>
           </td>
         </ng-container>
+        <ng-container matColumnDef="opciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
+          </td>
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="getDisplayedColumnsMaterias(); sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: getDisplayedColumnsMaterias()">
         </tr>
@@ -177,6 +183,13 @@
           <td mat-cell *matCellDef="let element">
             <mat-checkbox color="primary" (click)="setEvalPares(element._id,{'evaluacion_pares':!element.evaluacion_pares})" [checked]=element.evaluacion_pares>
             </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="opciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="getDisplayedColumnsDocentes(); sticky: true"></tr>
@@ -300,6 +313,13 @@
           <td mat-cell *matCellDef="let element">
             <mat-checkbox disabled color="primary" [checked]="element.cheque_entregado">
             </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="opciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button color="warn"><mat-icon>delete_outline</mat-icon></button>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>

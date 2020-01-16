@@ -8,6 +8,7 @@ import {map, startWith} from "rxjs/operators";
 import {Materia} from "../models/materia";
 import {DocentePost} from "../models/docentePost";
 import {MateriaPost} from "../models/materiaPost";
+import {Super} from "../models/super";
 
 @Component({
   selector: 'app-add-docente',
@@ -21,6 +22,7 @@ export class AddDocenteComponent implements OnInit {
   public docentePost:DocentePost;
   public materia:Materia;
   public materiaPost:MateriaPost;
+  public super: Super;
   public dataSourceDocentes=[];
   public dataSourceMaterias=[];
   constructor(private materiaService: MateriasService) {
@@ -28,6 +30,7 @@ export class AddDocenteComponent implements OnInit {
     this.materia= new Materia('','','','','',false,false,false,false,false,false,false,false,false,false,0,0,0);
     this.materiaPost = new MateriaPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
     this.docente = new Docente('','','','','',0,0,0,0,false,0);
+    this.super = new Super();
   }
 
   myControl = new FormControl();
@@ -81,7 +84,31 @@ export class AddDocenteComponent implements OnInit {
   }
 
   onSubmitAsign(form) {
-    console.log(this.materia);
+    this.super.docente.materias_asignadas +=1;
+    let horasPlantaDocente = this.super.docente.horas_planta;
+    let horasCubiertasDocente = this.super.docente.horas_cubiertas;
+    let horasTotalesMateria = this.super.materia.horas_totales;
+    if(horasPlantaDocente - horasCubiertasDocente - horasTotalesMateria >= 0){
+      this.super.docente.horas_cubiertas = parseInt(String(horasCubiertasDocente)) + parseInt(String(horasTotalesMateria));
+      this.super.materia.horas_planta = horasTotalesMateria;
+    }else{
+      this.super.docente.horas_cubiertas = horasPlantaDocente;
+      this.super.materia.horas_planta = parseInt(String(horasPlantaDocente)) - parseInt(String(horasCubiertasDocente));
+    }
+    this.materiaService.putMateria(this.super.materia._id, {id_docente: this.super.docente._id,horas_planta: this.super.materia.horas_planta}).subscribe(
+      res=>{
+        console.log(res);
+      }, error => {
+        console.log(error);
+      }
+    );
+    this.materiaService.putDocente(this.super.docente._id,{"materias_asignadas":this.super.docente.materias_asignadas,"horas_cubiertas": this.super.docente.horas_cubiertas }).subscribe(
+      res=>{
+        console.log(res)
+      },error => {
+        console.log(error)
+      }
+    );
   }
 
   displayDocente(subject) {
@@ -90,6 +117,7 @@ export class AddDocenteComponent implements OnInit {
       return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno;
     }
   }
+
   displayMateria(subject){
     if(subject){
       this.idMateria=subject._id;
@@ -106,12 +134,12 @@ export class AddDocenteComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.dataSourceMaterias.filter(a=>a.id_docente == "").filter(option=>(option.nombre+" "+option.inicio+" "+option.fin).toLowerCase().includes(filterValue));
   }
+
   displayDate(inicio) : string {
     if(inicio!=null) {
       return inicio.substr(0, 10);
     }
   }
-
 
   displayMateria2(option) {
     if (option.nombre){
@@ -121,17 +149,12 @@ export class AddDocenteComponent implements OnInit {
     }
   }
 
-
   displayDocente2(option) {
     if(option.nombre){
       return option.nombre+" "+option.apellido_paterno+" "+option.apellido_materno;
     }else{
       return "";
     }
-
   }
 
-  assigPrueba(option,option2) {
-
-  }
 }

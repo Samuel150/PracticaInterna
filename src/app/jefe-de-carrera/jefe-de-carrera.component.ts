@@ -70,6 +70,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     cheque_solicitado: new FormControl(true),
     cheque_recibido: new FormControl(true),
     cheque_entregado: new FormControl(true),
+    opciones: new FormControl(this.admin||this.jefe||this.asistente)
   });
   formMaterias: FormGroup = new FormGroup({
     nombre: new FormControl(true),
@@ -87,7 +88,8 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     planilla_firmada: new FormControl(this.registros || this.contabilidad),
     cheque_solicitado: new FormControl(this.contabilidad),
     cheque_recibido: new FormControl(this.contabilidad),
-    cheque_entregado: new FormControl(this.contabilidad)
+    cheque_entregado: new FormControl(this.contabilidad),
+    opciones: new FormControl(this.admin||this.jefe||this.asistente)
   });
   formDocentes: FormGroup = new FormGroup({
     nombre: new FormControl(true),
@@ -99,6 +101,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     horas_cubiertas: new FormControl(this.admin),
     horas_faltantes: new FormControl(this.admin),
     evaluacion_pares: new FormControl(this.admin),
+    opciones: new FormControl(this.admin||this.jefe||this.asistente)
   });
 
   nombre = this.form.get('nombre');
@@ -115,6 +118,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   cheque_solicitado = this.form.get('cheque_solicitado');
   cheque_recibido = this.form.get('cheque_recibido');
   cheque_entregado = this.form.get('cheque_entregado');
+  opciones = this.form.get('opciones');
 
   nombre2 = this.formMaterias.get('nombre');
   id_docente2 = this.formMaterias.get('id_docente');
@@ -132,6 +136,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   cheque_solicitado2 = this.formMaterias.get('cheque_solicitado');
   cheque_recibido2 = this.formMaterias.get('cheque_recibido');
   cheque_entregado2 = this.formMaterias.get('cheque_entregado');
+  opciones2 = this.formMaterias.get('opciones');
 
   nombre3 = this.formDocentes.get('nombre');
   segundo_nombre3 = this.formDocentes.get('segundo_nombre');
@@ -142,7 +147,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   horas_cubiertas3 = this.formDocentes.get('horas_cubiertas');
   horas_faltantes3 = this.formDocentes.get('horas_faltantes');
   evaluacion_pares3 = this.formDocentes.get('evaluacion_pares');
-
+  opciones3 = this.formMaterias.get('opciones');
 
   columnDefinitions =
     [{def: 'nombre', label: 'Materia', hide: this.nombre.value},
@@ -158,7 +163,8 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       {def: 'planilla_firmada', label: 'Planilla Firmada', hide: this.planilla_firmada.value},
       {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: this.cheque_solicitado.value},
       {def: 'cheque_recibido', label: 'Cheque Recibido', hide: this.cheque_recibido.value},
-      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: this.cheque_entregado.value}
+      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: this.cheque_entregado.value},
+      {def: 'opciones',label: 'Opciones',hide: this.opciones.value}
     ];
 
   displayedColumnsMaterias =
@@ -177,7 +183,8 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       {def: 'planilla_firmada', label: 'Planilla Firmada', hide: this.planilla_firmada2.value},
       {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: this.cheque_solicitado2.value},
       {def: 'cheque_recibido', label: 'Cheque Recibido', hide: this.cheque_recibido2.value},
-      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: this.cheque_entregado2.value}
+      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: this.cheque_entregado2.value},
+      {def: 'opciones',label: 'Opciones',hide: this.opciones2.value}
     ];
 
   displayedColumnsDocentes =
@@ -186,7 +193,8 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       {def:'horas_planta',label: 'Horas de Planta',hide: this.horas_planta3.value},
       {def:'horas_cubiertas',label: 'Horas Cubiertas',hide: this.horas_cubiertas3.value},
       {def:'horas_faltantes',label: 'Horas Faltantes',hide: this.horas_faltantes3.value},
-      {def:'evaluacion_pares',label: 'Evaluacion por Pares',hide: this.evaluacion_pares3.value}
+      {def:'evaluacion_pares',label: 'Evaluacion por Pares',hide: this.evaluacion_pares3.value},
+      {def: 'opciones',label: 'Opciones',hide: this.opciones3.value}
     ];
 
   public dataSourceConfiguracion: MatTableDataSource<Configuracion> = new MatTableDataSource(this.neededColumnDefinitions());
@@ -293,12 +301,16 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   openAddMaterias() {
     let dialogRef = this.dialogMaterias.open(AddMateriaComponent, {width:'750px', height:'450px'});
     dialogRef.afterClosed().subscribe(() => {
+      this.getDocentes();
+      this.getMaterias();
     });
   }
 
   openAddDocentes() {
     let dialogRef = this.dialogMaterias.open(AddDocenteComponent, {width:'750px'});
     dialogRef.afterClosed().subscribe(() => {
+      this.getDocentes();
+      this.getMaterias();
     });
   }
 
@@ -360,11 +372,12 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     this.materiaService.putMateria(idMateria,body).subscribe(
       res=>{
         console.log(res);
+        this.getMaterias();
       },
       error => {
         console.log(error);
       }
-    );
+    )
   }
 
   setEvalPares(idDocente,body) {
