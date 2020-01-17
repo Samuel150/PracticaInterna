@@ -1,1 +1,46 @@
-<p>edit-materia works!</p>
+<div class="add_docente">
+  <h2>Editar Materia</h2>
+  <div>
+    <form  class = "form grid" (ngSubmit)="onSubmit()">
+      <div>
+        <mat-form-field  class="form" [formGroup]="form">
+          <input required type="text" matInput formControlName="nombre" placeholder="Materia" name="nombre" [ngModel]="data.dataKey.nombre" >
+          <mat-error>Nombre de Maateria Requerida</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form" >
+          <input [matAutocomplete]="auto" [formControl]="myControlDocentes" type="text" matInput placeholder="Docente" name="id_docente" [ngModel]="data.dataKey.id_docente" [(ngModel)]="super.docente">
+          <mat-error>Docente Requerido</mat-error>
+          <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente2" >
+            <mat-option *ngFor="let option of filterOptionsDocentes | async" [value]="option">
+              {{displayDocente(option)}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <input required type="text" matInput placeholder="Fecha de Inicio" name="inicio" [ngModel]="data.dataKey.inicio"  [matDatepicker]="datepickerRef" readonly/>
+          <mat-datepicker-toggle [for]="datepickerRef" matSuffix></mat-datepicker-toggle>
+          <mat-datepicker #datepickerRef></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <input required type="text" matInput placeholder="Fecha de Inicio" name="fin" [ngModel]="data.dataKey.fin"  [matDatepicker]="datepickerRef2" readonly/>
+          <mat-datepicker-toggle [for]="datepickerRef2" matSuffix></mat-datepicker-toggle>
+          <mat-datepicker #datepickerRef2></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  class="form" >
+          <input  required type="text" matInput  placeholder="Horas Totales Materia" name="horas_totales" [ngModel]="data.dataKey.horas_totales" >
+        </mat-form-field>
+      </div>
+      <div>
+        <button [disabled]="form.invalid" type="submit" class="add" mat-raised-button color="warn">Modificar</button>
+      </div>
+    </form>
+  </div>
+</div>

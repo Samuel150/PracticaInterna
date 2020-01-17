@@ -16,8 +16,8 @@ import {Super} from "../models/super";
   styleUrls: ['./add-docente.component.css']
 })
 export class AddDocenteComponent implements OnInit {
-  idDocente;
-  idMateria;
+  horasFaltantesDocente = "0";
+  horasTotalesMateria= "0";
   public docente:Docente;
   public docentePost:DocentePost;
   public materia:Materia;
@@ -113,14 +113,13 @@ export class AddDocenteComponent implements OnInit {
 
   displayDocente(subject) {
     if(subject) {
-      this.idDocente = subject._id;
+      this.horasFaltantesDocente = subject.horas_faltantes;
       return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno;
     }
   }
 
   displayMateria(subject){
     if(subject){
-      this.idMateria=subject._id;
       return subject.nombre+" "+subject.inicio.substr(0,10)+" "+subject.fin.substr(0,10);
     }
   }

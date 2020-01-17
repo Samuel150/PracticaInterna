@@ -4,10 +4,9 @@ import {FormControl, NgForm} from "@angular/forms";
 import { NativeDateAdapter } from "@angular/material";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {Docente} from "../models/docente";
-import {Observable, Subscriber} from "rxjs";
+import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {MateriaPost} from "../models/materiaPost";
-import {DocentePost} from "../models/docentePost";
 import {Super} from "../models/super";
 
 export class AppDateAdapter extends NativeDateAdapter {

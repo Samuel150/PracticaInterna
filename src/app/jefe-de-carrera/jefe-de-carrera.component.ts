@@ -11,7 +11,7 @@ import {MatSort} from '@angular/material/sort';
 import {Docente} from "../models/docente";
 import {Materia} from "../models/materia";
 import {MatPaginator} from "@angular/material/paginator";
-
+import {EditMateriaComponent} from "../edit-materia/edit-materia.component";
 
 export class Configuracion {
   constructor(
@@ -20,7 +20,6 @@ export class Configuracion {
 
   }
 }
-
 
 @Component({
   selector: 'app-pending',
@@ -36,17 +35,15 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   contabilidad: boolean= false;
 
   constructor(private materiaService: MateriasService, public dialogMaterias: MatDialog) {
-
   }
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
 
-  selectionConfiguracion = new SelectionModel(true,[]);
-
-
   public dataSourceMaterias: MatTableDataSource<Materia>;
   public dataSourceMaterias2: MatTableDataSource<Materia>;
+  public dataSourceMaterias3: MatTableDataSource<Materia>;
   public dataSourceDocentes: MatTableDataSource<Docente>;
+
   @ViewChild('sortGeneral', {read: MatSort, static: false}) public sort1 : MatSort;
   @ViewChild('sortDocentes', {read: MatSort, static: false}) public sort2 : MatSort;
   @ViewChild('sortMaterias', {read: MatSort, static: false}) public sort3 : MatSort;
@@ -72,6 +69,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     cheque_entregado: new FormControl(true),
     opciones: new FormControl(this.admin||this.jefe||this.asistente)
   });
+
   formMaterias: FormGroup = new FormGroup({
     nombre: new FormControl(true),
     id_docente: new FormControl(true),
@@ -91,6 +89,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     cheque_entregado: new FormControl(this.contabilidad),
     opciones: new FormControl(this.admin||this.jefe||this.asistente)
   });
+
   formDocentes: FormGroup = new FormGroup({
     nombre: new FormControl(true),
     segundo_nombre: new FormControl(true),
@@ -201,6 +200,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   public dataSourceConfiguracionMaterias: MatTableDataSource<Configuracion> = new MatTableDataSource(this.neededColumnDefinitionsMaterias());
   public dataSourceConfiguracionDocentes: MatTableDataSource<Configuracion> = new MatTableDataSource(this.neededColumnDefinitionsDocentes());
 
+
   ngAfterViewInit(){
     //General
     let o5:Observable<boolean> = this.silabo_subido.valueChanges;
@@ -267,23 +267,34 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.getMaterias();
     this.getDocentes();
+    this.getMaterias();
+    this.getMaterias3()
   }
 
   private getMaterias(){
     this.materiaService.getMaterias().subscribe(
       res => {
-        this.dataSourceMaterias2 = new MatTableDataSource(res);
-        this.dataSourceMaterias2.sort = this.sort3;
-        this.dataSourceMaterias2.paginator = this.paginator3;
         this.dataSourceMaterias = new MatTableDataSource(res);
         this.dataSourceMaterias.sort = this.sort1;
         this.dataSourceMaterias.paginator = this.paginator1;
+        this.dataSourceMaterias2 = new MatTableDataSource(res);
+        this.dataSourceMaterias2.filteredData.map(a=>a.id_docente=this.displayDocente(a.id_docente));
+        this.dataSourceMaterias2.sort = this.sort3;
+        this.dataSourceMaterias2.paginator = this.paginator3;
       }, err => {
         console.log(err);
       }
     );
+  }
+  private getMaterias3(){
+    this.materiaService.getMaterias().subscribe(
+    res=>{
+      this.dataSourceMaterias3 = new MatTableDataSource(res);
+    }, err => {
+      console.log(err);
+    }
+    )
   }
 
   private getDocentes(){
@@ -303,6 +314,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getDocentes();
       this.getMaterias();
+      this.getMaterias3();
     });
   }
 
@@ -311,19 +323,20 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getDocentes();
       this.getMaterias();
+      this.getMaterias3();
     });
   }
 
   neededColumnDefinitions(){
-    return this.columnDefinitions.filter(res=>(res.label != "Materia" && res.label != "Docente" && res.label != "Inicio" && res.label != "Fin"));
+    return this.columnDefinitions.filter(res=>(res.label!='Opciones'&&res.label != "Materia" && res.label != "Docente" && res.label != "Inicio" && res.label != "Fin"));
   }
 
   neededColumnDefinitionsMaterias(){
-    return this.displayedColumnsMaterias.filter(res=>(res.hide!=false && res.label != "Materia" && res.label != "Docente" && res.label != "Inicio" && res.label != "Fin"));
+    return this.displayedColumnsMaterias.filter(res=>(res.label!='Opciones'&&res.hide!=false && res.label != "Materia" && res.label != "Docente" && res.label != "Inicio" && res.label != "Fin"));
   }
 
   neededColumnDefinitionsDocentes(){
-    return this.displayedColumnsDocentes.filter(res=>(res.hide!=false && res.label != "Docente"));
+    return this.displayedColumnsDocentes.filter(res=>(res.label!='Opciones'&&res.hide!=false && res.label != "Docente"));
   }
 
   getDisplayedColumns():string[] {
@@ -347,7 +360,6 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       }else{
         return "";
       }
-
     }
   }
 
@@ -391,8 +403,18 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     );
   }
 
+  editMateria(element: Materia) {
+    let dialogRef = this.dialogMaterias.open(EditMateriaComponent, {width:'750px',data:{dataKey: element}});
+    dialogRef.afterClosed().subscribe(() => {
+      this.getDocentes();
+      this.getMaterias();
+      this.getMaterias3();
+    });
+  }
 
-
+  deleteMateria(element: Materia) {
+    console.log(element);
+  }
 }
 
 

@@ -65,7 +65,9 @@ export function provideConfig() {
     ],
     entryComponents:[
       AddMateriaComponent,
-      AddDocenteComponent
+      AddDocenteComponent,
+      EditMateriaComponent,
+      EditDocenteComponent
     ],
   providers: [
     {
