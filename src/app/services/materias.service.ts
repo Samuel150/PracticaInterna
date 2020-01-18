@@ -51,8 +51,11 @@ export class MateriasService {
     return this.http.put(this.URL_API_MATERIA+`/${materiaId}`, body,{headers: headers});
   }
 
-  deleteMateria(Materia: Materia){
-    return this.http.delete(this.URL_API_MATERIAS+`/${Materia._id}`);
+  deleteMateria(materia: Materia){
+    return this.http.delete(this.URL_API_MATERIA+`/${materia._id}`);
+  }
+  deleteDocente(docente: Docente){
+    return this.http.delete(this.URL_API_DOCENTE+`/${docente._id}`);
   }
 
   getDocente(docente){

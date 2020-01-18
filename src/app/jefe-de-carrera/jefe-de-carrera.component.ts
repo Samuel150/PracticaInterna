@@ -12,6 +12,7 @@ import {Docente} from "../models/docente";
 import {Materia} from "../models/materia";
 import {MatPaginator} from "@angular/material/paginator";
 import {EditMateriaComponent} from "../edit-materia/edit-materia.component";
+import {EditDocenteComponent} from "../edit-docente/edit-docente.component";
 
 export class Configuracion {
   constructor(
@@ -356,7 +357,12 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       let docenteFilter = this.dataSourceDocentes.filteredData;
       let docenteAc = docenteFilter.find(res=>res._id==docente);
       if(docenteAc){
-        return docenteAc.nombre+" "+docenteAc.apellido_paterno;
+        if(docenteAc.segundo_nombre!=""){
+          return docenteAc.nombre+" "+docenteAc.segundo_nombre+" "+docenteAc.apellido_paterno+" "+docenteAc.apellido_materno;
+        }else{
+          return docenteAc.nombre+" "+docenteAc.apellido_paterno+" "+docenteAc.apellido_materno;
+        }
+
       }else{
         return "";
       }
@@ -417,8 +423,45 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     });
   }
 
+
+
+  editDocente(element: Docente) {
+    let dialogRef = this.dialogMaterias.open(EditDocenteComponent, {width:'750px',data:{docente:element}});
+    dialogRef.afterClosed().subscribe(()=>{
+      this.getDocentes();
+      this.getMaterias();
+      this.getMaterias3();
+    })
+  }
+
   deleteMateria(element: Materia) {
-    console.log(element);
+    if(confirm("Seguro que desea eliminar materia")){
+      this.materiaService.deleteMateria(element).subscribe(
+        res=>{
+          console.log(res);
+          this.getDocentes();
+          this.getMaterias();
+          this.getMaterias3();
+        },error => {
+          console.log(error);
+        }
+      )
+    }
+  }
+
+  deleteDocente(element: Docente) {
+    if(confirm("Seguro que desea eliminar a docente")){
+      this.materiaService.deleteDocente(element).subscribe(
+        res=>{
+          console.log(res);
+          this.getDocentes();
+          this.getMaterias();
+          this.getMaterias3();
+        },error => {
+          console.log(error);
+        }
+      )
+    }
   }
 }
 

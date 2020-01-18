@@ -22,6 +22,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import { EditMateriaComponent } from './edit-materia/edit-materia.component';
 import { EditDocenteComponent } from './edit-docente/edit-docente.component';
  import {MatIconModule} from "@angular/material/icon";
+import { DeleteComponent } from './delete/delete.component';
 
  const config = new AuthServiceConfig([
   {
@@ -46,7 +47,8 @@ export function provideConfig() {
     AddCuentaComponent,
     GoogleLogInComponent,
     EditMateriaComponent,
-    EditDocenteComponent
+    EditDocenteComponent,
+    DeleteComponent
   ],
     imports: [
         BrowserModule,

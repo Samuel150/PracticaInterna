@@ -1,1 +1,39 @@
-<p>edit-docente works!</p>
+<div class="add_docente">
+  <h2>Editar Materia</h2>
+  <div>
+    <form  class = "form grid" (ngSubmit)="onSubmit()">
+      <div>
+        <mat-form-field  class="form" [formGroup]="form">
+          <input required type="text" matInput formControlName="nombre" placeholder="Nombre" name="nombre">
+          <mat-error>Nombre de Docente Requerido</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  class="form" [formGroup]="form">
+          <input formControlName="segundo_nombre"  required type="text" matInput  placeholder="Segundo Nombre" name="segundo_nombre" >
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  class="form" [formGroup]="form">
+          <input formControlName="apellido_paterno"  required type="text" matInput  placeholder="Apellido Paterno" name="apellido_paterno" >
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  class="form" [formGroup]="form">
+          <input formControlName="apellido_materno"  required type="text" matInput  placeholder="Apellido Materno" name="apellido_materno" >
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  class="form" [formGroup]="form">
+          <input formControlName="horas_planta"  type="text" matInput  placeholder="Horas Planta Materia" name="horas_totales"  >
+        </mat-form-field>
+      </div>
+      <div>
+        <p>Horas Cubiertas: {{this.data.docente.horas_cubiertas}}</p>
+      </div>
+      <div>
+        <button [disabled]="form.invalid"   type="submit" class="add" mat-raised-button color="warn">Modificar</button>
+      </div>
+    </form>
+  </div>
+</div>

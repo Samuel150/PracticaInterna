@@ -54,7 +54,6 @@ export class EditMateriaComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data);
     this.getDocentes();
     this.filterOptionsDocentes = this.myControlDocentes.valueChanges.pipe(
       startWith(''),
@@ -99,7 +98,7 @@ export class EditMateriaComponent implements OnInit {
     }else {
       if(this.data.docente[0]){
         this.form.value.id_docente = this.data.docente[0]._id;
-        if(this.data.docente[0]._id != this.data.acDocente[0]._id){
+        if(this.data.acDocente[0] && this.data.docente[0]._id != this.data.acDocente[0]._id){
             //rebajar materias asignadas al docente anterior
             //rebajar horas planta tambien (cubiertas con horasPlantaMateria)
             this.materiaService.putDocente(this.data.acDocente[0]._id,
@@ -111,7 +110,8 @@ export class EditMateriaComponent implements OnInit {
                 console.log(error);
               }
             );
-            this.materiaService.putDocente(this.data.docente[0]._id, {"horas_cubiertas": (+this.data.docente[0].horas_cubiertas +this.form.value.horas_planta)}).subscribe(
+            this.materiaService.putDocente(this.data.docente[0]._id,
+              {"horas_cubiertas": (+this.data.docente[0].horas_cubiertas +this.form.value.horas_planta)}).subscribe(
               res=>{
                 console.log(res);
               },error => {
@@ -122,13 +122,27 @@ export class EditMateriaComponent implements OnInit {
         }else{
             //put al docente anterior(horas planta)
             //igual se debe usar horasPlantaMateria
-            this.materiaService.putDocente(this.data.acDocente[0]._id, {"horas_cubiertas": (this.data.acDocente[0].horas_cubiertas-this.data.horasPlanta[0]+this.form.value.horas_planta)}).subscribe(
-              res=>{
-                console.log(res);
-              },error => {
-                console.log(error);
-              }
-            );
+            if(this.data.acDocente[0]){
+              this.materiaService.putDocente(this.data.acDocente[0]._id,
+                {"horas_cubiertas": (this.data.acDocente[0].horas_cubiertas-this.data.horasPlanta[0]+this.form.value.horas_planta)}).subscribe(
+                res=>{
+                  console.log(res);
+                },error => {
+                  console.log(error);
+                }
+              );
+            }else{
+              this.materiaService.putDocente(this.data.docente[0]._id,
+                {"horas_cubiertas": (this.data.docente[0].horas_cubiertas-this.data.horasPlanta[0]+this.form.value.horas_planta),
+                "materias_asignadas": this.data.docente[0].materias_asignadas+=1}).subscribe(
+                res=>{
+                  console.log(res);
+                },error => {
+                  console.log(error);
+                }
+              );
+            }
+
         }
       }else{
         this.form.value.horas_planta="0";
