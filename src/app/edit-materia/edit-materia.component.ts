@@ -71,8 +71,7 @@ export class EditMateriaComponent implements OnInit {
   }
 
   form: FormGroup = new FormGroup({
-    nombre: new FormControl('',Validators.required),
-    id_docente: new FormControl('',Validators.required),
+    nombre: new FormControl('',Validators.required)
   });
 
 

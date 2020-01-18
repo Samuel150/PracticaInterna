@@ -144,7 +144,7 @@
   </mat-tab>
   <mat-tab label="Docente" *ngIf="admin||jefe">
     <div class="allTable">
-      <button mat-raised-button color="warn" *ngIf="true" (click)="openAddDocentes()">Añadir/Asignar Docente</button>
+      <button mat-raised-button color="warn" *ngIf="true" (click)="openAddDocentes()">Añadir Docente</button>
       <br/>
       <mat-form-field>
         <input matInput (keyup)="applyFilterDocentes($event.target.value)" placeholder="Buscar">

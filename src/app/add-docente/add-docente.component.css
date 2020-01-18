@@ -6,6 +6,9 @@ h2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+.noGrid {
+  margin-left: 40px;
+}
 
 .form {
   width: 80%;
@@ -13,6 +16,9 @@ h2 {
 
 .add{
   width: 50%;
+}
+.noGridAdd{
+  width: 25%;
 }
 .option{
   width: 500px;

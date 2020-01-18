@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MateriasService} from "../services/materias.service";
 import {NgForm} from "@angular/forms";
 import {Docente} from "../models/docente";
@@ -16,13 +16,13 @@ import {Super} from "../models/super";
   styleUrls: ['./add-docente.component.css']
 })
 export class AddDocenteComponent implements OnInit {
-  horasFaltantesDocente = "0";
-  horasTotalesMateria= "0";
+
   public docente:Docente;
   public docentePost:DocentePost;
   public materia:Materia;
   public materiaPost:MateriaPost;
   public super: Super;
+  public super2: Super;
   public dataSourceDocentes=[];
   public dataSourceMaterias=[];
   constructor(private materiaService: MateriasService) {
@@ -31,12 +31,15 @@ export class AddDocenteComponent implements OnInit {
     this.materiaPost = new MateriaPost('','','','',false,false,false,false,false,false,false,false,false,false,0,0);
     this.docente = new Docente('','','','','',0,0,0,0,false,0);
     this.super = new Super();
+    this.super2 = new Super();
   }
 
   myControl = new FormControl();
   myControlMaterias = new FormControl();
   filterOptions: Observable<string[]>;
   filterOptionsMaterias: Observable<string[]>;
+
+  horasFaltantesDocente: any;
 
 
   ngOnInit() {
@@ -111,10 +114,11 @@ export class AddDocenteComponent implements OnInit {
     );
   }
 
-  displayDocente(subject) {
-    if(subject) {
-      this.horasFaltantesDocente = subject.horas_faltantes;
-      return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno;
+  displayDocente(subject)  {
+    if(subject || (subject instanceof Docente && subject.nombre)) {
+      return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno+" - Horas Faltantes: "+(+subject.horas_planta-subject.horas_cubiertas);
+    }else{
+      return "";
     }
   }
 
@@ -150,7 +154,7 @@ export class AddDocenteComponent implements OnInit {
 
   displayDocente2(option) {
     if(option.nombre){
-      return option.nombre+" "+option.apellido_paterno+" "+option.apellido_materno;
+      return option.nombre+" "+option.apellido_paterno+" "+option.apellido_materno+" - Horas Faltantes: "+(+option.horas_planta-option.horas_cubiertas);
     }else{
       return "";
     }
