@@ -67,7 +67,7 @@ export class AddMateriaComponent implements OnInit {
     fin: new FormControl('', Validators.required),
     id_docente: new FormControl(''),
     horas_totales: new FormControl('', [Validators.required,Validators.pattern('^\\d*$')]),
-    horas_planta: new FormControl('0',Validators.pattern('^\\d*$'))
+    horas_planta: new FormControl('',Validators.pattern('^\\d*$'))
   });
 
   getDocentes() {
@@ -105,6 +105,7 @@ export class AddMateriaComponent implements OnInit {
           }
         );
       } else {
+        this.form.value.horas_planta="0";
         this.form.value.id_docente = "";
       }
       this.materiaService.postMateria(this.form.value).subscribe(
