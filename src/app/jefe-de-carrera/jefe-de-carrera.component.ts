@@ -404,7 +404,12 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   }
 
   editMateria(element: Materia) {
-    let dialogRef = this.dialogMaterias.open(EditMateriaComponent, {width:'750px',data:{dataKey: element}});
+    let idMateria = element._id;
+    let idDocente = this.dataSourceMaterias3.filteredData.filter(a=>a._id == idMateria).map(a=>a.id_docente);
+    let acDocente = this.dataSourceDocentes.filteredData.filter(a=>a._id == idDocente as unknown as string);
+    let Docente = this.dataSourceDocentes.filteredData.filter(a=>a._id == idDocente as unknown as string);
+    let horasPlantaMateria = this.dataSourceMaterias3.filteredData.filter(a=>a._id == idMateria).map(a=>a.horas_planta);
+    let dialogRef = this.dialogMaterias.open(EditMateriaComponent, {width:'750px',data:{dataKey: element,docente:Docente,acDocente:acDocente,horasPlanta:horasPlantaMateria}});
     dialogRef.afterClosed().subscribe(() => {
       this.getDocentes();
       this.getMaterias();

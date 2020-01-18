@@ -4,13 +4,13 @@
     <form  class = "form grid" (ngSubmit)="onSubmit()">
       <div>
         <mat-form-field  class="form" [formGroup]="form">
-          <input required type="text" matInput formControlName="nombre" placeholder="Materia" name="nombre" [ngModel]="data.dataKey.nombre" >
+          <input required type="text" matInput formControlName="nombre" placeholder="Materia" name="nombre">
           <mat-error>Nombre de Maateria Requerida</mat-error>
         </mat-form-field>
       </div>
       <div>
-        <mat-form-field class="form" >
-          <input [matAutocomplete]="auto" [formControl]="myControlDocentes" type="text" matInput placeholder="Docente" name="id_docente" [ngModel]="data.dataKey.id_docente" [(ngModel)]="super.docente">
+        <mat-form-field class="form">
+          <input [matAutocomplete]="auto" [formControl]="myControlDocentes" type="text" matInput placeholder="Docente" name="id_docente" [ngModel]="data.docente[0]" [(ngModel)]="data.docente[0]">
           <mat-error>Docente Requerido</mat-error>
           <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayDocente2" >
             <mat-option *ngFor="let option of filterOptionsDocentes | async" [value]="option">
@@ -20,26 +20,31 @@
         </mat-form-field>
       </div>
       <div>
-        <mat-form-field class="form">
-          <input required type="text" matInput placeholder="Fecha de Inicio" name="inicio" [ngModel]="data.dataKey.inicio"  [matDatepicker]="datepickerRef" readonly/>
+        <mat-form-field class="form" [formGroup]="form">
+          <input formControlName="inicio" required type="text" matInput placeholder="Fecha de Inicio" name="inicio"  [matDatepicker]="datepickerRef" readonly/>
           <mat-datepicker-toggle [for]="datepickerRef" matSuffix></mat-datepicker-toggle>
           <mat-datepicker #datepickerRef></mat-datepicker>
         </mat-form-field>
       </div>
       <div>
-        <mat-form-field class="form">
-          <input required type="text" matInput placeholder="Fecha de Inicio" name="fin" [ngModel]="data.dataKey.fin"  [matDatepicker]="datepickerRef2" readonly/>
+        <mat-form-field class="form" [formGroup]="form">
+          <input formControlName="fin" required type="text" matInput placeholder="Fecha de Fin" name="fin" [matDatepicker]="datepickerRef2" readonly/>
           <mat-datepicker-toggle [for]="datepickerRef2" matSuffix></mat-datepicker-toggle>
           <mat-datepicker #datepickerRef2></mat-datepicker>
         </mat-form-field>
       </div>
       <div>
-        <mat-form-field  class="form" >
-          <input  required type="text" matInput  placeholder="Horas Totales Materia" name="horas_totales" [ngModel]="data.dataKey.horas_totales" >
+        <mat-form-field  class="form" [formGroup]="form">
+          <input formControlName="horas_totales"  required type="text" matInput  placeholder="Horas Totales Materia" name="horas_totales" >
         </mat-form-field>
       </div>
       <div>
-        <button [disabled]="form.invalid" type="submit" class="add" mat-raised-button color="warn">Modificar</button>
+        <mat-form-field  class="form" [formGroup]="form">
+          <input formControlName="horas_planta"  type="text" matInput  placeholder="Horas Planta Materia" name="horas_totales"  >
+        </mat-form-field>
+      </div>
+      <div>
+        <button [disabled]="form.invalid"   type="submit" class="add" mat-raised-button color="warn">Modificar</button>
       </div>
     </form>
   </div>
