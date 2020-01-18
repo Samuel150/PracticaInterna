@@ -1,33 +1,35 @@
 <div class="add_docente">
   <h2 mat-dialog-title>Añadir Docente</h2>
-  <form mat-dialog-content class="grid" #form="ngForm" (ngSubmit)="onSubmit(form)" >
+  <form mat-dialog-content class="grid" (ngSubmit)="onSubmit()" >
     <div>
-      <mat-form-field class="form">
-        <input type="text" id="nombre" matInput placeholder="Nombre" name="nombre" #nombre="ngModel" [(ngModel)]="docentePost.nombre">
+      <mat-form-field class="form" [formGroup]="form">
+        <input formControlName="nombre" type="text" id="nombre" matInput placeholder="Nombre" name="nombre">
       </mat-form-field>
     </div>
     <div>
-      <mat-form-field class="form">
-        <input type="text" id="segundoNombre" matInput placeholder="Segundo Nombre" name="segundoNombre" #segundoNombre = "ngModel" [(ngModel)]="docentePost.segundo_nombre">
+      <mat-form-field class="form" [formGroup]="form">
+        <input formControlName="segundo_nombre" type="text" id="segundo_nombre" matInput placeholder="Segundo Nombre" name="segundo_nombre">
       </mat-form-field>
     </div>
     <div>
-      <mat-form-field class="form">
-        <input type="text" id="apellidoPaterno" matInput placeholder="Apellido Paterno" name="apellidoPaterno" #apellidoPaterno="ngModel" [(ngModel)]="docentePost.apellido_paterno">
+      <mat-form-field class="form" [formGroup]="form">
+        <input formControlName="apellido_paterno" type="text" id="apellido_paterno" matInput placeholder="Apellido Paterno" name="apellido_paterno">
       </mat-form-field>
     </div>
     <div>
-      <mat-form-field class="form">
-        <input type="text" id="apellidoMaterno" matInput placeholder="Apellido Materno" name="apellidoMaterno" #apellidoMaterno="ngModel" [(ngModel)]="docentePost.apellido_materno">
+      <mat-form-field class="form" [formGroup]="form">
+        <input formControlName="apellido_materno" type="text" id="apellido_materno" matInput placeholder="Apellido Materno" name="apellido_materno">
       </mat-form-field>
     </div>
     <div>
-      <mat-form-field class="form">
-        <input type="text" id="horasPlanta" matInput placeholder="Horas de Planta" name="horasPlanta" #horasPlanta="ngModel" [(ngModel)]="docentePost.horas_planta">
+      <mat-form-field class="form" [formGroup]="form">
+        <input formControlName="horas_planta" type="text" id="horas_planta" matInput placeholder="Horas de Planta" name="horas_planta">
       </mat-form-field>
     </div>
     <div>
-      <button class="add" mat-raised-button color="warn">Añadir</button>
+    </div>
+    <div>
+      <button [disabled]="form.invalid" class="add" mat-raised-button color="warn">Añadir</button>
     </div>
   </form>
 <!--  <hr>-->

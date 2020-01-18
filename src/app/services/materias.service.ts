@@ -25,7 +25,7 @@ export class MateriasService {
     return this.http.get(this.URL_API_DOCENTES);
   }
 
-  postDocente(docente: DocentePost){
+  postDocente(docente){
     let params = JSON.stringify(docente);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
     return this.http.post(this.URL_API_DOCENTE_POST,params,{headers:headers})
@@ -35,7 +35,7 @@ export class MateriasService {
     return this.http.get(this.URL_API_MATERIAS);
   }
 
-  postMateria(materia: MateriaPost){
+  postMateria(materia){
     let params = JSON.stringify(materia);
     let headers = new HttpHeaders().set('Content-Type', "application/json");
     return this.http.post(this.URL_API_MATERIA_POST,params,{headers: headers});

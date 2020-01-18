@@ -6,7 +6,6 @@ import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/c
 import {Docente} from "../models/docente";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
-import {MateriaPost} from "../models/materiaPost";
 import {Super} from "../models/super";
 
 export class AppDateAdapter extends NativeDateAdapter {
@@ -44,7 +43,6 @@ export class AppDateAdapter extends NativeDateAdapter {
 })
 export class AddMateriaComponent implements OnInit {
 
-  public IdDocente;
   public docente:Docente;
   public super: Super;
   public dataSourceDocentes=[];
