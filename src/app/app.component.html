@@ -1,6 +1,8 @@
 <mat-toolbar color="warn" >
   <span>DocFollow</span>
-  <button mat-raised-button (click)="signOut()">Log Out</button>
+  <button *ngIf="tokenService.getUser()" mat-raised-button (click)="signOut()">Log Out</button>
+  <p *ngIf="tokenService.getUser()">{{tokenService.user.name}}</p>
+  <img *ngIf="tokenService.getUser()" src="{{ tokenService.user.photoUrl }}">
 </mat-toolbar>
 
 <router-outlet></router-outlet>

@@ -87,7 +87,7 @@ export class EditMateriaComponent implements OnInit {
     // console.log(this.data.docente[0]);//docente del formulario
     // console.log(this.data.acDocente);//idDocenteAnterior
     // console.log(this.data.dataKey);//materia a editar
-    if(this.data.docente && this.data.docente[0] && this.form.value.horas_planta==""){
+    if(this.data.docente && this.data.docente[0] && this.form.value.horas_planta){
       confirm("Asignar horas de planta al docente");
     }else if(this.data.docente && !this.data.docente[0] && this.form.value.horas_planta!=""){
       confirm("Seleccionar un docente");

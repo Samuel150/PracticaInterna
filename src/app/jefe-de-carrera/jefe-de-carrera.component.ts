@@ -12,11 +12,11 @@ import {Materia} from "../models/materia";
 import {MatPaginator} from "@angular/material/paginator";
 import {EditMateriaComponent} from "../edit-materia/edit-materia.component";
 import {EditDocenteComponent} from "../edit-docente/edit-docente.component";
+import {TokenService} from "../services/token.service";
+import {Router} from "@angular/router";
 
 export class Configuracion {
-  constructor(
-    public label: string
-  ){
+  constructor(){
 
   }
 }
@@ -34,7 +34,19 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   registros: boolean= false;
   contabilidad: boolean= false;
 
-  constructor(private materiaService: MateriasService, public dialogMaterias: MatDialog) {
+  token: string;
+
+  constructor(private route: Router,private materiaService: MateriasService, public dialogMaterias: MatDialog, private tokenService: TokenService) {
+  }
+
+  ngOnInit() {
+    this.token=this.tokenService.getToken();
+    if(!this.token){
+      this.route.navigate(['']);
+    }
+    this.getDocentes();
+    this.getMaterias();
+    this.getMaterias3()
   }
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
@@ -264,12 +276,6 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       this.displayedColumnsDocentes[4].hide = this.horas_faltantes3.value;
       this.displayedColumnsDocentes[5].hide = this.evaluacion_pares3.value;
     })
-  }
-
-  ngOnInit() {
-    this.getDocentes();
-    this.getMaterias();
-    this.getMaterias3()
   }
 
   private getMaterias(){
