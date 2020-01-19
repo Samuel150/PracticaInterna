@@ -16,15 +16,20 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.authService.authState.subscribe(user => {
-      if(user){
-        this.tokenService.setUser(user);
-        this.tokenService.setToken(user.idToken);
-        this.tokenService.setEmail(user.email);
-      }else{
+    if(this.tokenService.getUsuarioDocFollow()){
+      this.route.navigate(['seguimiento']);
+    }else{
+      this.authService.authState.subscribe(user => {
+        if(user){
+          this.tokenService.setUser(user);
+          this.tokenService.setToken(user.idToken);
+          this.tokenService.setEmail(user.email);
+        }else{
 
-      }
-    });
+        }
+      });
+    }
+
 
   }
 
@@ -32,6 +37,7 @@ export class AppComponent implements OnInit{
     this.tokenService.setUser(null);
     this.tokenService.setToken(null);
     this.tokenService.setEmail(null);
+    this.tokenService.setUserDocFollow(null);
     this.authService.signOut();
     this.route.navigate(['']);
   }

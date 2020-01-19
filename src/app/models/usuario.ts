@@ -37,7 +37,7 @@ export class Usuario {
     public apellido_materno: string,
     public email: string,
     public ci: number,
-    public rol: number,
+    public rol: string,
     public super_usuario: boolean,
     public preferencias_pendientes: PreferenciasPendientes,
     public preferencias_seguimiento: PreferenciasPendientes,

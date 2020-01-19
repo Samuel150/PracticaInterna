@@ -43,10 +43,11 @@ export class GoogleLogInComponent implements OnInit {
       res=>{
         this.users=new MatTableDataSource<Usuario>(res);
         let acUser = this.users.filteredData.filter(a=>a.email==this.tokenService.getEmail());
-        if(acUser[0]){
-          this.route.navigate(['seguimiento']);
+        if(acUser.length==0){
+          confirm("Cuenta no registrada")
         }else{
-          confirm("Cuenta no registrada");
+          this.tokenService.setUserDocFollow(acUser[0]);
+          this.route.navigate(['seguimiento']);
         }
       },error=>{
         console.log(error);

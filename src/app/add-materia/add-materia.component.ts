@@ -7,6 +7,8 @@ import {Docente} from "../models/docente";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {Super} from "../models/super";
+import {MatTableDataSource} from "@angular/material/table";
+import {Usuario} from "../models/usuario";
 
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
@@ -43,6 +45,7 @@ export class AppDateAdapter extends NativeDateAdapter {
 })
 export class AddMateriaComponent implements OnInit {
 
+  public dataSourceUsuarios=[];
   public docente:Docente;
   public super: Super;
   public dataSourceDocentes=[];

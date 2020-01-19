@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import {SocialUser} from "angularx-social-login";
+import {Usuario} from "../models/usuario";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
-  public user: SocialUser;
+  user: SocialUser;
+  userDocFollow:Usuario;
   token : string;
   email: string;
 
@@ -31,5 +33,10 @@ export class TokenService {
     return this.email
   }
 
-
+  setUserDocFollow(usuario: Usuario) {
+    this.userDocFollow = usuario
+  }
+  getUsuarioDocFollow(){
+    return this.userDocFollow;
+  }
 }

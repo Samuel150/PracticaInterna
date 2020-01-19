@@ -2,6 +2,7 @@ export class MateriaPost {
   constructor(
     public nombre: string,
     public id_docente: string,
+    public id_jefe_carrera: string,
     public inicio: string,
     public fin: string,
     public silabo_subido: boolean,

@@ -9,6 +9,8 @@ import {Materia} from "../models/materia";
 import {DocentePost} from "../models/docentePost";
 import {MateriaPost} from "../models/materiaPost";
 import {Super} from "../models/super";
+import {MatTableDataSource} from "@angular/material/table";
+import {Usuario} from "../models/usuario";
 
 @Component({
   selector: 'app-add-docente',
@@ -18,6 +20,7 @@ import {Super} from "../models/super";
 export class AddDocenteComponent implements OnInit {
 
 
+  public dataSourceUsuarios: MatTableDataSource<Usuario>;
   constructor(private materiaService: MateriasService) {
 
   }

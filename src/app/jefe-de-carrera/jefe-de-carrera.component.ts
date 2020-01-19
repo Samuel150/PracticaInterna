@@ -14,6 +14,7 @@ import {EditMateriaComponent} from "../edit-materia/edit-materia.component";
 import {EditDocenteComponent} from "../edit-docente/edit-docente.component";
 import {TokenService} from "../services/token.service";
 import {Router} from "@angular/router";
+import {Usuario} from "../models/usuario";
 
 export class Configuracion {
   constructor(){
@@ -28,25 +29,25 @@ export class Configuracion {
 })
 export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
 
-  admin: boolean = true;
-  jefe: boolean = false;
-  asistente: boolean= false;
-  registros: boolean= false;
-  contabilidad: boolean= false;
+  admin: boolean = this.tokenService.getUsuarioDocFollow().super_usuario;
+  jefe: boolean = this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera";
+  asistente: boolean= this.tokenService.getUsuarioDocFollow().rol=="asistente";
+  registros: boolean= this.tokenService.getUsuarioDocFollow().rol=="registros";
+  contabilidad: boolean= this.tokenService.getUsuarioDocFollow().rol=="contabilidad";
 
-  token: string;
+  usuarioDoc: Usuario;
 
   constructor(private route: Router,private materiaService: MateriasService, public dialogMaterias: MatDialog, private tokenService: TokenService) {
   }
 
   ngOnInit() {
-    this.token=this.tokenService.getToken();
-    if(!this.token){
+    this.usuarioDoc=this.tokenService.getUsuarioDocFollow();
+    if(!this.usuarioDoc){
       this.route.navigate(['']);
     }
     this.getDocentes();
     this.getMaterias();
-    this.getMaterias3()
+    this.getMaterias2();
   }
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
@@ -293,7 +294,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       }
     );
   }
-  private getMaterias3(){
+  private getMaterias2(){
     this.materiaService.getMaterias().subscribe(
     res=>{
       this.dataSourceMaterias3 = new MatTableDataSource(res);
@@ -320,7 +321,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getDocentes();
       this.getMaterias();
-      this.getMaterias3();
+      this.getMaterias2();
     });
   }
 
@@ -329,7 +330,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getDocentes();
       this.getMaterias();
-      this.getMaterias3();
+      this.getMaterias2();
     });
   }
 
@@ -367,7 +368,6 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
         }else{
           return docenteAc.nombre+" "+docenteAc.apellido_paterno+" "+docenteAc.apellido_materno;
         }
-
       }else{
         return "";
       }
@@ -424,7 +424,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getDocentes();
       this.getMaterias();
-      this.getMaterias3();
+      this.getMaterias2();
     });
   }
 
@@ -435,7 +435,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(()=>{
       this.getDocentes();
       this.getMaterias();
-      this.getMaterias3();
+      this.getMaterias2();
     })
   }
 
@@ -446,7 +446,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
           console.log(res);
           this.getDocentes();
           this.getMaterias();
-          this.getMaterias3();
+          this.getMaterias2();
         },error => {
           console.log(error);
         }
@@ -461,7 +461,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
           console.log(res);
           this.getDocentes();
           this.getMaterias();
-          this.getMaterias3();
+          this.getMaterias2();
         },error => {
           console.log(error);
         }
