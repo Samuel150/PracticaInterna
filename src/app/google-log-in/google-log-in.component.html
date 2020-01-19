@@ -1,14 +1,4 @@
 <div>
   <button mat-raised-button (click)="signInWithGoogle()">Log In With Google</button>
-  <button mat-raised-button (click)="signOut()">Log Out</button>
 </div>
 
-
-<div *ngIf="loggedIn">
-  <img src="{{ user.photoUrl }}">
-  <div>
-    <h4>{{ user.name }}</h4>
-    <p>{{ user.email }}</p>
-    <p>{{ user.idToken }}</p>
-  </div>
-</div>

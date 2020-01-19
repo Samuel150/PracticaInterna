@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {SelectionModel} from '@angular/cdk/collections';
 import {MateriasService} from "../services/materias.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {merge, Observable} from "rxjs";
