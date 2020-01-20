@@ -5,6 +5,7 @@ import {TokenService} from "../services/token.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {Usuario} from "../models/usuario";
 import {Router} from "@angular/router";
+import {AuthorizationService} from "../services/authorization.service";
 
 @Component({
   selector: 'app-google-log-in',
@@ -14,44 +15,37 @@ import {Router} from "@angular/router";
 export class GoogleLogInComponent implements OnInit {
 
   description = 'Modulo de Seguimiento de Docentes';
-  public user: SocialUser;
-  public loggedIn: boolean;
-  public users:MatTableDataSource<Usuario>;
 
-  constructor(private route:Router,private authService: AuthService, private tokenService: TokenService,private materiasService: MateriasService) { }
+  constructor(
+    private route: Router,
+    private authService: AuthService,
+    private tokenService: TokenService,
+    private materiasService: MateriasService
+  ) { }
 
   ngOnInit() {
+    console.log('fefef');
+  }
+
+  async signIn(){
+    await this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
     this.authService.authState.subscribe(user => {
-      this.user = user;
-      this.loggedIn = (user != null);
+      this.materiasService.getUsuarioByEmail(user.email).subscribe(
+        res => {
+          this.tokenService.setUserDocFollow(res);
+          this.tokenService.setToken(user.idToken);
+          this.tokenService.setUser(user);
+          this.tokenService.setEmail(user.email);
+          this.route.navigate(['seguimiento']);
+        },error=>{
+          confirm('Cuenta no registrada');
+          this.authService.signOut().catch(console.log);
+          this.tokenService.reset();
+          this.route.navigate(['']);
+        }
+      );
+
     });
   }
 
-  signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-    if(this.user){
-      this.tokenService.setToken(this.user.idToken);
-      this.tokenService.setUser(this.user);
-      this.tokenService.setEmail(this.user.email);
-    }
-
-  }
-
-
-  Ingresar() {
-    this.materiasService.getUsuarios().subscribe(
-      res=>{
-        this.users=new MatTableDataSource<Usuario>(res);
-        let acUser = this.users.filteredData.filter(a=>a.email==this.tokenService.getEmail());
-        if(acUser.length==0){
-          confirm("Cuenta no registrada")
-        }else{
-          this.tokenService.setUserDocFollow(acUser[0]);
-          this.route.navigate(['seguimiento']);
-        }
-      },error=>{
-        console.log(error);
-      }
-    )
-  }
 }

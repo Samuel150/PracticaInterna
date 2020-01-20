@@ -23,8 +23,8 @@ export class MateriasService {
   // readonly URL_API_MATERIA ="http://skynet.lp.upb.edu:7875/materia";
   // readonly URL_API_MATERIA_POST = "http://skynet.lp.upb.edu:7875/materias";
 
-  readonly URL_API = "http://skynet.lp.upb.edu:7875";
-  //readonly URL_API = "http://localhost:3700";
+  //readonly URL_API = "http://skynet.lp.upb.edu:7875";
+  readonly URL_API = "http://localhost:3700";
   constructor(private http: HttpClient, private tokenService: TokenService) {
 
   }
@@ -32,6 +32,11 @@ export class MateriasService {
   getUsuarios():Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', "application/json");
     return this.http.get(this.URL_API+"/usuarios/getAll",{headers:headers});
+  }
+
+  getUsuarioByEmail(email: string):Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', "application/json");
+    return this.http.get(this.URL_API+"/usuarios/getOneByEmail/"+email,{headers:headers});
   }
 
   getDocentes():Observable<any>{
@@ -88,9 +93,9 @@ export class MateriasService {
     return this.http.get<Docente>(this.URL_API + "/docentes/getOne"+`/${docente}`,{headers:headers});
   }
 
-  getPendientes(idUsuario):Observable<any>{
+  getPendientes():Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', "application/json")
-    return this.http.get(this.URL_API + "/pendientes"+`/${idUsuario}`,{headers:headers});
+    return this.http.get(this.URL_API + "/pendientes/"+this.tokenService.getUsuarioDocFollow()._id,{headers:headers});
   }
 
 }

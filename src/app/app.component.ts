@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService, SocialUser} from "angularx-social-login";
 import {TokenService} from "./services/token.service";
 import {Router} from "@angular/router";
+import {AuthorizationService} from "./services/authorization.service";
 
 @Component({
   selector: 'app-root',
@@ -16,29 +17,13 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
-    if(this.tokenService.getUsuarioDocFollow()){
-      this.route.navigate(['seguimiento']);
-    }else{
-      this.authService.authState.subscribe(user => {
-        if(user){
-          this.tokenService.setUser(user);
-          this.tokenService.setToken(user.idToken);
-          this.tokenService.setEmail(user.email);
-        }else{
-
-        }
-      });
-    }
-
 
   }
 
-  signOut(): void {
-    this.tokenService.setUser(null);
-    this.tokenService.setToken(null);
-    this.tokenService.setEmail(null);
-    this.tokenService.setUserDocFollow(null);
-    this.authService.signOut();
+  signOut() {
+    console.log('service log out');
+    this.authService.signOut().catch(console.log);
+    this.tokenService.reset();
     this.route.navigate(['']);
   }
 }

@@ -1,26 +1,45 @@
 .allTable{
   align-self: center;
   margin: 10px;
-  height: 500px;
+  height: auto;
 }
-.Table{
+.Table {
   align-self: center;
   margin: 10px;
-  height: 500px;
+  height: auto;
   min-width: 1800px;
 }
+.Table > div > mat-paginator{
+  align-self: center;
+  margin: 10px;
+  height: auto;
+  min-width: 1800px;
+}
+.allTable > div > mat-paginator{
+  align-self: center;
+  margin: 10px;
+  height: auto;
+}
+
+.allTable > form{
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-bottom: 10px;
+  min-width: 1800px;
+}
+
+.allTable > form > mat-checkbox{
+  margin: 15px;
+}
+
 .mat-table {
   width: 100%;
   margin: auto;
-  align-items: center;
   text-align: center;
+  align-items: center;
 }
 .mat-header-cell {
   text-align: center;
   font-size: medium;
 }
-.mat-cell{
-  word-wrap:break-word;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
+

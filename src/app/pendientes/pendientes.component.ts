@@ -27,14 +27,14 @@ const PENDIENTES: Pendientes[] = [
   styleUrls: ['./pendientes.component.css']
 })
 export class PendientesComponent implements OnInit {
-  displayedColumnsPendientes: string[]=['materia','docente','inicio','fin','pendiente', 'hecho'];
+  //displayedColumnsPendientes: string[]=['materia','docente','inicio','fin','pendiente', 'hecho'];
   //dataSourcePendientes =  new MatTableDataSource(PENDIENTES);
   constructor(private materiaService: MateriasService, private tokenService: TokenService) { }
 
 
   public dataSourceDocentes: MatTableDataSource<Docente>;
   public dataSourcePendientes: MatTableDataSource<Pendiente>;
-  displayedColumnsConfiguracion: string[]=['materia','id_docente','inicio','fin','message','hecho'];
+  displayedColumnsPendientes: string[]=['materia','id_docente','inicio','fin','message'];
 
   ngOnInit() {
     this.getDocentes();
@@ -56,7 +56,7 @@ export class PendientesComponent implements OnInit {
   }
 
   private getPendientes() {
-    this.materiaService.getPendientes(this.tokenService.getUsuarioDocFollow()._id).subscribe(
+    this.materiaService.getPendientes().subscribe(
       res=>{
         this.dataSourcePendientes = new MatTableDataSource(res);
         this.dataSourcePendientes.filteredData.map(a=>a.id_docente=this.displayDocente(a.id_docente));
@@ -87,5 +87,9 @@ export class PendientesComponent implements OnInit {
     if(inicio!=null) {
       return inicio.substr(0, 10);
     }
+  }
+
+  applyFilterPendientes(filterValue: string) {
+    this.dataSourcePendientes.filter = filterValue.trim().toLowerCase();
   }
 }
