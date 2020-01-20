@@ -22,6 +22,8 @@ import { EditMateriaComponent } from './edit-materia/edit-materia.component';
 import { EditDocenteComponent } from './edit-docente/edit-docente.component';
  import {MatIconModule} from "@angular/material/icon";
 import { DeleteComponent } from './delete/delete.component';
+import { AddUsuarioComponent } from './add-usuario/add-usuario.component';
+import { EditUsuarioComponent } from './edit-usuario/edit-usuario.component';
 
  const config = new AuthServiceConfig([
   {
@@ -46,7 +48,9 @@ export function provideConfig() {
     GoogleLogInComponent,
     EditMateriaComponent,
     EditDocenteComponent,
-    DeleteComponent
+    DeleteComponent,
+    AddUsuarioComponent,
+    EditUsuarioComponent
   ],
     imports: [
         BrowserModule,
@@ -67,7 +71,9 @@ export function provideConfig() {
       AddMateriaComponent,
       AddDocenteComponent,
       EditMateriaComponent,
-      EditDocenteComponent
+      EditDocenteComponent,
+      AddUsuarioComponent,
+      EditUsuarioComponent
     ],
   providers: [
     {

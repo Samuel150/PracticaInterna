@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {Super} from "../models/super";
 import {MatTableDataSource} from "@angular/material/table";
-import {Usuario} from "../models/usuario";
+import {PreferenciasDocente, PreferenciasPendientes, Usuario} from "../models/usuario";
 
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
@@ -47,19 +47,31 @@ export class AddMateriaComponent implements OnInit {
 
   public dataSourceUsuarios=[];
   public docente:Docente;
+  public usuario:Usuario;
+  public preferencias:PreferenciasPendientes;
+  public preferenciasDoc:PreferenciasDocente;
   public super: Super;
   public dataSourceDocentes=[];
   constructor(private materiaService: MateriasService) {
+    this.preferencias = new PreferenciasPendientes('',false,false,false,false,false,false,false,false,false,false,false,false);
+    this.preferenciasDoc = new PreferenciasDocente('',false,false,false,false);
     this.docente = new Docente('','','','','',0,0,0,0,false,0);
+    this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias,this.preferencias,this.preferenciasDoc);
     this.super = new Super();
     this.super.docente = this.docente;
+    this.super.usuario = this.usuario;
   }
 
   ngOnInit() {
     this.getDocentes();
+    this.getUsuarios();
     this.filterOptionsDocentes = this.myControlDocentes.valueChanges.pipe(
       startWith(''),
       map(value=>this._filterDocentes(value.toString()))
+    );
+    this.filterOptionsUsuarios = this.myControlUsuarios.valueChanges.pipe(
+      startWith(''),
+      map(value=>this._filterUsuarios(value.toString()))
     );
   }
   form: FormGroup = new FormGroup({
@@ -68,7 +80,8 @@ export class AddMateriaComponent implements OnInit {
     fin: new FormControl('', Validators.required),
     id_docente: new FormControl(''),
     horas_totales: new FormControl('', [Validators.required,Validators.pattern('^\\d*$')]),
-    horas_planta: new FormControl('',Validators.pattern('^\\d*$'))
+    horas_planta: new FormControl('',Validators.pattern('^\\d*$')),
+    id_jefe_carrera: new FormControl()
   });
 
   getDocentes() {
@@ -80,8 +93,20 @@ export class AddMateriaComponent implements OnInit {
       }
     );
   }
+  getUsuarios() {
+    this.materiaService.getUsuarios().subscribe(
+      res => {
+        this.dataSourceUsuarios = res;
+      }, err => {
+        console.log(err);
+      }
+    );
+  }
   myControlDocentes = new FormControl();
   filterOptionsDocentes: Observable<string[]>;
+
+  myControlUsuarios = new FormControl();
+  filterOptionsUsuarios:Observable<string[]>;
 
   onSubmit() {
     if(this.super && this.super.docente && this.form.value.horas_planta==""){
@@ -92,30 +117,33 @@ export class AddMateriaComponent implements OnInit {
       confirm("Las horas de planta no deben superar las horas totales de la meteria");
     }else if(this.super &&(+this.super.docente.horas_planta-this.super.docente.horas_cubiertas)<(+this.form.value.horas_planta)){
       confirm("Las horas de planta faltantes del docente son menores a las horas de planta indicadas");
-    }else {
-      if (this.super.docente) {
-        this.form.value.id_docente = this.super.docente._id;
-        this.materiaService.putDocente(this.super.docente._id, {
-          "materias_asignadas": this.super.docente.materias_asignadas + 1,
-          "horas_cubiertas": (+this.super.docente.horas_cubiertas + this.form.value.horas_planta)
-        }).subscribe(
+    }else if(this.super && !this.super.usuario) {
+      confirm("Seleccionar Jefe de Carrera encargado");
+    }else{
+        if (this.super.docente) {
+          this.form.value.id_docente = this.super.docente._id;
+          this.materiaService.putDocente(this.super.docente._id, {
+            "materias_asignadas": this.super.docente.materias_asignadas + 1,
+            "horas_cubiertas": (parseInt(String(this.super.docente.horas_cubiertas))+parseInt(this.form.value.horas_planta))
+          }).subscribe(
+            res => {
+              console.log(res)
+            }, error => {
+              console.log(error)
+            }
+          );
+        } else {
+          this.form.value.horas_planta="0";
+          this.form.value.id_docente = "";
+        }
+        this.form.value.id_jefe_carrera=this.super.usuario._id;
+        this.materiaService.postMateria(this.form.value).subscribe(
           res => {
             console.log(res)
           }, error => {
             console.log(error)
           }
         );
-      } else {
-        this.form.value.horas_planta="0";
-        this.form.value.id_docente = "";
-      }
-      this.materiaService.postMateria(this.form.value).subscribe(
-        res => {
-          console.log(res)
-        }, error => {
-          console.log(error)
-        }
-      );
     }
   }
 
@@ -124,13 +152,18 @@ export class AddMateriaComponent implements OnInit {
     return this.dataSourceDocentes.filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
   }
 
+  private _filterUsuarios(value: string) {
+    const filterValue = value.toLowerCase();
+    return this.dataSourceUsuarios.filter(option=>option.rol=="jefe_carrera" ).filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
+  }
+
   displayDocente(subject) : string {
     return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
   }
 
   displayDocente2(subject: Docente) {
     if(subject && subject.nombre) {
-      return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno;
+      return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
     }
   }
 }

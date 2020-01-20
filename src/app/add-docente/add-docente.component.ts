@@ -20,7 +20,6 @@ import {Usuario} from "../models/usuario";
 export class AddDocenteComponent implements OnInit {
 
 
-  public dataSourceUsuarios: MatTableDataSource<Usuario>;
   constructor(private materiaService: MateriasService) {
 
   }

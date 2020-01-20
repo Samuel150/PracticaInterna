@@ -15,6 +15,8 @@ import {EditDocenteComponent} from "../edit-docente/edit-docente.component";
 import {TokenService} from "../services/token.service";
 import {Router} from "@angular/router";
 import {Usuario} from "../models/usuario";
+import {AddUsuarioComponent} from "../add-usuario/add-usuario.component";
+import {EditUsuarioComponent} from "../edit-usuario/edit-usuario.component";
 
 export class Configuracion {
   constructor(){
@@ -41,6 +43,9 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    if(!this.tokenService || !this.tokenService.getUsuarioDocFollow()){
+      this.route.navigate(['']);
+    }
     this.usuarioDoc=this.tokenService.getUsuarioDocFollow();
     if(!this.usuarioDoc){
       this.route.navigate(['']);
@@ -48,22 +53,27 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     this.getDocentes();
     this.getMaterias();
     this.getMaterias2();
+    this.getUsuarios();
   }
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
+  displayedColumnsUsuarios: string[]=['nombre','email','rol','opciones'];
 
   public dataSourceMaterias: MatTableDataSource<Materia>;
   public dataSourceMaterias2: MatTableDataSource<Materia>;
   public dataSourceMaterias3: MatTableDataSource<Materia>;
   public dataSourceDocentes: MatTableDataSource<Docente>;
+  public dataSourceUsuarios: MatTableDataSource<Usuario>;
 
   @ViewChild('sortGeneral', {read: MatSort, static: false}) public sort1 : MatSort;
   @ViewChild('sortDocentes', {read: MatSort, static: false}) public sort2 : MatSort;
   @ViewChild('sortMaterias', {read: MatSort, static: false}) public sort3 : MatSort;
+  @ViewChild('sortUsuarios', {read: MatSort, static: false}) public sort4 : MatSort;
 
   @ViewChild('paginatorDocentes',{read:MatPaginator,static: false}) public paginator2: MatPaginator;
   @ViewChild('paginatorMaterias',{read:MatPaginator,static: false}) public paginator3: MatPaginator;
   @ViewChild('paginatorGeneral',{read:MatPaginator,static: false}) public paginator1: MatPaginator;
+  @ViewChild('paginatorUsuarios',{read:MatPaginator,static: false}) public paginator4: MatPaginator;
 
   form:FormGroup = new FormGroup({
     nombre: new FormControl(true),
@@ -315,6 +325,17 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
       }
     );
   }
+  private getUsuarios(){
+    this.materiaService.getUsuarios().subscribe(
+      res=>{
+        this.dataSourceUsuarios = new MatTableDataSource(res);
+        this.dataSourceUsuarios.sort = this.sort4;
+        this.dataSourceUsuarios.paginator = this.paginator4;
+      },err=>{
+        console.log(err);
+      }
+    );
+  }
 
   openAddMaterias() {
     let dialogRef = this.dialogMaterias.open(AddMateriaComponent, {width:'750px', height:'450px'});
@@ -389,6 +410,9 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
 
   applyFilterDocentes(filterValue: string) {
     this.dataSourceDocentes.filter = filterValue.trim().toLowerCase();
+  }
+  applyFilterUsuarios(filterValue: string) {
+    this.dataSourceUsuarios.filter = filterValue.trim().toLowerCase();
   }
 
   setCheckbox(idMateria,body) {
@@ -466,6 +490,55 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
           console.log(error);
         }
       )
+    }
+  }
+
+  openAddCuentas() {
+    let dialogRef = this.dialogMaterias.open(AddUsuarioComponent, {width:'750px'});
+    dialogRef.afterClosed().subscribe(() => {
+      this.getDocentes();
+      this.getMaterias();
+      this.getMaterias2();
+    });
+  }
+
+  editUsuario(element) {
+    let dialogRef = this.dialogMaterias.open(EditUsuarioComponent, {width:'750px',data:{usuario:element}});
+    dialogRef.afterClosed().subscribe(()=>{
+      this.getDocentes();
+      this.getMaterias();
+      this.getMaterias2();
+    })
+  }
+
+  deleteUsuario(element) {
+    if(confirm("Seguro que desea eliminar cuenta")){
+      this.materiaService.deleteUsuarios(element._id).subscribe(
+        res=>{
+          console.log(res);
+        }, error => {
+          console.log(error);
+        }
+      )
+    }
+  }
+
+  refresh() {
+    this.getUsuarios();
+    this.getDocentes();
+    this.getMaterias();
+    this.getMaterias2();
+  }
+
+  displayRol(rol) {
+    if(rol == "jefe_carrera"){
+      return "Jefe de Carrera"
+    }else if(rol == "asistente"){
+      return "Asistente Administrativa"
+    }else if(rol == "registros"){
+      return "Encargada de Registros"
+    }else if(rol == "contabilidad"){
+      return "Encargada de Contabilidad"
     }
   }
 }

@@ -11,8 +11,6 @@ import {AuthorizationService} from "./services/authorization.service";
 })
 export class AppComponent implements OnInit{
 
-  public user: SocialUser;
-  public token: string;
   constructor(public authService: AuthService, public tokenService: TokenService, private route: Router) {
   }
 
