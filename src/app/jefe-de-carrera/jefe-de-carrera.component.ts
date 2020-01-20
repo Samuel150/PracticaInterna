@@ -43,9 +43,6 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    if(!this.tokenService || !this.tokenService.getUsuarioDocFollow()){
-      this.route.navigate(['']);
-    }
     this.usuarioDoc=this.tokenService.getUsuarioDocFollow();
     if(!this.usuarioDoc){
       this.route.navigate(['']);

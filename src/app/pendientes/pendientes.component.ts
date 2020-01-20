@@ -92,4 +92,9 @@ export class PendientesComponent implements OnInit {
   applyFilterPendientes(filterValue: string) {
     this.dataSourcePendientes.filter = filterValue.trim().toLowerCase();
   }
+
+  refresh() {
+    this.getDocentes();
+    this.getPendientes();
+  }
 }

@@ -81,7 +81,18 @@ export class AddMateriaComponent implements OnInit {
     id_docente: new FormControl(''),
     horas_totales: new FormControl('', [Validators.required,Validators.pattern('^\\d*$')]),
     horas_planta: new FormControl('',Validators.pattern('^\\d*$')),
-    id_jefe_carrera: new FormControl()
+    id_jefe_carrera: new FormControl(),
+    silabo_subido:new FormControl(false),
+    aula_revisada:new FormControl(false),
+    examen_revisado:new FormControl(false),
+    contrato_impreso:new FormControl(false),
+    contrato_firmado: new FormControl(false),
+    planilla_lista:new FormControl(false),
+    planilla_firmada:new FormControl(false),
+    cheque_solicitado:new FormControl(false),
+    cheque_recibido: new FormControl(false),
+    cheque_entregado:new FormControl(false),
+
   });
 
   getDocentes() {

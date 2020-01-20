@@ -21,8 +21,8 @@ export class MateriasService {
   // readonly URL_API_MATERIA ="http://skynet.lp.upb.edu:7875/materia";
   // readonly URL_API_MATERIA_POST = "http://skynet.lp.upb.edu:7875/materias";
 
-  readonly URL_API = "http://skynet.lp.upb.edu:7875";
-  //readonly URL_API = "http://localhost:3700";
+  //readonly URL_API = "http://skynet.lp.upb.edu:7875";
+  readonly URL_API = "http://localhost:3700";
   constructor(private http: HttpClient, private tokenService: TokenService) {
 
   }
