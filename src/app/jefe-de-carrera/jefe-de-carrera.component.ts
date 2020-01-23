@@ -31,12 +31,12 @@ export class Configuracion {
 })
 export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
 
-  admin: boolean = this.tokenService.getUsuarioDocFollow().super_usuario;
-  jefe: boolean = this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera";
-  asistente: boolean= this.tokenService.getUsuarioDocFollow().rol=="asistente";
-  registros: boolean= this.tokenService.getUsuarioDocFollow().rol=="registros";
-  contabilidad: boolean= this.tokenService.getUsuarioDocFollow().rol=="contabilidad";
 
+  admin = this.tokenService.getUsuarioDocFollow().super_usuario;
+  jefe = this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera";
+  asistente= this.tokenService.getUsuarioDocFollow().rol=="asistente";
+  registros= this.tokenService.getUsuarioDocFollow().rol=="registros";
+  contabilidad= this.tokenService.getUsuarioDocFollow().rol=="contabilidad";
   usuarioDoc: Usuario;
 
   constructor(private route: Router,private materiaService: MateriasService, public dialogMaterias: MatDialog, private tokenService: TokenService) {
@@ -438,10 +438,8 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   editMateria(element: Materia) {
     let idMateria = element._id;
     let idDocente = this.dataSourceMaterias3.filteredData.filter(a=>a._id == idMateria).map(a=>a.id_docente);
-    let acDocente = this.dataSourceDocentes.filteredData.filter(a=>a._id == idDocente as unknown as string);
-    let Docente = this.dataSourceDocentes.filteredData.filter(a=>a._id == idDocente as unknown as string);
-    let horasPlantaMateria = this.dataSourceMaterias3.filteredData.filter(a=>a._id == idMateria).map(a=>a.horas_planta);
-    let dialogRef = this.dialogMaterias.open(EditMateriaComponent, {width:'750px',data:{dataKey: element,docente:Docente,acDocente:acDocente,horasPlanta:horasPlantaMateria}});
+    let docente = this.dataSourceDocentes.filteredData.filter(a=>a._id == idDocente as unknown as string);
+    let dialogRef = this.dialogMaterias.open(EditMateriaComponent, {width:'750px',data:{materia: element,docente:docente}});
     dialogRef.afterClosed().subscribe(() => {
       this.getDocentes();
       this.getMaterias();

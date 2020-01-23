@@ -3,7 +3,7 @@
   <form mat-dialog-content class="grid" (ngSubmit)="onSubmit()" >
     <div>
       <mat-form-field class="form" [formGroup]="form">
-        <input formControlName="nombre" type="text" id="nombre" matInput placeholder="Nombre" name="nombre">
+        <input required formControlName="nombre" type="text" id="nombre" matInput placeholder="Nombre" name="nombre">
       </mat-form-field>
     </div>
     <div>
@@ -13,20 +13,23 @@
     </div>
     <div>
       <mat-form-field class="form" [formGroup]="form">
-        <input formControlName="apellido_paterno" type="text" id="apellido_paterno" matInput placeholder="Apellido Paterno" name="apellido_paterno">
+        <input required formControlName="apellido_paterno" type="text" id="apellido_paterno" matInput placeholder="Apellido Paterno" name="apellido_paterno">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="form" [formGroup]="form">
-        <input formControlName="apellido_materno" type="text" id="apellido_materno" matInput placeholder="Apellido Materno" name="apellido_materno">
+        <input required formControlName="apellido_materno" type="text" id="apellido_materno" matInput placeholder="Apellido Materno" name="apellido_materno">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="form" [formGroup]="form">
-        <input formControlName="horas_planta" type="text" id="horas_planta" matInput placeholder="Horas de Planta" name="horas_planta">
+        <input formControlName="email" type="text" id="email" matInput placeholder="Correo" name="email">
       </mat-form-field>
     </div>
     <div>
+      <mat-form-field class="form" [formGroup]="form">
+        <input required formControlName="horas_planta" type="text" id="horas_planta" matInput placeholder="Horas de Planta" name="horas_planta">
+      </mat-form-field>
     </div>
     <div>
       <button [disabled]="form.invalid" class="add" mat-raised-button color="warn">Añadir</button>

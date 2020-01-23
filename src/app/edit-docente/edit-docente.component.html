@@ -24,6 +24,11 @@
         </mat-form-field>
       </div>
       <div>
+        <mat-form-field class="form" [formGroup]="form">
+          <input formControlName="email" type="text" id="email" matInput placeholder="Correo" name="email">
+        </mat-form-field>
+      </div>
+      <div>
         <mat-form-field  class="form" [formGroup]="form">
           <input formControlName="horas_planta"  type="text" matInput  placeholder="Horas Planta Materia" name="horas_totales"  >
         </mat-form-field>

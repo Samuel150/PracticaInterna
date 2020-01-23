@@ -7,7 +7,6 @@ import {Docente} from "../models/docente";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {Super} from "../models/super";
-import {MatTableDataSource} from "@angular/material/table";
 import {PreferenciasDocente, PreferenciasPendientes, Usuario} from "../models/usuario";
 
 export class AppDateAdapter extends NativeDateAdapter {
@@ -74,27 +73,6 @@ export class AddMateriaComponent implements OnInit {
       map(value=>this._filterUsuarios(value.toString()))
     );
   }
-  form: FormGroup = new FormGroup({
-    nombre: new FormControl('',Validators.required),
-    inicio: new FormControl('', Validators.required),
-    fin: new FormControl('', Validators.required),
-    id_docente: new FormControl(''),
-    horas_totales: new FormControl('', [Validators.required,Validators.pattern('^\\d*$')]),
-    horas_planta: new FormControl('',Validators.pattern('^\\d*$')),
-    id_jefe_carrera: new FormControl(),
-    silabo_subido:new FormControl(false),
-    aula_revisada:new FormControl(false),
-    examen_revisado:new FormControl(false),
-    contrato_impreso:new FormControl(false),
-    contrato_firmado: new FormControl(false),
-    planilla_lista:new FormControl(false),
-    planilla_firmada:new FormControl(false),
-    cheque_solicitado:new FormControl(false),
-    cheque_recibido: new FormControl(false),
-    cheque_entregado:new FormControl(false),
-
-  });
-
   getDocentes() {
     this.materiaService.getDocentes().subscribe(
       res => {
@@ -113,11 +91,32 @@ export class AddMateriaComponent implements OnInit {
       }
     );
   }
+
   myControlDocentes = new FormControl();
   filterOptionsDocentes: Observable<string[]>;
-
   myControlUsuarios = new FormControl();
   filterOptionsUsuarios:Observable<string[]>;
+
+  form: FormGroup = new FormGroup({
+    nombre: new FormControl('',Validators.required),
+    inicio: new FormControl('', Validators.required),
+    fin: new FormControl('', Validators.required),
+    id_docente: new FormControl(''),
+    horas_totales: new FormControl('', [Validators.required,Validators.pattern('^\\d*$')]),
+    horas_planta: new FormControl('',Validators.pattern('\\d*$')),
+    id_jefe_carrera: new FormControl(),
+    silabo_subido:new FormControl(false),
+    aula_revisada:new FormControl(false),
+    examen_revisado:new FormControl(false),
+    contrato_impreso:new FormControl(false),
+    contrato_firmado: new FormControl(false),
+    planilla_lista:new FormControl(false),
+    planilla_firmada:new FormControl(false),
+    cheque_solicitado:new FormControl(false),
+    cheque_recibido: new FormControl(false),
+    cheque_entregado:new FormControl(false),
+  });
+
 
   onSubmit() {
     if(this.super && this.super.docente && this.form.value.horas_planta==""){
@@ -133,16 +132,6 @@ export class AddMateriaComponent implements OnInit {
     }else{
         if (this.super.docente) {
           this.form.value.id_docente = this.super.docente._id;
-          this.materiaService.putDocente(this.super.docente._id, {
-            "materias_asignadas": this.super.docente.materias_asignadas + 1,
-            "horas_cubiertas": (parseInt(String(this.super.docente.horas_cubiertas))+parseInt(this.form.value.horas_planta))
-          }).subscribe(
-            res => {
-              console.log(res)
-            }, error => {
-              console.log(error)
-            }
-          );
         } else {
           this.form.value.horas_planta="0";
           this.form.value.id_docente = "";

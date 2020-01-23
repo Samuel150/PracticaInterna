@@ -16,15 +16,12 @@ export class GoogleLogInComponent implements OnInit {
 
   description = 'Modulo de Seguimiento de Docentes';
 
-  constructor(
-    private route: Router,
-    private authService: AuthService,
-    private tokenService: TokenService,
-    private materiasService: MateriasService
-  ) { }
+  constructor(private route: Router, private authService: AuthService, private tokenService: TokenService,
+              private materiasService: MateriasService) {
+  }
 
   ngOnInit() {
-    console.log('fefef');
+
   }
 
   async signIn(){
@@ -44,7 +41,6 @@ export class GoogleLogInComponent implements OnInit {
           this.route.navigate(['']);
         }
       );
-
     });
   }
 

@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {MatDialog} from "@angular/material/dialog";
 import {TokenService} from "../services/token.service";
 import {MateriasService} from "../services/materias.service";
 import {Docente} from "../models/docente";
@@ -27,9 +26,8 @@ const PENDIENTES: Pendientes[] = [
   styleUrls: ['./pendientes.component.css']
 })
 export class PendientesComponent implements OnInit {
-  //displayedColumnsPendientes: string[]=['materia','docente','inicio','fin','pendiente', 'hecho'];
-  //dataSourcePendientes =  new MatTableDataSource(PENDIENTES);
-  constructor(private materiaService: MateriasService, private tokenService: TokenService) { }
+
+  constructor(private materiaService: MateriasService) { }
 
 
   public dataSourceDocentes: MatTableDataSource<Docente>;

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {AuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
+import {AuthService, SocialUser} from "angularx-social-login";
 import {Usuario} from "../models/usuario";
-import {MatTableDataSource} from "@angular/material/table";
-import {MateriasService} from "./materias.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +11,7 @@ export class TokenService {
   token : string;
   email: string;
 
-  constructor() { }
+  constructor(public authService: AuthService) { }
 
   getToken(){
     return this.token;
