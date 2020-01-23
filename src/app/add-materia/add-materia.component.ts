@@ -190,6 +190,7 @@ export class AddMateriaComponent implements OnInit {
       this.data = await <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1, raw: false}));
       //Joaco aqui debes enviar el this.data que es el array, el boton es feo despues lo arreglo
       //si te da error con el xlsx pon esto npm install xlsx
+      this.materiaService.postMateriasExcel(this.data);
     };
     reader.readAsBinaryString(target.files[0]);
 
