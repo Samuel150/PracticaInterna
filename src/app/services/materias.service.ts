@@ -30,7 +30,7 @@ export class MateriasService {
   postMateriasExcel(excel){
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
-    return this.http.post(this.URL_API+"/materias/create/fucking",excel,{headers:headers})
+    return this.http.post(this.URL_API+"/materias/create/excel",excel,{headers:headers})
   }
 
   getUsuarios():Observable<any>{
