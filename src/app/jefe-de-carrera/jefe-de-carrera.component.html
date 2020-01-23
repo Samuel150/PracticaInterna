@@ -1,10 +1,9 @@
-
 <mat-tab-group>
   <mat-tab label="Pendientes">
   <app-pendientes>
   </app-pendientes>
   </mat-tab>
-  <mat-tab label="Materia">
+  <mat-tab label="Materias">
     <div class="allTable">
       <button mat-raised-button color="warn" *ngIf="admin||jefe" (click)="openAddMaterias()">Añadir Materia</button>
       <button mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
@@ -31,11 +30,11 @@
         </ng-container>
         <ng-container matColumnDef="horas_planta">
           <th mat-header-cell *matHeaderCellDef mat-sort-header > Horas de Planta </th>
-          <td style="align: center" mat-cell *matCellDef="let element"> {{element.horas_planta}} </td>
+          <td  mat-cell *matCellDef="let element"> {{element.horas_planta}} </td>
         </ng-container>
         <ng-container matColumnDef="horas_totales">
           <th mat-header-cell *matHeaderCellDef mat-sort-header > Horas Totales </th>
-          <td style="align: center" mat-cell *matCellDef="let element"> {{element.horas_totales}} </td>
+          <td  mat-cell *matCellDef="let element"> {{element.horas_totales}} </td>
         </ng-container>
         <ng-container matColumnDef="silabo_subido">
           <th mat-header-cell *matHeaderCellDef>
@@ -143,7 +142,7 @@
       <mat-paginator #paginatorMaterias [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-tab>
-  <mat-tab label="Docente" *ngIf="admin||jefe">
+  <mat-tab label="Docentes" *ngIf="admin||jefe">
     <div class="allTable">
       <button mat-raised-button color="warn" *ngIf="true" (click)="openAddDocentes()">Añadir Docente</button>
       <button mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
@@ -366,14 +365,9 @@
   </mat-tab>
   <mat-tab label="Configuracion">
     <div class="allTable" *ngIf="admin || jefe">
-<!--      <form [formGroup]="form">-->
-<!--        <mat-checkbox *ngFor="let cd of neededColumnDefinitions()" [formControlName]="cd.def">-->
-<!--          {{cd.label}}-->
-<!--        </mat-checkbox>-->
-<!--      </form>-->
       <table mat-table [dataSource]="dataSourceConfiguracion" class="mat-elevation-z8">
         <ng-container matColumnDef="opcion">
-          <th mat-header-cell *matHeaderCellDef> Pendientes </th>
+          <th mat-header-cell *matHeaderCellDef> Seguimiento General </th>
           <td mat-cell *matCellDef="let element"> {{element.label}} </td>
         </ng-container>
         <ng-container matColumnDef="configuracion">

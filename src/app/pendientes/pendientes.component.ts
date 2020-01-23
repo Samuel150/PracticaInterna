@@ -95,4 +95,8 @@ export class PendientesComponent implements OnInit {
     this.getDocentes();
     this.getPendientes();
   }
+
+  displayMensaje(message) {
+    return message.toString();
+  }
 }

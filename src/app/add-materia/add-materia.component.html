@@ -64,9 +64,7 @@
   <hr>
   <div class="grid">
     <div>
-      <mat-form-field class="form">
-        <input matInput placeholder="archivo.xls">
-      </mat-form-field>
+      <input type="file" (change)="onFileChange($event)">
     </div>
     <div>
       <button class="add" mat-raised-button color="warn">Añadir Materia</button>

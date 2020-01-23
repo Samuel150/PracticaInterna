@@ -22,7 +22,7 @@
         </ng-container>
         <ng-container matColumnDef="message">
           <th mat-header-cell  *matHeaderCellDef> Mensaje </th>
-          <td style="text-align: left; width: 300px; padding-right: 20px" *matCellDef="let element"> {{element.message}} </td>
+          <td style="text-align: left" *matCellDef="let element">{{displayMensaje(element.message)}} </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumnsPendientes; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsPendientes;">

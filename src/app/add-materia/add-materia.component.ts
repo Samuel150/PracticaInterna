@@ -6,6 +6,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/c
 import {Docente} from "../models/docente";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
+import * as XLSX from 'xlsx'
 import {Super} from "../models/super";
 import {PreferenciasDocente, PreferenciasPendientes, Usuario} from "../models/usuario";
 
@@ -21,18 +22,21 @@ export class AppDateAdapter extends NativeDateAdapter {
     }
     return date.toDateString();
   }
-}export const APP_DATE_FORMATS: MatDateFormats = {
+}
+export const APP_DATE_FORMATS: MatDateFormats = {
   parse: {
     dateInput: { month: "short", year: "numeric", day: "numeric" },
   },
   display: {
     dateInput: "input",
     monthYearLabel: { year: "numeric", month: "numeric" },
-    dateA11yLabel: { year: "numeric", month: "long", day: "numeric"
-    },
+    dateA11yLabel: { year: "numeric", month: "long", day: "numeric"},
     monthYearA11yLabel: { year: "numeric", month: "long" },
   }
 };
+
+type AOA = any[][];
+
 @Component({
   selector: 'app-add-materia',
   templateUrl: './add-materia.component.html',
@@ -60,6 +64,8 @@ export class AddMateriaComponent implements OnInit {
     this.super.docente = this.docente;
     this.super.usuario = this.usuario;
   }
+
+  data: AOA = [[1, 2], [3, 4]];
 
   ngOnInit() {
     this.getDocentes();
@@ -165,6 +171,29 @@ export class AddMateriaComponent implements OnInit {
     if(subject && subject.nombre) {
       return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
     }
+  }
+
+  onFileChange(evt: any) {
+    const target: DataTransfer = <DataTransfer>(evt.target);
+    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+    const reader: FileReader = new FileReader();
+    reader.onload = async (e: any) => {
+      /* read workbook */
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary', cellDates: true});
+
+      /* grab first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      /* save data */
+      this.data = await <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1, raw: false}));
+      //Joaco aqui debes enviar el this.data que es el array, el boton es feo despues lo arreglo
+      //si te da error con el xlsx pon esto npm install xlsx
+    };
+    reader.readAsBinaryString(target.files[0]);
+
+
   }
 }
 

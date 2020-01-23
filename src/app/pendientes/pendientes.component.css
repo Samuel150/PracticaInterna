@@ -1,37 +1,7 @@
-.allTable{
+.allTable {
   align-self: center;
   margin: 10px;
-  height: auto;
 }
-.Table {
-  align-self: center;
-  margin: 10px;
-  height: auto;
-  min-width: 1800px;
-}
-.Table > div > mat-paginator{
-  align-self: center;
-  margin: 10px;
-  height: auto;
-  min-width: 1800px;
-}
-.allTable > div > mat-paginator{
-  align-self: center;
-  margin: 10px;
-  height: auto;
-}
-
-.allTable > form{
-  margin-left: 30px;
-  margin-right: 30px;
-  margin-bottom: 10px;
-  min-width: 1800px;
-}
-
-.allTable > form > mat-checkbox{
-  margin: 15px;
-}
-
 .mat-table {
   width: 100%;
   margin: auto;
