@@ -22,7 +22,7 @@ export class EditDocenteComponent implements OnInit {
     segundo_nombre: new FormControl(this.data.docente.segundo_nombre),
     apellido_paterno: new FormControl(this.data.docente.apellido_paterno,Validators.required),
     apellido_materno: new FormControl(this.data.docente.apellido_materno),
-    email: new FormControl('',Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")),
+    email: new FormControl(this.data.docente.email,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")),
     horas_planta: new FormControl(this.data.docente.horas_planta, [Validators.required,Validators.pattern('^\\d*$')]),
   });
 

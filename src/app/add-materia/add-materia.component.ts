@@ -54,7 +54,7 @@ export class AddMateriaComponent implements OnInit {
   constructor(private materiaService: MateriasService) {
     this.preferencias = new PreferenciasPendientes('',false,false,false,false,false,false,false,false,false,false,false,false);
     this.preferenciasDoc = new PreferenciasDocente('',false,false,false,false);
-    this.docente = new Docente('','','','','',0,0,0,0,false,0);
+    this.docente = new Docente('','','','','','',0,0,0,0,false,0);
     this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias,this.preferencias,this.preferenciasDoc);
     this.super = new Super();
     this.super.docente = this.docente;
