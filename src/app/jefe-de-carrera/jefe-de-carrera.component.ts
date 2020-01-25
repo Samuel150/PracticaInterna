@@ -29,29 +29,56 @@ export class Configuracion {
   templateUrl: './jefe-de-carrera.component.html',
   styleUrls: ['./jefe-de-carrera.component.css']
 })
-export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
+export class JefeDeCarreraComponent implements OnInit {
 
+  private usuarioDoc: Usuario;
+  private admin: boolean;
+  private jefe: boolean;
+  private asistente: boolean;
+  private registros: boolean;
+  private contabilidad: boolean;
 
-  admin = this.tokenService.getUsuarioDocFollow().super_usuario;
-  jefe = this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera";
-  asistente= this.tokenService.getUsuarioDocFollow().rol=="asistente";
-  registros= this.tokenService.getUsuarioDocFollow().rol=="registros";
-  contabilidad= this.tokenService.getUsuarioDocFollow().rol=="contabilidad";
-  usuarioDoc: Usuario;
-
-  constructor(private route: Router,private materiaService: MateriasService, public dialogMaterias: MatDialog, private tokenService: TokenService) {
+  constructor(private route: Router,
+              private materiaService: MateriasService,
+              public dialogMaterias: MatDialog,
+              private tokenService: TokenService) {
   }
 
-  ngOnInit() {
-    this.usuarioDoc=this.tokenService.getUsuarioDocFollow();
-    if(!this.usuarioDoc){
+    ngOnInit() {
+    this.verifyUsuarioDoc().then(r => console.log(r)).catch(()=>{
       this.route.navigate(['']);
-    }
+    });
+    this.setRoles().then(r => console.log(r)).catch(()=>{
+      this.route.navigate(['']);
+    });
     this.getDocentes();
     this.getMaterias();
     this.getMaterias2();
     this.getUsuarios();
   }
+  async verifyUsuarioDoc(){
+    this.usuarioDoc = this.tokenService.getUsuarioDocFollow();
+    if (!this.usuarioDoc) {
+      await this.route.navigate(['']);
+    }
+  }
+
+  async setRoles(){
+    this.admin = this.tokenService.getUsuarioDocFollow().super_usuario;
+    this.jefe = this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera";
+    this.asistente = this.tokenService.getUsuarioDocFollow().rol=="asistente";
+    this.registros = this.tokenService.getUsuarioDocFollow().rol=="registros";
+    this.contabilidad = this.tokenService.getUsuarioDocFollow().rol=="contabilidad";
+    this.columnDefinitions.filter(a=>a.def=='opciones').map(a=>a.hide=(this.admin||this.jefe||this.asistente));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='horas_planta' || a.def=='horas_totales')).map(a=>a.hide=(this.admin||this.jefe||this.asistente));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='silabo_subido'||a.def=='aula_revisada' || a.def=='examen_revisado')).map(a=>a.hide=(this.admin||this.jefe));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='contrato_impreso'||a.def=='contrato_firmado')).map(a=>a.hide=(this.asistente));
+    this.displayedColumnsMaterias.filter(a=>a.def=='planilla_lista').map(a=>a.hide=(this.registros));
+    this.displayedColumnsMaterias.filter(a=>a.def=='planilla_firmada').map(a=>a.hide=(this.registros|| this.contabilidad));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='cheque_solicitado'||a.def=='cheque_recibido'||a.def=='cheque_entregado')).map(a=>a.hide=(this.contabilidad));
+    this.displayedColumnsMaterias.filter(a=>a.def=='opciones').map(a=>a.hide=(this.admin||this.jefe||this.asistente));
+  }
+
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
   displayedColumnsUsuarios: string[]=['nombre','email','rol','opciones'];
@@ -87,7 +114,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     cheque_solicitado: new FormControl(true),
     cheque_recibido: new FormControl(true),
     cheque_entregado: new FormControl(true),
-    opciones: new FormControl(this.admin||this.jefe||this.asistente)
+    opciones: new FormControl(true)
   });
 
   formMaterias: FormGroup = new FormGroup({
@@ -95,19 +122,19 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     id_docente: new FormControl(true),
     inicio: new FormControl(true),
     fin: new FormControl(true),
-    horas_planta: new FormControl(this.admin),
-    horas_totales: new FormControl(this.admin),
-    silabo_subido: new FormControl(this.admin),
-    aula_revisada: new FormControl(this.admin),
-    examen_revisado: new FormControl(this.admin),
-    contrato_impreso: new FormControl(this.asistente),
-    contrato_firmado: new FormControl(this.asistente),
-    planilla_lista: new FormControl(this.registros),
-    planilla_firmada: new FormControl(this.registros || this.contabilidad),
-    cheque_solicitado: new FormControl(this.contabilidad),
-    cheque_recibido: new FormControl(this.contabilidad),
-    cheque_entregado: new FormControl(this.contabilidad),
-    opciones: new FormControl(this.admin||this.jefe||this.asistente)
+    horas_planta: new FormControl(true),//admin
+    horas_totales: new FormControl(true),//admin
+    silabo_subido: new FormControl(true),//admin
+    aula_revisada: new FormControl(true),//admin
+    examen_revisado: new FormControl(true),//admin
+    contrato_impreso: new FormControl(true),//asistente
+    contrato_firmado: new FormControl(true),//asistente
+    planilla_lista: new FormControl(true),//registros
+    planilla_firmada: new FormControl(true),//registros contabilidad
+    cheque_solicitado: new FormControl(true),//contabilidad
+    cheque_recibido: new FormControl(true),//contabilidad
+    cheque_entregado: new FormControl(true),//contabilidad
+    opciones: new FormControl(true)//admin / jefe / asistente
   });
 
   formDocentes: FormGroup = new FormGroup({
@@ -115,12 +142,12 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
     segundo_nombre: new FormControl(true),
     apellido_paterno: new FormControl(true),
     apellido_materno: new FormControl(true),
-    materias_asignadas: new FormControl(this.admin),
-    horas_planta: new FormControl(this.admin),
-    horas_cubiertas: new FormControl(this.admin),
-    horas_faltantes: new FormControl(this.admin),
-    evaluacion_pares: new FormControl(this.admin),
-    opciones: new FormControl(this.admin||this.jefe||this.asistente)
+    materias_asignadas: new FormControl(true),//admin
+    horas_planta: new FormControl(true),//admin
+    horas_cubiertas: new FormControl(true),//admin
+    horas_faltantes: new FormControl(true),//admin
+    evaluacion_pares: new FormControl(true),//admin
+    opciones: new FormControl(false)//admin / jefe / asistente
   });
 
   nombre = this.form.get('nombre');
@@ -137,7 +164,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   cheque_solicitado = this.form.get('cheque_solicitado');
   cheque_recibido = this.form.get('cheque_recibido');
   cheque_entregado = this.form.get('cheque_entregado');
-  opciones = this.form.get('opciones');
+  opciones = this.form.value.opciones;
 
   nombre2 = this.formMaterias.get('nombre');
   id_docente2 = this.formMaterias.get('id_docente');
@@ -169,51 +196,51 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   opciones3 = this.formMaterias.get('opciones');
 
   columnDefinitions =
-    [{def: 'nombre', label: 'Materia', hide: this.nombre.value},
-      {def: 'id_docente', label: 'Docente', hide: this.id_docente.value},
-      {def: 'inicio', label: 'Inicio', hide: this.inicio.value},
-      {def: 'fin', label: 'Fin', hide: this.fin.value},
-      {def: 'silabo_subido', label: 'Silabo Subido', hide: this.silabo_subido.value},
-      {def: 'aula_revisada', label: 'Aula Revisada', hide: this.aula_revisada.value},
-      {def: 'examen_revisado', label: 'Examen Revisado', hide: this.examen_revisado.value},
-      {def: 'contrato_impreso', label: 'Contrato Impreso', hide: this.contrato_impreso.value},
-      {def: 'contrato_firmado', label: 'Contrato Firmado', hide: this.contrato_firmado.value},
-      {def: 'planilla_lista', label: 'Planilla Lista', hide: this.planilla_lista.value},
-      {def: 'planilla_firmada', label: 'Planilla Firmada', hide: this.planilla_firmada.value},
-      {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: this.cheque_solicitado.value},
-      {def: 'cheque_recibido', label: 'Cheque Recibido', hide: this.cheque_recibido.value},
-      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: this.cheque_entregado.value},
-      {def: 'opciones',label: 'Opciones',hide: this.opciones.value}
+    [{def: 'nombre', label: 'Materia', hide: true},
+      {def: 'id_docente', label: 'Docente', hide: true},
+      {def: 'inicio', label: 'Inicio', hide: true},
+      {def: 'fin', label: 'Fin', hide: true},
+      {def: 'silabo_subido', label: 'Silabo Subido', hide: true},
+      {def: 'aula_revisada', label: 'Aula Revisada', hide: true},
+      {def: 'examen_revisado', label: 'Examen Revisado', hide: true},
+      {def: 'contrato_impreso', label: 'Contrato Impreso', hide: true},
+      {def: 'contrato_firmado', label: 'Contrato Firmado', hide: true},
+      {def: 'planilla_lista', label: 'Planilla Lista', hide: true},
+      {def: 'planilla_firmada', label: 'Planilla Firmada', hide: true},
+      {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: true},
+      {def: 'cheque_recibido', label: 'Cheque Recibido', hide: true},
+      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: true},
+      {def: 'opciones',label: 'Opciones',hide: true}
     ];
 
   displayedColumnsMaterias =
-    [{def: 'nombre', label: 'Materia', hide: this.nombre2.value},
-      {def: 'id_docente', label: 'Docente', hide: this.id_docente2.value},
-      {def: 'inicio', label: 'Inicio', hide: this.inicio2.value},
-      {def: 'fin', label: 'Fin', hide: this.fin2.value},
-      {def : 'horas_planta', label: 'Horas de Planta', hide: this.horas_planta2.value},
-      {def: 'horas_totales', label: 'Horas Totales', hide: this.horas_totales2.value},
-      {def: 'silabo_subido', label: 'Silabo Subido', hide: this.silabo_subido2.value},
-      {def: 'aula_revisada', label: 'Aula Revisada', hide: this.aula_revisada2.value},
-      {def: 'examen_revisado', label: 'Examen Revisado', hide: this.examen_revisado2.value},
-      {def: 'contrato_impreso', label: 'Contrato Impreso', hide: this.contrato_impreso2.value},
-      {def: 'contrato_firmado', label: 'Contrato Firmado', hide: this.contrato_firmado2.value},
-      {def: 'planilla_lista', label: 'Planilla Lista', hide: this.planilla_lista2.value},
-      {def: 'planilla_firmada', label: 'Planilla Firmada', hide: this.planilla_firmada2.value},
-      {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: this.cheque_solicitado2.value},
-      {def: 'cheque_recibido', label: 'Cheque Recibido', hide: this.cheque_recibido2.value},
-      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: this.cheque_entregado2.value},
-      {def: 'opciones',label: 'Opciones',hide: this.opciones2.value}
+    [{def: 'nombre', label: 'Materia', hide: true},
+      {def: 'id_docente', label: 'Docente', hide: true},
+      {def: 'inicio', label: 'Inicio', hide: true},
+      {def: 'fin', label: 'Fin', hide: true},
+      {def : 'horas_planta', label: 'Horas de Planta',hide: true},
+      {def: 'horas_totales', label: 'Horas Totales', hide:true},
+      {def: 'silabo_subido', label: 'Silabo Subido', hide:true},
+      {def: 'aula_revisada', label: 'Aula Revisada', hide: true},
+      {def: 'examen_revisado', label: 'Examen Revisado', hide:true},
+      {def: 'contrato_impreso', label: 'Contrato Impreso', hide:true},
+      {def: 'contrato_firmado', label: 'Contrato Firmado', hide: true},
+      {def: 'planilla_lista', label: 'Planilla Lista', hide: true},
+      {def: 'planilla_firmada', label: 'Planilla Firmada', hide: true},
+      {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: true},
+      {def: 'cheque_recibido', label: 'Cheque Recibido', hide:true},
+      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: true},
+      {def: 'opciones',label: 'Opciones',hide: true}
     ];
 
   displayedColumnsDocentes =
-    [{def: 'nombre', label: 'Docente', hide: this.nombre3.value},
-      {def: 'materias_asignadas',label: 'Materia Asignadas',hide: this.materias_asignadas3.value},
-      {def:'horas_planta',label: 'Horas de Planta',hide: this.horas_planta3.value},
-      {def:'horas_cubiertas',label: 'Horas Cubiertas',hide: this.horas_cubiertas3.value},
-      {def:'horas_faltantes',label: 'Horas Faltantes',hide: this.horas_faltantes3.value},
-      {def:'evaluacion_pares',label: 'Evaluacion por Pares',hide: this.evaluacion_pares3.value},
-      {def: 'opciones',label: 'Opciones',hide: this.opciones3.value}
+    [{def: 'nombre', label: 'Docente', hide: true},
+      {def: 'materias_asignadas',label: 'Materia Asignadas',hide: true},
+      {def:'horas_planta',label: 'Horas de Planta',hide: true},
+      {def:'horas_cubiertas',label: 'Horas Cubiertas',hide: true},
+      {def:'horas_faltantes',label: 'Horas Faltantes',hide: true},
+      {def:'evaluacion_pares',label: 'Evaluacion por Pares',hide: true},
+      {def: 'opciones',label: 'Opciones',hide: true}
     ];
 
   public dataSourceConfiguracion: MatTableDataSource<Configuracion> = new MatTableDataSource(this.neededColumnDefinitions());
@@ -221,70 +248,70 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   public dataSourceConfiguracionDocentes: MatTableDataSource<Configuracion> = new MatTableDataSource(this.neededColumnDefinitionsDocentes());
 
 
-  ngAfterViewInit(){
-    //General
-    let o5:Observable<boolean> = this.silabo_subido.valueChanges;
-    let o6:Observable<boolean> = this.aula_revisada.valueChanges;
-    let o7:Observable<boolean> = this.examen_revisado.valueChanges;
-    let o8:Observable<boolean> = this.contrato_impreso.valueChanges;
-    let o9:Observable<boolean> = this.contrato_firmado.valueChanges;
-    let o10:Observable<boolean> = this.planilla_lista.valueChanges;
-    let o11:Observable<boolean> = this.planilla_firmada.valueChanges;
-    let o12:Observable<boolean> = this.cheque_solicitado.valueChanges;
-    let o13:Observable<boolean> = this.cheque_recibido.valueChanges;
-    let o14:Observable<boolean> = this.cheque_entregado.valueChanges;
-    //Materia
-    let o15:Observable<boolean> = this.horas_planta2.valueChanges;
-    let o16:Observable<boolean> = this.horas_totales2.valueChanges;
-    let o17:Observable<boolean> = this.silabo_subido2.valueChanges;
-    let o18:Observable<boolean> = this.aula_revisada2.valueChanges;
-    let o19:Observable<boolean> = this.examen_revisado2.valueChanges;
-    let o20:Observable<boolean> = this.contrato_impreso2.valueChanges;
-    let o21:Observable<boolean> = this.contrato_firmado2.valueChanges;
-    let o22:Observable<boolean> = this.planilla_lista2.valueChanges;
-    let o23:Observable<boolean> = this.planilla_firmada2.valueChanges;
-    let o24:Observable<boolean> = this.cheque_solicitado2.valueChanges;
-    let o25:Observable<boolean> = this.cheque_recibido2.valueChanges;
-    let o26:Observable<boolean> = this.cheque_entregado2.valueChanges;
-    //Docente
-    let o27: Observable<boolean> = this.materias_asignadas3.valueChanges;
-    let o28: Observable<boolean> = this.horas_planta3.valueChanges;
-    let o29: Observable<boolean> = this.horas_cubiertas3.valueChanges;
-    let o30: Observable<boolean> = this.horas_faltantes3.valueChanges;
-    let o31: Observable<boolean> = this.evaluacion_pares3.valueChanges;
-    merge(o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16,o17,o18,o19,o20,o21,o22,o23,o24,o25,o26,o27,o28,o29,o30,o31).subscribe( ()=>{
-      //General
-      this.columnDefinitions[4].hide = this.silabo_subido.value;
-      this.columnDefinitions[5].hide = this.aula_revisada.value;
-      this.columnDefinitions[6].hide = this.examen_revisado.value;
-      this.columnDefinitions[7].hide = this.contrato_impreso.value;
-      this.columnDefinitions[8].hide = this.contrato_firmado.value;
-      this.columnDefinitions[9].hide = this.planilla_lista.value;
-      this.columnDefinitions[10].hide = this.planilla_firmada.value;
-      this.columnDefinitions[11].hide = this.cheque_solicitado.value;
-      this.columnDefinitions[12].hide = this.cheque_recibido.value;
-      this.columnDefinitions[13].hide = this.cheque_entregado.value;
-      //Materia
-      this.displayedColumnsMaterias[4].hide = this.horas_planta2.value;
-      this.displayedColumnsMaterias[5].hide = this.horas_totales2.value;
-      this.displayedColumnsMaterias[6].hide = this.silabo_subido2.value;
-      this.displayedColumnsMaterias[7].hide = this.aula_revisada2.value;
-      this.displayedColumnsMaterias[8].hide = this.examen_revisado2.value;
-      this.displayedColumnsMaterias[9].hide = this.contrato_impreso2.value;
-      this.displayedColumnsMaterias[10].hide = this.contrato_firmado2.value;
-      this.displayedColumnsMaterias[11].hide = this.planilla_lista2.value;
-      this.displayedColumnsMaterias[12].hide = this.planilla_firmada2.value;
-      this.displayedColumnsMaterias[13].hide = this.cheque_solicitado2.value;
-      this.displayedColumnsMaterias[14].hide = this.cheque_recibido2.value;
-      this.displayedColumnsMaterias[15].hide = this.cheque_entregado2.value;
-      //Docente
-      this.displayedColumnsDocentes[1].hide = this.materias_asignadas3.value;
-      this.displayedColumnsDocentes[2].hide = this.horas_planta3.value;
-      this.displayedColumnsDocentes[3].hide = this.horas_cubiertas3.value;
-      this.displayedColumnsDocentes[4].hide = this.horas_faltantes3.value;
-      this.displayedColumnsDocentes[5].hide = this.evaluacion_pares3.value;
-    })
-  }
+  // ngAfterViewInit(){
+  //   //General
+  //   let o5:Observable<boolean> = this.silabo_subido.valueChanges;
+  //   let o6:Observable<boolean> = this.aula_revisada.valueChanges;
+  //   let o7:Observable<boolean> = this.examen_revisado.valueChanges;
+  //   let o8:Observable<boolean> = this.contrato_impreso.valueChanges;
+  //   let o9:Observable<boolean> = this.contrato_firmado.valueChanges;
+  //   let o10:Observable<boolean> = this.planilla_lista.valueChanges;
+  //   let o11:Observable<boolean> = this.planilla_firmada.valueChanges;
+  //   let o12:Observable<boolean> = this.cheque_solicitado.valueChanges;
+  //   let o13:Observable<boolean> = this.cheque_recibido.valueChanges;
+  //   let o14:Observable<boolean> = this.cheque_entregado.valueChanges;
+  //   //Materia
+  //   let o15:Observable<boolean> = this.horas_planta2.valueChanges;
+  //   let o16:Observable<boolean> = this.horas_totales2.valueChanges;
+  //   let o17:Observable<boolean> = this.silabo_subido2.valueChanges;
+  //   let o18:Observable<boolean> = this.aula_revisada2.valueChanges;
+  //   let o19:Observable<boolean> = this.examen_revisado2.valueChanges;
+  //   let o20:Observable<boolean> = this.contrato_impreso2.valueChanges;
+  //   let o21:Observable<boolean> = this.contrato_firmado2.valueChanges;
+  //   let o22:Observable<boolean> = this.planilla_lista2.valueChanges;
+  //   let o23:Observable<boolean> = this.planilla_firmada2.valueChanges;
+  //   let o24:Observable<boolean> = this.cheque_solicitado2.valueChanges;
+  //   let o25:Observable<boolean> = this.cheque_recibido2.valueChanges;
+  //   let o26:Observable<boolean> = this.cheque_entregado2.valueChanges;
+  //   //Docente
+  //   let o27: Observable<boolean> = this.materias_asignadas3.valueChanges;
+  //   let o28: Observable<boolean> = this.horas_planta3.valueChanges;
+  //   let o29: Observable<boolean> = this.horas_cubiertas3.valueChanges;
+  //   let o30: Observable<boolean> = this.horas_faltantes3.valueChanges;
+  //   let o31: Observable<boolean> = this.evaluacion_pares3.valueChanges;
+  //   merge(o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16,o17,o18,o19,o20,o21,o22,o23,o24,o25,o26,o27,o28,o29,o30,o31).subscribe( ()=>{
+  //     //General
+  //     this.columnDefinitions[4].hide = this.silabo_subido.value;
+  //     this.columnDefinitions[5].hide = this.aula_revisada.value;
+  //     this.columnDefinitions[6].hide = this.examen_revisado.value;
+  //     this.columnDefinitions[7].hide = this.contrato_impreso.value;
+  //     this.columnDefinitions[8].hide = this.contrato_firmado.value;
+  //     this.columnDefinitions[9].hide = this.planilla_lista.value;
+  //     this.columnDefinitions[10].hide = this.planilla_firmada.value;
+  //     this.columnDefinitions[11].hide = this.cheque_solicitado.value;
+  //     this.columnDefinitions[12].hide = this.cheque_recibido.value;
+  //     this.columnDefinitions[13].hide = this.cheque_entregado.value;
+  //     //Materia
+  //     this.displayedColumnsMaterias[4].hide = this.horas_planta2.value;
+  //     this.displayedColumnsMaterias[5].hide = this.horas_totales2.value;
+  //     this.displayedColumnsMaterias[6].hide = this.silabo_subido2.value;
+  //     this.displayedColumnsMaterias[7].hide = this.aula_revisada2.value;
+  //     this.displayedColumnsMaterias[8].hide = this.examen_revisado2.value;
+  //     this.displayedColumnsMaterias[9].hide = this.contrato_impreso2.value;
+  //     this.displayedColumnsMaterias[10].hide = this.contrato_firmado2.value;
+  //     this.displayedColumnsMaterias[11].hide = this.planilla_lista2.value;
+  //     this.displayedColumnsMaterias[12].hide = this.planilla_firmada2.value;
+  //     this.displayedColumnsMaterias[13].hide = this.cheque_solicitado2.value;
+  //     this.displayedColumnsMaterias[14].hide = this.cheque_recibido2.value;
+  //     this.displayedColumnsMaterias[15].hide = this.cheque_entregado2.value;
+  //     //Docente
+  //     this.displayedColumnsDocentes[1].hide = this.materias_asignadas3.value;
+  //     this.displayedColumnsDocentes[2].hide = this.horas_planta3.value;
+  //     this.displayedColumnsDocentes[3].hide = this.horas_cubiertas3.value;
+  //     this.displayedColumnsDocentes[4].hide = this.horas_faltantes3.value;
+  //     this.displayedColumnsDocentes[5].hide = this.evaluacion_pares3.value;
+  //   })
+  // }
 
   private getMaterias(){
     this.materiaService.getMaterias().subscribe(
@@ -357,6 +384,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   }
 
   neededColumnDefinitionsMaterias(){
+    this.setRoles();
     return this.displayedColumnsMaterias.filter(res=>(res.label!='Opciones'&&res.hide!=false && res.label != "Materia" && res.label != "Docente" && res.label != "Inicio" && res.label != "Fin"));
   }
 
@@ -365,6 +393,7 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   }
 
   getDisplayedColumns():string[] {
+    this.setRoles();
     return this.columnDefinitions.filter(cd=>cd.hide).map(cd=>cd.def);
   }
 
@@ -500,10 +529,8 @@ export class JefeDeCarreraComponent implements OnInit, AfterViewInit {
   editUsuario(element) {
     let dialogRef = this.dialogMaterias.open(EditUsuarioComponent, {width:'750px',data:{usuario:element}});
     dialogRef.afterClosed().subscribe(()=>{
-      this.getDocentes();
-      this.getMaterias();
-      this.getMaterias2();
-    })
+      this.getUsuarios();
+    });
   }
 
   deleteUsuario(element) {

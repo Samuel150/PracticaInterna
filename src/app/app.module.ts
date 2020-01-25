@@ -24,6 +24,7 @@ import { EditDocenteComponent } from './edit-docente/edit-docente.component';
 import { DeleteComponent } from './delete/delete.component';
 import { AddUsuarioComponent } from './add-usuario/add-usuario.component';
 import { EditUsuarioComponent } from './edit-usuario/edit-usuario.component';
+import { AlertComponent } from './alert/alert.component';
 
  const config = new AuthServiceConfig([
   {
@@ -50,7 +51,8 @@ export function provideConfig() {
     EditDocenteComponent,
     DeleteComponent,
     AddUsuarioComponent,
-    EditUsuarioComponent
+    EditUsuarioComponent,
+    AlertComponent
   ],
     imports: [
         BrowserModule,
@@ -73,7 +75,8 @@ export function provideConfig() {
       EditMateriaComponent,
       EditDocenteComponent,
       AddUsuarioComponent,
-      EditUsuarioComponent
+      EditUsuarioComponent,
+      AlertComponent
     ],
   providers: [
     {

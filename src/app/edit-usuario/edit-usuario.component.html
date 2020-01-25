@@ -46,7 +46,7 @@
       </form>
     </div>
     <div>
-      <button [disabled]="form.invalid" class="add" mat-raised-button color="warn">Actualizar</button>
+      <button [disabled]="form.invalid" (click)="openResultDialog()" class="add" mat-raised-button color="warn">Actualizar</button>
     </div>
   </form>
 </div>

@@ -1,7 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {MateriasService} from "../services/materias.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AlertComponent} from "../alert/alert.component";
 
 @Component({
   selector: 'app-edit-usuario',
@@ -10,7 +11,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class EditUsuarioComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data, private materiaService: MateriasService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data, private materiaService: MateriasService,public dialogRef: MatDialogRef<EditUsuarioComponent>, public dialog: MatDialog) {
 
   }
 
@@ -30,10 +31,17 @@ export class EditUsuarioComponent implements OnInit {
   onSubmit() {
     this.materiaService.putUsuarios(this.form.value,this.data.usuario._id).subscribe(
       res=>{
-        console.log(res);
+        this.dialogRef.close();
+        if(res.status==200) {
+          this.dialog.open(AlertComponent, {width:'300px',data:{action:"Modificación",message:"Usuario modificado exitosamente"}});
+        }
       },error => {
         console.log(error);
       }
     )
+  }
+
+  openResultDialog() {
+
   }
 }

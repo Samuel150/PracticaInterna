@@ -2,26 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService, GoogleLoginProvider, SocialUser} from 'angularx-social-login';
 import {MateriasService} from "../services/materias.service";
 import {TokenService} from "../services/token.service";
-import {MatTableDataSource} from "@angular/material/table";
-import {Usuario} from "../models/usuario";
 import {Router} from "@angular/router";
-import {AuthorizationService} from "../services/authorization.service";
 
 @Component({
   selector: 'app-google-log-in',
   templateUrl: './google-log-in.component.html',
   styleUrls: ['./google-log-in.component.css']
 })
-export class GoogleLogInComponent implements OnInit {
+export class GoogleLogInComponent {
 
   description = 'Modulo de Seguimiento de Docentes';
 
   constructor(private route: Router, private authService: AuthService, private tokenService: TokenService,
               private materiasService: MateriasService) {
-  }
-
-  ngOnInit() {
-
   }
 
   async signIn(){

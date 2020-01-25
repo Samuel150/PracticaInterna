@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http'
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http'
 import {Materia} from '../models/materia'
 import {Docente} from '../models/docente'
 import {Observable} from "rxjs";
@@ -34,26 +34,38 @@ export class MateriasService {
   }
 
   getUsuarios():Observable<any>{
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.get(this.URL_API+"/usuarios/getAll",{headers:headers});
+    return this.http.get(this.URL_API+"/usuarios/getAll",{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken())
+    });
+
   }
   deleteUsuarios(idUsuario){
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.delete(this.URL_API+"/usuarios/delete/"+idUsuario,{headers:headers});
+    return this.http.delete<HttpResponse<Usuario>>(this.URL_API+"/usuarios/delete/"+idUsuario,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+      observe:"response"
+    });
   }
   postUsuarios(usuario){
     let params = JSON.stringify(usuario);
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.post(this.URL_API+"/usuarios/create",params,{headers:headers});
+    return this.http.post<HttpResponse<Usuario>>(this.URL_API+"/usuarios/create",params,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+      observe:"response"
+    });
   }
   putUsuarios(usuario,idUsuario){
     let params = JSON.stringify(usuario);
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.put(this.URL_API+"/usuarios/update/"+idUsuario,params,{headers:headers});
+    return this.http.put<HttpResponse<Usuario>>(this.URL_API+"/usuarios/update/"+idUsuario,params,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+        observe:"response"
+    });
   }
 
   getUsuarioByEmail(email: string):Observable<any>{
@@ -69,21 +81,30 @@ export class MateriasService {
 
   postDocente(docente){
     let params = JSON.stringify(docente);
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.post(this.URL_API + "/docentes/create",params,{headers:headers})
+    return this.http.post(this.URL_API + "/docentes/create",params,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+      observe:"response"
+    });
   }
 
   putDocente(docenteID, body){
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.put(this.URL_API + "/docentes/update"+`/${docenteID}`,body,{headers: headers});
+    return this.http.put(this.URL_API + "/docentes/update"+`/${docenteID}`,body,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+      observe:"response"
+    });
   }
 
   deleteDocente(docente: Docente){
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.delete(this.URL_API + "/docentes/delete"+`/${docente._id}`,{headers:headers});
+    return this.http.delete(this.URL_API + "/docentes/delete"+`/${docente._id}`,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+      observe:"response"
+    });
   }
 
   getMaterias():Observable<any>{
@@ -94,26 +115,34 @@ export class MateriasService {
     }else{
       return this.http.get(this.URL_API+"/materias/getAll/",{headers:headers});
     }
-
   }
 
   postMateria(materia){
     let params = JSON.stringify(materia);
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.post(this.URL_API+ "/materias/create",params,{headers: headers});
+    return this.http.post(this.URL_API+ "/materias/create",params,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+      observe:"response"
+    });
   }
 
   putMateria(materiaId,body){
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.put(this.URL_API+"/materias/update"+`/${materiaId}`, body,{headers: headers});
+    return this.http.put(this.URL_API+"/materias/update"+`/${materiaId}`, body,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+      observe:"response"
+    });
   }
 
   deleteMateria(materia: Materia){
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    return this.http.delete(this.URL_API+"/materias/delete"+`/${materia._id}`,{headers:headers});
+    return this.http.delete(this.URL_API+"/materias/delete"+`/${materia._id}`,{
+      headers:new HttpHeaders()
+        .set('Content-Type', "application/json")
+        .set('Token', this.tokenService.getToken()),
+      observe:"response"
+    });
   }
 
   getDocente(docente){
