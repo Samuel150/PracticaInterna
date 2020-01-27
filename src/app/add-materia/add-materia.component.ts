@@ -60,14 +60,14 @@ export class AddMateriaComponent implements OnInit {
   constructor(private materiaService: MateriasService,public dialogRef: MatDialogRef<AddMateriaComponent>, public dialog: MatDialog) {
     this.preferencias = new PreferenciasPendientes('',false,false,false,false,false,false,false,false,false,false,false,false);
     this.preferenciasDoc = new PreferenciasDocente('',false,false,false,false);
-    this.docente = new Docente('','','','','','',0,0,0,0,false,0);
+    this.docente = new Docente('','','','','','',0,0,0,0,false,'',0);
     this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias,this.preferencias,this.preferenciasDoc);
     this.super = new Super();
     this.super.docente = this.docente;
     this.super.usuario = this.usuario;
   }
 
-  data: AOA = [[1, 2], [3, 4]];
+  data: AOA = [];
 
   ngOnInit() {
     this.getDocentes();
@@ -113,6 +113,7 @@ export class AddMateriaComponent implements OnInit {
     horas_totales: new FormControl('', [Validators.required,Validators.pattern('^\\d*$')]),
     horas_planta: new FormControl('',Validators.pattern('\\d*$')),
     id_jefe_carrera: new FormControl(),
+    aula: new FormControl(),
     silabo_subido:new FormControl(false),
     aula_revisada:new FormControl(false),
     examen_revisado:new FormControl(false),
@@ -128,15 +129,15 @@ export class AddMateriaComponent implements OnInit {
 
   onSubmit() {
     if(this.super && this.super.docente && this.form.value.horas_planta==""){
-      confirm("Asignar horas de planta al docente");
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar horas de planta al docente"}});
     }else if(this.super && !this.super.docente && this.form.value.horas_planta!=""){
-      confirm("Seleccionar un docente");
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Seleccionar un docente"}});
     }else if((+this.form.value.horas_totales)<(+this.form.value.horas_planta)){
-      confirm("Las horas de planta no deben superar las horas totales de la meteria");
-    }else if(this.super &&(+this.super.docente.horas_planta-this.super.docente.horas_cubiertas)<(+this.form.value.horas_planta)){
-      confirm("Las horas de planta faltantes del docente son menores a las horas de planta indicadas");
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Las horas de planta no deben superar las horas totales de la materia"}});
+    }else if(this.super &&(parseInt(String(this.super.docente.horas_planta))-parseInt(String(this.super.docente.horas_cubiertas)))<(+this.form.value.horas_planta)){
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Las horas de planta faltantes del docente son menores a las horas de planta indicadas"}});
     }else if(this.super && !this.super.usuario) {
-      confirm("Seleccionar Jefe de Carrera encargado");
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Seleccionar Jefe de Carrera encargado"}});
     }else{
         if (this.super.docente) {
           this.form.value.id_docente = this.super.docente._id;
@@ -170,12 +171,26 @@ export class AddMateriaComponent implements OnInit {
   }
 
   displayDocente(subject) : string {
-    return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
+    if(subject){
+      if(subject.segundo_nombre!=""){
+        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }else{
+        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }
+    }else{
+      return ""
+    }
   }
 
-  displayDocente2(subject: Docente) {
-    if(subject && subject.nombre) {
-      return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
+  displayDocente2(subject) {
+    if(subject instanceof Docente || (subject && subject.nombre)) {
+      if(subject.segundo_nombre!=""){
+        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }else{
+        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }
+    }else{
+      return "";
     }
   }
 

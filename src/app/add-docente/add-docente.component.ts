@@ -10,7 +10,7 @@ import {DocentePost} from "../models/docentePost";
 import {MateriaPost} from "../models/materiaPost";
 import {Super} from "../models/super";
 import {MatTableDataSource} from "@angular/material/table";
-import {Usuario} from "../models/usuario";
+import {PreferenciasDocente, PreferenciasPendientes, Usuario} from "../models/usuario";
 import {VariableAst} from "@angular/compiler";
 import {AlertComponent} from "../alert/alert.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
@@ -21,14 +21,41 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./add-docente.component.css']
 })
 export class AddDocenteComponent implements OnInit {
-
-
+  public preferencias:PreferenciasPendientes;
+  public preferenciasDoc:PreferenciasDocente;
+  public dataSourceUsuarios=[];
+  public docente:Docente;
+  public usuario:Usuario;
+  public super: Super;
   constructor(private materiaService: MateriasService,public dialogRef: MatDialogRef<AddDocenteComponent>, public dialog: MatDialog) {
-
+    this.preferencias = new PreferenciasPendientes('',false,false,false,false,false,false,false,false,false,false,false,false);
+    this.preferenciasDoc = new PreferenciasDocente('',false,false,false,false);
+    this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias,this.preferencias,this.preferenciasDoc);
+    this.super = new Super();
+    this.super.docente = this.docente;
+    this.super.usuario = this.usuario;
   }
-
+  myControlUsuarios = new FormControl();
+  filterOptionsUsuarios:Observable<string[]>;
   ngOnInit() {
-
+    this.getUsuarios();
+    this.filterOptionsUsuarios = this.myControlUsuarios.valueChanges.pipe(
+      startWith(''),
+      map(value=>this._filterUsuarios(value.toString()))
+    );
+  }
+  getUsuarios() {
+    this.materiaService.getUsuarios().subscribe(
+      res => {
+        this.dataSourceUsuarios = res;
+      }, err => {
+        console.log(err);
+      }
+    );
+  }
+  private _filterUsuarios(value: string) {
+    const filterValue = value.toLowerCase();
+    return this.dataSourceUsuarios.filter(option=>option.rol=="jefe_carrera" ).filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
   }
 
   form: FormGroup = new FormGroup({
@@ -41,22 +68,52 @@ export class AddDocenteComponent implements OnInit {
     horas_planta: new FormControl('', [Validators.required,Validators.pattern('^\\d*$')]),
     horas_cubiertas: new FormControl(0),
     evaluacion_pares: new FormControl(false),
+    id_jefe_carrera: new FormControl(),
   });
 
 
   onSubmit() {
-    this.materiaService.postDocente(this.form.value).subscribe(
-      res=>{
-        this.dialogRef.close();
+    if(!this.super.usuario._id){
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar un jefe de carrera encargado"}});
+    }else{
+      this.form.value.id_jefe_carrera=this.super.usuario._id;
+      console.log(this.form.value);
+      this.materiaService.postDocente(this.form.value).subscribe(
+        res=>{
+          this.dialogRef.close();
           if(res.status==200) {
             this.dialog.open(AlertComponent, {width:'300px',data:{action:"Adición",message:"Docente añadido exitosamente"}});
           }
         },error => {
           console.log(error);
           this.dialog.open(AlertComponent, {width:'300px',data:{action:"Error",message:"Error al añadir docente"}});
+        }
+      );
+    }
+
+  }
+  displayDocente(subject) : string {
+    if(subject){
+      if(subject.segundo_nombre!=""){
+        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }else{
+        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
       }
-    );
+    }else{
+      return ""
+    }
   }
 
+  displayDocente2(subject) {
+    if(subject instanceof Docente || (subject && subject.nombre)) {
+      if(subject.segundo_nombre!=""){
+        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }else{
+        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }
+    }else{
+      return "";
+    }
+  }
 
 }

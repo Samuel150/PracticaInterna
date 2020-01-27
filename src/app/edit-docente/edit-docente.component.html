@@ -1,43 +1,54 @@
 <div class="add_docente">
-  <h2>Editar Materia</h2>
+  <h2 *ngIf="!data.visual">Editar Docente</h2>
+  <h2 *ngIf="data.visual">Visualizar Docente</h2>
   <div>
     <form  class = "form grid" (ngSubmit)="onSubmit()">
       <div>
         <mat-form-field  class="form" [formGroup]="form">
-          <input required type="text" matInput formControlName="nombre" placeholder="Nombre" name="nombre">
+          <input [readonly]="data.visual" required type="text" matInput formControlName="nombre" placeholder="Nombre" name="nombre">
           <mat-error>Nombre de Docente Requerido</mat-error>
         </mat-form-field>
       </div>
       <div>
         <mat-form-field  class="form" [formGroup]="form">
-          <input formControlName="segundo_nombre"  required type="text" matInput  placeholder="Segundo Nombre" name="segundo_nombre" >
+          <input [readonly]="data.visual" formControlName="segundo_nombre"  required type="text" matInput  placeholder="Segundo Nombre" name="segundo_nombre" >
         </mat-form-field>
       </div>
       <div>
         <mat-form-field  class="form" [formGroup]="form">
-          <input formControlName="apellido_paterno"  required type="text" matInput  placeholder="Apellido Paterno" name="apellido_paterno" >
+          <input [readonly]="data.visual" formControlName="apellido_paterno"  required type="text" matInput  placeholder="Apellido Paterno" name="apellido_paterno" >
         </mat-form-field>
       </div>
       <div>
         <mat-form-field  class="form" [formGroup]="form">
-          <input formControlName="apellido_materno"  required type="text" matInput  placeholder="Apellido Materno" name="apellido_materno" >
+          <input [readonly]="data.visual" formControlName="apellido_materno"  required type="text" matInput  placeholder="Apellido Materno" name="apellido_materno" >
         </mat-form-field>
       </div>
       <div>
         <mat-form-field class="form" [formGroup]="form">
-          <input formControlName="email" type="text" id="email" matInput placeholder="Correo" name="email">
+          <input [readonly]="data.visual" formControlName="email" type="text" id="email" matInput placeholder="Correo" name="email">
         </mat-form-field>
       </div>
       <div>
         <mat-form-field  class="form" [formGroup]="form">
-          <input formControlName="horas_planta"  type="text" matInput  placeholder="Horas Planta Materia" name="horas_totales"  >
+          <input [readonly]="data.visual" formControlName="horas_planta"  type="text" matInput  placeholder="Horas Planta Materia" name="horas_totales"  >
         </mat-form-field>
       </div>
       <div>
         <p>Horas Cubiertas: {{this.data.docente.horas_cubiertas}}</p>
       </div>
       <div>
-        <button [disabled]="form.invalid"   type="submit" class="add" mat-raised-button color="warn">Modificar</button>
+        <mat-form-field class="form" [formGroup]="form">
+          <input [readonly]="data.visual" id="encargado" [matAutocomplete]="auto2" [formControl]="myControlUsuarios" type="text" matInput placeholder="Jefe de Carrera Encargado" name="id_jefe_carrera" [ngModel]="data.jefe[0]" [(ngModel)]="data.jefe[0]">
+          <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayDocente2" >
+            <mat-option *ngFor="let option of filterOptionsUsuarios | async" [value]="option">
+              {{displayDocente(option)}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div>
+        <button *ngIf="!data.visual" [disabled]="form.invalid"   type="submit" class="add" mat-raised-button color="warn">Modificar</button>
       </div>
     </form>
   </div>

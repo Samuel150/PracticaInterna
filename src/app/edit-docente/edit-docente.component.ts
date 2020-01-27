@@ -3,6 +3,9 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {MateriasService} from "../services/materias.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertComponent} from "../alert/alert.component";
+import {Observable} from "rxjs";
+import {map, startWith} from "rxjs/operators";
+import {Docente} from "../models/docente";
 
 @Component({
   selector: 'app-edit-docente',
@@ -14,9 +17,26 @@ export class EditDocenteComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data, private materiaService: MateriasService,public dialogRef: MatDialogRef<EditDocenteComponent>, public dialog: MatDialog) {
 
   }
-
+  public dataSourceUsuarios=[];
+  myControlUsuarios = new FormControl();
+  filterOptionsUsuarios:Observable<string[]>;
   ngOnInit() {
+    this.getUsuarios();
+    this.filterOptionsUsuarios = this.myControlUsuarios.valueChanges.pipe(
+      startWith(''),
+      map(value=>this._filterUsuarios(value.toString()))
+    );
   }
+  getUsuarios() {
+    this.materiaService.getUsuarios().subscribe(
+      res => {
+        this.dataSourceUsuarios = res;
+      }, err => {
+        console.log(err);
+      }
+    );
+  }
+
 
   form: FormGroup = new FormGroup({
     nombre: new FormControl(this.data.docente.nombre,Validators.required),
@@ -25,12 +45,18 @@ export class EditDocenteComponent implements OnInit {
     apellido_materno: new FormControl(this.data.docente.apellido_materno),
     email: new FormControl(this.data.docente.email,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")),
     horas_planta: new FormControl(this.data.docente.horas_planta, [Validators.required,Validators.pattern('^\\d*$')]),
+    id_jefe_carrera: new FormControl()
   });
 
   onSubmit(){
+    console.log(this.data.jefe);
     if((+this.form.value.horas_planta)<(+this.data.docente.horas_cubiertas)){
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"El docente ya cubre con mas horas de planta que las inidicadas"}});
-    }else{
+    }else if(!this.data.jefe[0]._id){
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar un jefe de carrera encargado"}});
+    } else{
+      this.form.value.id_jefe_carrera=this.data.jefe[0]._id;
+      console.log(this.form.value);
       this.materiaService.putDocente(this.data.docente._id,this.form.value).subscribe(
         res=>{
           this.dialogRef.close();
@@ -42,6 +68,35 @@ export class EditDocenteComponent implements OnInit {
           this.dialog.open(AlertComponent, {width:'300px',data:{action:"Error",message:"Error al modificar docente"}});
         }
       )
+    }
+  }
+
+  private _filterUsuarios(value: string) {
+    const filterValue = value.toLowerCase();
+    return this.dataSourceUsuarios.filter(option=>option.rol=="jefe_carrera").filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
+  }
+
+  displayDocente(subject) : string {
+    if(subject){
+      if(subject.segundo_nombre!=""){
+        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }else{
+        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }
+    }else{
+      return ""
+    }
+  }
+
+  displayDocente2(subject) {
+    if(subject instanceof Docente || (subject && subject.nombre)) {
+      if(subject.segundo_nombre!=""){
+        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }else{
+        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }
+    }else{
+      return subject
     }
   }
 }

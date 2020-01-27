@@ -12,6 +12,7 @@ export class Docente {
     public horas_cubiertas: number,
     public horas_faltantes: number,
     public evaluacion_pares: boolean,
+    public id_jefe_carrera: string,
     public __v: number){
 
   }

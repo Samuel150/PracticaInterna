@@ -14,7 +14,7 @@
       <table #sortMaterias mat-table [dataSource]="dataSourceMaterias2"  matSort  class="mat-elevation-z8">
         <ng-container matColumnDef="nombre" sticky>
           <th class="Materia" mat-header-cell *matHeaderCellDef mat-sort-header >  Materia </th>
-          <td style="text-align: left; width: 120px; padding-right: 20px" mat-cell *matCellDef="let element" > {{element.nombre}} </td>
+          <td (click)="editMateria(element,true)" style="text-align: left; width: 120px; padding-right: 20px" mat-cell *matCellDef="let element" > {{element.nombre}} </td>
         </ng-container>
         <ng-container matColumnDef="id_docente" >
           <th  mat-header-cell *matHeaderCellDef  mat-sort-header  > Docente </th>
@@ -153,7 +153,7 @@
       <table #sortDocentes mat-table [dataSource]="dataSourceDocentes"  matSort class="mat-elevation-z8">
         <ng-container matColumnDef="nombre">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Docente </th>
-          <td style="text-align: left; width: 120px; padding-right: 20px" mat-cell *matCellDef="let element"> {{element.nombre}} {{element.segundo_nombre}} {{element.apellido_paterno}}  {{element.apellido_materno}}</td>
+          <td (click)="editDocente(element,true)" style="text-align: left; width: 120px; padding-right: 20px" mat-cell *matCellDef="let element"> {{element.nombre}} {{element.segundo_nombre}} {{element.apellido_paterno}}  {{element.apellido_materno}}</td>
         </ng-container>
         <ng-container matColumnDef="materias_asignadas">
           <th mat-header-cell  *matHeaderCellDef mat-sort-header> Materia Asignadas </th>
@@ -206,7 +206,7 @@
       <table #sortGeneral mat-table [dataSource]="dataSourceMaterias"  matSort  class="mat-elevation-z8">
         <ng-container matColumnDef="nombre" sticky>
           <th class="Materia" mat-header-cell *matHeaderCellDef mat-sort-header >  Materia </th>
-          <td style="text-align: left; width: 120px; padding-right: 20px" mat-cell *matCellDef="let element" > {{element.nombre}} </td>
+          <td (click)="editMateria(element,true)" style="text-align: left; width: 120px; padding-right: 20px" mat-cell *matCellDef="let element" > {{element.nombre}} </td>
         </ng-container>
         <ng-container matColumnDef="id_docente" >
           <th  mat-header-cell *matHeaderCellDef mat-sort-header > Docente </th>

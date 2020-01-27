@@ -54,6 +54,11 @@ export class EditMateriaComponent implements OnInit {
 
   ngOnInit() {
     this.getDocentes();
+    this.getUsuarios();
+    this.filterOptionsUsuarios = this.myControlUsuarios.valueChanges.pipe(
+      startWith(''),
+      map(value=>this._filterUsuarios(value.toString()))
+    );
     this.filterOptionsDocentes = this.myControlDocentes.valueChanges.pipe(
       startWith(''),
       map(value=>this._filterDocentes(value.toString()))
@@ -69,40 +74,60 @@ export class EditMateriaComponent implements OnInit {
     );
   }
 
+  public dataSourceUsuarios=[];
+  myControlUsuarios = new FormControl();
+  filterOptionsUsuarios:Observable<string[]>;
+
+  getUsuarios() {
+    this.materiaService.getUsuarios().subscribe(
+      res => {
+        this.dataSourceUsuarios = res;
+      }, err => {
+        console.log(err);
+      }
+    );
+  }
+  private _filterUsuarios(value: string) {
+    const filterValue = value.toLowerCase();
+    return this.dataSourceUsuarios.filter(option=>option.rol=="jefe_carrera").filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
+  }
+
   form: FormGroup = new FormGroup({
     nombre: new FormControl(this.data.materia.nombre,Validators.required),
     inicio: new FormControl(this.data.materia.inicio, Validators.required),
     fin: new FormControl(this.data.materia.fin, Validators.required),
     id_docente: new FormControl(''),
     horas_totales: new FormControl(this.data.materia.horas_totales, [Validators.required,Validators.pattern('^\\d*$')]),
-    horas_planta: new FormControl(this.data.materia.horas_planta,Validators.pattern('^\\d*$'))
+    horas_planta: new FormControl(this.data.materia.horas_planta,Validators.pattern('^\\d*$')),
+    id_jefe_carrera: new FormControl(''),
+    aula: new FormControl(this.data.materia.aula)
   });
-  private horasFaltantes: number;
 
   onSubmit() {
-    if (this.data.docente) {
-      this.horasFaltantes = this.data.docente[0].horas_planta - this.data.docente[0].horas_cubiertas;
-    }
-    if (this.data.docente && this.data.docente[0] && !this.form.value.horas_planta) {
+    if(this.data.jefe && !this.data.jefe[0]){
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar un jefe de carrera encargado"}});
+    }else if (this.data.docente && this.data.docente[0] && (this.form.value.horas_planta==null || this.form.value.horas_planta.toString()=="")) {
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar horas de planta al docente"}});
     } else if (this.data.docente && !this.data.docente[0] && this.form.value.horas_planta != "") {
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Seleccionar un docente"}});
     } else if ((+this.form.value.horas_totales) < (+this.form.value.horas_planta)) {
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Las horas de planta no deben superar las horas totales de la meteria"}});
-    } else if (this.data.docente && (this.data.materia.horas_planta < this.form.value.horas_planta) ? this.horasFaltantes < (this.form.value.horas_planta - this.data.materia.horas_planta) : false) {
+    } else if (this.data.docente && (this.data.materia.horas_planta < this.form.value.horas_planta) && ((parseInt(this.data.docente[0].horas_planta) - parseInt(this.data.docente[0].horas_cubiertas)) < (parseInt(this.form.value.horas_planta) - parseInt(this.data.materia.horas_planta)))) {
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Las horas de planta faltantes del docente son menores a las horas de planta indicadas"}});
     } else {
       if (this.data.docente && this.data.docente[0]) {
-        this.form.value.id_docente = this.data.docente._id;
+        this.form.value.id_docente = this.data.docente[0]._id;
       } else {
         this.form.value.id_docente = "";
         this.form.value.horas_planta = "0";
       }
+      this.form.value.id_jefe_carrera = this.data.jefe[0]._id;
       this.materiaService.putMateria(this.data.materia._id, this.form.value).subscribe(
         res => {
           this.dialogRef.close();
           if(res.status==200) {
             this.dialog.open(AlertComponent, {width:'300px',data:{action:"Modificación",message:"Materia modificada exitosamente"}});
+            console.log(this.form.value);
           }
         }, error => {
           console.log(error);
@@ -111,74 +136,6 @@ export class EditMateriaComponent implements OnInit {
       )
     }
   }
-    //   if(this.data.docente[0]){
-    //     this.form.value.id_docente = this.data.docente[0]._id;
-    //     if(this.data.acDocente[0] && this.data.docente[0]._id != this.data.acDocente[0]._id){
-    //         //rebajar materias asignadas al docente anterior
-    //         //rebajar horas planta tambien (cubiertas con horasPlantaMateria)
-    //         this.materiaService.putDocente(this.data.acDocente[0]._id,
-    //           {"materias_asignadas": (this.data.acDocente[0].materias_asignadas-=1),
-    //           "horas_cubiertas": (this.data.acDocente[0].horas_cubiertas-this.data.horasPlanta[0])}).subscribe(
-    //           res=>{
-    //             console.log(res);
-    //           },error => {
-    //             console.log(error);
-    //           }
-    //         );
-    //         this.materiaService.putDocente(this.data.docente[0]._id,
-    //           {"horas_cubiertas": (+this.data.docente[0].horas_cubiertas +this.form.value.horas_planta)}).subscribe(
-    //           res=>{
-    //             console.log(res);
-    //           },error => {
-    //             console.log(error);
-    //           }
-    //         );
-    //         //put al nuevo docente
-    //     }else{
-    //         //put al docente anterior(horas planta)
-    //         //igual se debe usar horasPlantaMateria
-    //         if(this.data.acDocente[0]){
-    //           this.materiaService.putDocente(this.data.acDocente[0]._id,
-    //             {"horas_cubiertas": (this.data.acDocente[0].horas_cubiertas-this.data.horasPlanta[0]+this.form.value.horas_planta)}).subscribe(
-    //             res=>{
-    //               console.log(res);
-    //             },error => {
-    //               console.log(error);
-    //             }
-    //           );
-    //         }else{
-    //           this.materiaService.putDocente(this.data.docente[0]._id,
-    //             {"horas_cubiertas": (this.data.docente[0].horas_cubiertas-this.data.horasPlanta[0]+this.form.value.horas_planta),
-    //             "materias_asignadas": this.data.docente[0].materias_asignadas+=1}).subscribe(
-    //             res=>{
-    //               console.log(res);
-    //             },error => {
-    //               console.log(error);
-    //             }
-    //           );
-    //         }
-    //
-    //     }
-    //   }else{
-    //     this.form.value.horas_planta="0";
-    //     this.form.value.id_docente = "";
-    //     if(this.data.acDocente[0]._id != ""){
-    //       //rebajar materias asignadas al docente anterior
-    //       //rebajar horas planta tambien (cubiertas con horasPlantaMateria)
-    //       this.materiaService.putDocente(this.data.acDocente[0]._id,
-    //         {"materias_asignadas": (this.data.acDocente[0].materias_asignadas-=1),
-    //           "horas_cubiertas": (this.data.acDocente[0].horas_cubiertas-this.data.horasPlanta[0])}).subscribe(
-    //         res=>{
-    //           console.log(res);
-    //         },error => {
-    //           console.log(error);
-    //         }
-    //       );
-    //     }
-    //   }
-
-    // }
-
 
   private _filterDocentes(value: string) {
     const filterValue = value.toLowerCase();
@@ -186,12 +143,24 @@ export class EditMateriaComponent implements OnInit {
   }
 
   displayDocente(subject) : string {
-    return subject ? subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno: undefined;
+    if(subject){
+      if(subject.segundo_nombre!=""){
+        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }else{
+        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }
+    }else{
+      return ""
+    }
   }
 
   displayDocente2(subject) {
     if(subject instanceof Docente || (subject && subject.nombre)) {
-      return subject.nombre + " " + subject.apellido_paterno + " " + subject.apellido_materno;
+      if(subject.segundo_nombre!=""){
+        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }else{
+        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
+      }
     }else{
       return subject
     }

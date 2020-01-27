@@ -20,7 +20,6 @@ export class MateriasService {
   }
 
   postMateriasExcel(excel){
-    console.log({excel});
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
     return this.http.post(this.URL_API+"/materias/create/excel",{excel},{headers:headers})
@@ -149,7 +148,7 @@ export class MateriasService {
     if(this.tokenService.getUsuarioDocFollow()){
       return this.http.get(this.URL_API + "/pendientes/"+this.tokenService.getUsuarioDocFollow()._id,{headers:headers});
     }else{
-      return null;
+      return this.http.get(this.URL_API + "/pendientes/",{headers:headers});
     }
   }
   //
