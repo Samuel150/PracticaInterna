@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats, NativeDateAdapter} from "@angular/material/core";
 import {MateriasService} from "../services/materias.service";
 import {map, startWith} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {Docente} from "../models/docente";
+import {AlertComponent} from "../alert/alert.component";
 
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
@@ -47,7 +48,7 @@ export class EditMateriaComponent implements OnInit {
   myControlDocentes = new FormControl();
   filterOptionsDocentes: Observable<string[]>;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data, private materiaService: MateriasService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data, private materiaService: MateriasService,public dialogRef: MatDialogRef<EditMateriaComponent>, public dialog: MatDialog) {
 
   }
 
@@ -83,13 +84,13 @@ export class EditMateriaComponent implements OnInit {
       this.horasFaltantes = this.data.docente[0].horas_planta - this.data.docente[0].horas_cubiertas;
     }
     if (this.data.docente && this.data.docente[0] && !this.form.value.horas_planta) {
-      confirm("Asignar horas de planta al docente");
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar horas de planta al docente"}});
     } else if (this.data.docente && !this.data.docente[0] && this.form.value.horas_planta != "") {
-      confirm("Seleccionar un docente");
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Seleccionar un docente"}});
     } else if ((+this.form.value.horas_totales) < (+this.form.value.horas_planta)) {
-      confirm("Las horas de planta no deben superar las horas totales de la meteria");
-    } else if (this.data.docente && (this.data.materia.horas_planta < this.form.value.horas_planta) ? this.horasFaltantes < (this.form.value.horas_planta - this.data.materiaa.horas_planta) : false) {
-      confirm("Las horas de planta faltantes del docente son menores a las horas de planta indicadas");
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Las horas de planta no deben superar las horas totales de la meteria"}});
+    } else if (this.data.docente && (this.data.materia.horas_planta < this.form.value.horas_planta) ? this.horasFaltantes < (this.form.value.horas_planta - this.data.materia.horas_planta) : false) {
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Las horas de planta faltantes del docente son menores a las horas de planta indicadas"}});
     } else {
       if (this.data.docente && this.data.docente[0]) {
         this.form.value.id_docente = this.data.docente._id;
@@ -97,14 +98,17 @@ export class EditMateriaComponent implements OnInit {
         this.form.value.id_docente = "";
         this.form.value.horas_planta = "0";
       }
-      console.log(this.form.value);
-      // this.materiaService.putMateria(this.data.materia._id, this.form.value).subscribe(
-      //   res => {
-      //     console.log(res);
-      //   }, error => {
-      //     console.log(error);
-      //   }
-      // )
+      this.materiaService.putMateria(this.data.materia._id, this.form.value).subscribe(
+        res => {
+          this.dialogRef.close();
+          if(res.status==200) {
+            this.dialog.open(AlertComponent, {width:'300px',data:{action:"Modificación",message:"Materia modificada exitosamente"}});
+          }
+        }, error => {
+          console.log(error);
+          this.dialog.open(AlertComponent, {width:'300px',data:{action:"Error",message:"Error al modificar materia"}});
+        }
+      )
     }
   }
     //   if(this.data.docente[0]){

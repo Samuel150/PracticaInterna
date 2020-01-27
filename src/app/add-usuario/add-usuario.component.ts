@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MateriasService} from "../services/materias.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {AlertComponent} from "../alert/alert.component";
 
 @Component({
   selector: 'app-add-usuario',
@@ -9,7 +11,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class AddUsuarioComponent implements OnInit {
 
-  constructor(private materiaService: MateriasService) { }
+  constructor(private materiaService: MateriasService,public dialogRef: MatDialogRef<AddUsuarioComponent>, public dialog: MatDialog) { }
 
   ngOnInit() {
   }
@@ -26,9 +28,12 @@ export class AddUsuarioComponent implements OnInit {
 
   onSubmit() {
     this.materiaService.postUsuarios(this.form.value).subscribe(
-      response=>{
-        console.log(response);},
-      error => {
+      res=>{
+        this.dialogRef.close();
+        if(res.status==200) {
+          this.dialog.open(AlertComponent, {width:'300px',data:{action:"Adición",message:"Usuario añadido exitosamente"}});
+        }
+        }, error => {
         console.log(error);
       }
     );

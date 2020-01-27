@@ -10,7 +10,6 @@ import { JefeDeCarreraComponent } from './jefe-de-carrera/jefe-de-carrera.compon
 import { PendientesComponent } from './pendientes/pendientes.component';
 import { AddMateriaComponent } from './add-materia/add-materia.component';
 import { AddDocenteComponent } from './add-docente/add-docente.component';
-import { AddCuentaComponent } from './add-cuenta/add-cuenta.component';
 import {HttpClientModule} from "@angular/common/http";
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
 import { GoogleLogInComponent } from './google-log-in/google-log-in.component';
@@ -45,7 +44,6 @@ export function provideConfig() {
     PendientesComponent,
     AddMateriaComponent,
     AddDocenteComponent,
-    AddCuentaComponent,
     GoogleLogInComponent,
     EditMateriaComponent,
     EditDocenteComponent,
@@ -54,30 +52,31 @@ export function provideConfig() {
     EditUsuarioComponent,
     AlertComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        HttpClientModule,
-        FormsModule,
-        SocialLoginModule,
-        ReactiveFormsModule,
-        MatAutocompleteModule,
-        MatDatepickerModule,
-        MatSortModule,
-        MatPaginatorModule,
-        MatIconModule
-    ],
-    entryComponents:[
-      AddMateriaComponent,
-      AddDocenteComponent,
-      EditMateriaComponent,
-      EditDocenteComponent,
-      AddUsuarioComponent,
-      EditUsuarioComponent,
-      AlertComponent
-    ],
+  imports: [
+      BrowserModule,
+      AppRoutingModule,
+      BrowserAnimationsModule,
+      MaterialModule,
+      HttpClientModule,
+      FormsModule,
+      SocialLoginModule,
+      ReactiveFormsModule,
+      MatAutocompleteModule,
+      MatDatepickerModule,
+      MatSortModule,
+      MatPaginatorModule,
+      MatIconModule
+  ],
+  entryComponents:[
+    AddMateriaComponent,
+    AddDocenteComponent,
+    EditMateriaComponent,
+    EditDocenteComponent,
+    AddUsuarioComponent,
+    EditUsuarioComponent,
+    AlertComponent,
+    DeleteComponent
+  ],
   providers: [
     {
       provide: AuthServiceConfig,

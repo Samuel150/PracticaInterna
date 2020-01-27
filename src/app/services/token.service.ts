@@ -37,11 +37,12 @@ export class TokenService {
     this.userDocFollow = usuario
   }
   getUsuarioDocFollow(){
-    try {
+    if(this.userDocFollow){
       return this.userDocFollow;
-    }catch (e) {
-      return null;
+    }else{
+      return null
     }
+
   }
 
   reset(){

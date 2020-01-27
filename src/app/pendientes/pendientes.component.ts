@@ -46,9 +46,11 @@ export class PendientesComponent implements OnInit {
   private getDocentes(){
     this.materiaService.getDocentes().subscribe(
       res=>{
-        this.dataSourceDocentes = new MatTableDataSource(res);
+        if(res!=null){
+          this.dataSourceDocentes = new MatTableDataSource(res);
+        }
       },err=>{
-        console.log(err);
+        //console.log(err);
       }
     );
   }
@@ -56,12 +58,14 @@ export class PendientesComponent implements OnInit {
   private getPendientes() {
     this.materiaService.getPendientes().subscribe(
       res=>{
-        this.dataSourcePendientes = new MatTableDataSource(res);
-        this.dataSourcePendientes.filteredData.map(a=>a.id_docente=this.displayDocente(a.id_docente));
-        this.dataSourcePendientes.sort = this.sort2;
-        this.dataSourcePendientes.paginator = this.paginator2;
+        if(res!=null) {
+          this.dataSourcePendientes = new MatTableDataSource(res);
+          this.dataSourcePendientes.filteredData.map(a => a.id_docente = this.displayDocente(a.id_docente));
+          this.dataSourcePendientes.sort = this.sort2;
+          this.dataSourcePendientes.paginator = this.paginator2;
+        }
       },err=>{
-        console.log(err);
+        //console.log(err);
       }
     );
   }

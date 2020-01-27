@@ -27,7 +27,6 @@
       </mat-form-field>
     </div>
     <div>
-
       <mat-form-field class="form" [formGroup]="form">
         <mat-label>Rol</mat-label>
         <select matNativeControl required formControlName="rol">
@@ -36,7 +35,6 @@
           <option value="registros">Encargada de Registros</option>
           <option value="contabilidad">Encargada de Contabilidad</option>
         </select>
-<!--        <input formControlName="rol" type="text" id="rol" matInput placeholder="Rol" name="rol">-->
       </mat-form-field>
     </div>
     <div>
@@ -46,7 +44,7 @@
       </form>
     </div>
     <div>
-      <button [disabled]="form.invalid" (click)="openResultDialog()" class="add" mat-raised-button color="warn">Actualizar</button>
+      <button [disabled]="form.invalid" class="add" mat-raised-button color="warn">Actualizar</button>
     </div>
   </form>
 </div>

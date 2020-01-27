@@ -9,7 +9,7 @@ import {AlertComponent} from "../alert/alert.component";
   templateUrl: './edit-usuario.component.html',
   styleUrls: ['./edit-usuario.component.css']
 })
-export class EditUsuarioComponent implements OnInit {
+export class EditUsuarioComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, private materiaService: MateriasService,public dialogRef: MatDialogRef<EditUsuarioComponent>, public dialog: MatDialog) {
 
@@ -25,8 +25,6 @@ export class EditUsuarioComponent implements OnInit {
     super_usuario: new FormControl(this.data.usuario.super_usuario)
   });
 
-  ngOnInit() {
-  }
 
   onSubmit() {
     this.materiaService.putUsuarios(this.form.value,this.data.usuario._id).subscribe(
@@ -37,11 +35,9 @@ export class EditUsuarioComponent implements OnInit {
         }
       },error => {
         console.log(error);
+        this.dialog.open(AlertComponent, {width:'300px',data:{action:"Error",message:"Error al modificar usuario"}});
       }
     )
   }
 
-  openResultDialog() {
-
-  }
 }

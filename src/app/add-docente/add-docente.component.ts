@@ -12,6 +12,8 @@ import {Super} from "../models/super";
 import {MatTableDataSource} from "@angular/material/table";
 import {Usuario} from "../models/usuario";
 import {VariableAst} from "@angular/compiler";
+import {AlertComponent} from "../alert/alert.component";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-add-docente',
@@ -21,7 +23,7 @@ import {VariableAst} from "@angular/compiler";
 export class AddDocenteComponent implements OnInit {
 
 
-  constructor(private materiaService: MateriasService) {
+  constructor(private materiaService: MateriasService,public dialogRef: MatDialogRef<AddDocenteComponent>, public dialog: MatDialog) {
 
   }
 
@@ -42,16 +44,16 @@ export class AddDocenteComponent implements OnInit {
   });
 
 
-
-
-
-
   onSubmit() {
     this.materiaService.postDocente(this.form.value).subscribe(
-      response=>{
-        console.log(response);},
-      error => {
-        console.log(error);
+      res=>{
+        this.dialogRef.close();
+          if(res.status==200) {
+            this.dialog.open(AlertComponent, {width:'300px',data:{action:"Adición",message:"Docente añadido exitosamente"}});
+          }
+        },error => {
+          console.log(error);
+          this.dialog.open(AlertComponent, {width:'300px',data:{action:"Error",message:"Error al añadir docente"}});
       }
     );
   }

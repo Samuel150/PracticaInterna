@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
@@ -6,12 +6,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.css']
 })
-export class AlertComponent implements OnInit {
+export class AlertComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,public dialogRef: MatDialogRef<AlertComponent>) { }
-
-  ngOnInit() {
-  }
 
   closeDialog() {
     this.dialogRef.close()

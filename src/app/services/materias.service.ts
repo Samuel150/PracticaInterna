@@ -13,24 +13,18 @@ import {Usuario} from "../models/usuario";
 })
 export class MateriasService {
 
-
-  // readonly URL_API_DOCENTES = "http://skynet.lp.upb.edu:7875/docentes";
-  // readonly URL_API_DOCENTE = "http://skynet.lp.upb.edu:7875/docente";
-  // readonly URL_API_DOCENTE_POST = "http://skynet.lp.upb.edu:7875/docentes";
-  // readonly URL_API_MATERIAS = "http://skynet.lp.upb.edu:7875/materias";
-  // readonly URL_API_MATERIA ="http://skynet.lp.upb.edu:7875/materia";
-  // readonly URL_API_MATERIA_POST = "http://skynet.lp.upb.edu:7875/materias";
-
   readonly URL_API = "http://skynet.lp.upb.edu:7875";
   //readonly URL_API = "http://localhost:3700";
-  constructor(private http: HttpClient, private tokenService: TokenService) {
 
+  constructor(private http: HttpClient, private tokenService: TokenService) {
   }
 
   postMateriasExcel(excel){
+    let file = JSON.stringify(excel);
+    console.log({file});
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
-    return this.http.post(this.URL_API+"/materias/create/excel",excel,{headers:headers})
+    return this.http.post(this.URL_API+"/materias/create/excel",{file},{headers:headers})
   }
 
   getUsuarios():Observable<any>{
@@ -110,7 +104,7 @@ export class MateriasService {
   getMaterias():Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
-    if(this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){
+    if(this.tokenService.getUsuarioDocFollow() && this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){
       return this.http.get(this.URL_API+"/materias/getByUserId/"+this.tokenService.getUsuarioDocFollow()._id,{headers:headers});
     }else{
       return this.http.get(this.URL_API+"/materias/getAll/",{headers:headers});
@@ -153,7 +147,20 @@ export class MateriasService {
   getPendientes():Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
-    return this.http.get(this.URL_API + "/pendientes/"+this.tokenService.getUsuarioDocFollow()._id,{headers:headers});
+    if(this.tokenService.getUsuarioDocFollow()){
+      return this.http.get(this.URL_API + "/pendientes/"+this.tokenService.getUsuarioDocFollow()._id,{headers:headers});
+    }else{
+      return null;
+    }
   }
+  //
+  // putUsuario(body,idUsuario){
+  //   return this.http.put(this.URL_API+"/usuarios/update"+`/${idUsuario}`, body,{
+  //     headers:new HttpHeaders()
+  //       .set('Content-Type', "application/json")
+  //       .set('Token', this.tokenService.getToken()),
+  //     observe:"response"
+  //   });
+  // }
 
 }

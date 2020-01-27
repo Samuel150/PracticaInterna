@@ -5,7 +5,7 @@
   </mat-tab>
   <mat-tab label="Materias">
     <div class="allTable">
-      <button mat-raised-button color="warn" *ngIf="admin||jefe" (click)="openAddMaterias()">Añadir Materia</button>
+      <button mat-raised-button color="warn" *ngIf="admin||jefe||asistente" (click)="openAddMaterias()">Añadir Materia</button>
       <button mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
       <br/>
       <mat-form-field>
@@ -142,9 +142,9 @@
       <mat-paginator #paginatorMaterias [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-tab>
-  <mat-tab label="Docentes" *ngIf="admin||jefe">
+  <mat-tab label="Docentes" *ngIf="admin||jefe||asistente">
     <div class="allTable">
-      <button mat-raised-button color="warn" *ngIf="true" (click)="openAddDocentes()">Añadir Docente</button>
+      <button mat-raised-button color="warn" *ngIf="admin||jefe||asistente" (click)="openAddDocentes()">Añadir Docente</button>
       <button mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
       <br/>
       <mat-form-field>
@@ -364,6 +364,7 @@
       </div>
   </mat-tab>
   <mat-tab label="Configuracion">
+    <button mat-raised-button color="warn"  (click)="updatePreferences()">Guardar Cambios</button>
     <div class="allTable" *ngIf="admin || jefe">
       <table mat-table [dataSource]="dataSourceConfiguracion" class="mat-elevation-z8">
         <ng-container matColumnDef="opcion">
@@ -374,8 +375,8 @@
           <th mat-header-cell *matHeaderCellDef>
             Configuracion
           </th>
-          <td mat-cell *matCellDef="let element" [formGroup]="form">
-            <mat-checkbox color="primary" [checked]="element.hide" [formControlName]="element.def">
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" [checked]="element.hide" (click)="changePreferenceSeg(element.def,element.hide)">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -394,8 +395,8 @@
           <th mat-header-cell *matHeaderCellDef>
             Configuracion
           </th>
-          <td mat-cell *matCellDef="let element" [formGroup]="formMaterias">
-            <mat-checkbox color="primary" [checked]="element.hide" [formControlName]="element.def">
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" [checked]="element.hide" (click)="changePreferenceMat(element)">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -407,15 +408,15 @@
     <div class="allTable" *ngIf="admin||jefe">
       <table mat-table [dataSource]="dataSourceConfiguracionDocentes" class="mat-elevation-z8">
         <ng-container matColumnDef="opcion">
-          <th mat-header-cell *matHeaderCellDef> Docente </th>
+          <th mat-header-cell *matHeaderCellDef> Docentes </th>
           <td mat-cell *matCellDef="let element"> {{element.label}} </td>
         </ng-container>
         <ng-container matColumnDef="configuracion">
           <th mat-header-cell *matHeaderCellDef>
             Configuracion
           </th>
-          <td mat-cell *matCellDef="let element" [formGroup]="formDocentes">
-            <mat-checkbox color="primary" [checked]="element.hide" [formControlName]="element.def">
+          <td mat-cell *matCellDef="let element" >
+            <mat-checkbox color="primary" [checked]="element.hide" (click)="changePreferenceDoc(element)">
             </mat-checkbox>
           </td>
         </ng-container>

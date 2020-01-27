@@ -9,6 +9,8 @@ import {map, startWith} from "rxjs/operators";
 import * as XLSX from 'xlsx'
 import {Super} from "../models/super";
 import {PreferenciasDocente, PreferenciasPendientes, Usuario} from "../models/usuario";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {AlertComponent} from "../alert/alert.component";
 
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
@@ -55,7 +57,7 @@ export class AddMateriaComponent implements OnInit {
   public preferenciasDoc:PreferenciasDocente;
   public super: Super;
   public dataSourceDocentes=[];
-  constructor(private materiaService: MateriasService) {
+  constructor(private materiaService: MateriasService,public dialogRef: MatDialogRef<AddMateriaComponent>, public dialog: MatDialog) {
     this.preferencias = new PreferenciasPendientes('',false,false,false,false,false,false,false,false,false,false,false,false);
     this.preferenciasDoc = new PreferenciasDocente('',false,false,false,false);
     this.docente = new Docente('','','','','','',0,0,0,0,false,0);
@@ -145,9 +147,13 @@ export class AddMateriaComponent implements OnInit {
         this.form.value.id_jefe_carrera=this.super.usuario._id;
         this.materiaService.postMateria(this.form.value).subscribe(
           res => {
-            console.log(res)
+            this.dialogRef.close();
+            if(res.status==200) {
+              this.dialog.open(AlertComponent, {width:'300px',data:{action:"Adición",message:"Materia añadida exitosamente"}});
+            }
           }, error => {
-            console.log(error)
+            console.log(error);
+            this.dialog.open(AlertComponent, {width:'300px',data:{action:"Error",message:"Error al añadir materia"}});
           }
         );
     }
@@ -187,7 +193,7 @@ export class AddMateriaComponent implements OnInit {
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
       /* save data */
-      this.data = await <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1, raw: false}));
+      this.data = <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1}));
       //Joaco aqui debes enviar el this.data que es el array, el boton es feo despues lo arreglo
       //si te da error con el xlsx pon esto npm install xlsx
       this.materiaService.postMateriasExcel(this.data);
