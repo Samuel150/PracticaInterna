@@ -24,7 +24,7 @@ export class MateriasService {
     console.log({file});
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
-    return this.http.post(this.URL_API+"/materias/create/excel",{file},{headers:headers})
+    return this.http.post(this.URL_API+"/materias/create/excel",{excel:file},{headers:headers})
   }
 
   getUsuarios():Observable<any>{

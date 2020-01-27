@@ -388,7 +388,7 @@
     <div class="allTable">
       <table mat-table [dataSource]="dataSourceConfiguracionMaterias" class="mat-elevation-z8">
         <ng-container matColumnDef="opcion">
-          <th mat-header-cell *matHeaderCellDef> Materias </th>
+          <th mat-header-cell *matHeaderCellDef> Materias y Pendientes </th>
           <td mat-cell *matCellDef="let element"> {{element.label}} </td>
         </ng-container>
         <ng-container matColumnDef="configuracion">
@@ -396,7 +396,7 @@
             Configuracion
           </th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox color="primary" [checked]="element.hide" (click)="changePreferenceMat(element)">
+            <mat-checkbox color="primary" [checked]="element.hide" (click)="changePreferenceMat(element.def,element.hide)">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -405,7 +405,7 @@
         </tr>
       </table>
     </div>
-    <div class="allTable" *ngIf="admin||jefe">
+    <div class="allTable" *ngIf="admin||jefe||asistente">
       <table mat-table [dataSource]="dataSourceConfiguracionDocentes" class="mat-elevation-z8">
         <ng-container matColumnDef="opcion">
           <th mat-header-cell *matHeaderCellDef> Docentes </th>
@@ -416,7 +416,7 @@
             Configuracion
           </th>
           <td mat-cell *matCellDef="let element" >
-            <mat-checkbox color="primary" [checked]="element.hide" (click)="changePreferenceDoc(element)">
+            <mat-checkbox color="primary" [checked]="element.hide" (click)="changePreferenceDoc(element.def,element.hide)">
             </mat-checkbox>
           </td>
         </ng-container>

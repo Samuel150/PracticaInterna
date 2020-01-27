@@ -90,6 +90,7 @@ export class JefeDeCarreraComponent implements OnInit {
     this.registros = this.tokenService.getUsuarioDocFollow().rol=="registros";
     this.contabilidad = this.tokenService.getUsuarioDocFollow().rol=="contabilidad";
     this.columnDefinitions.filter(a=>a.def=='opciones').map(a=>a.hide=(this.admin||this.jefe||this.asistente));
+
     this.displayedColumnsMaterias.filter(a=>(a.def=='horas_planta' || a.def=='horas_totales')).map(a=>a.hide=(this.admin||this.jefe||this.asistente));
     this.displayedColumnsMaterias.filter(a=>(a.def=='silabo_subido'||a.def=='aula_revisada' || a.def=='examen_revisado')).map(a=>a.hide=(this.admin||this.jefe));
     this.displayedColumnsMaterias.filter(a=>(a.def=='contrato_impreso'||a.def=='contrato_firmado')).map(a=>a.hide=(this.asistente));
@@ -97,6 +98,14 @@ export class JefeDeCarreraComponent implements OnInit {
     this.displayedColumnsMaterias.filter(a=>a.def=='planilla_firmada').map(a=>a.hide=(this.registros|| this.contabilidad));
     this.displayedColumnsMaterias.filter(a=>(a.def=='cheque_solicitado'||a.def=='cheque_recibido'||a.def=='cheque_entregado')).map(a=>a.hide=(this.contabilidad));
     this.displayedColumnsMaterias.filter(a=>a.def=='opciones').map(a=>a.hide=(this.admin||this.jefe||this.asistente));
+
+    this.displayedColumnsMaterias.filter(a=>(a.def=='horas_planta' || a.def=='horas_totales')).map(a=>a.rol=(this.admin||this.jefe||this.asistente));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='silabo_subido'||a.def=='aula_revisada' || a.def=='examen_revisado')).map(a=>a.rol=(this.admin||this.jefe));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='contrato_impreso'||a.def=='contrato_firmado')).map(a=>a.rol=(this.asistente));
+    this.displayedColumnsMaterias.filter(a=>a.def=='planilla_lista').map(a=>a.rol=(this.registros));
+    this.displayedColumnsMaterias.filter(a=>a.def=='planilla_firmada').map(a=>a.rol=(this.registros|| this.contabilidad));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='cheque_solicitado'||a.def=='cheque_recibido'||a.def=='cheque_entregado')).map(a=>a.rol=(this.contabilidad));
+    this.displayedColumnsMaterias.filter(a=>a.def=='opciones').map(a=>a.rol=(this.admin||this.jefe||this.asistente));
   }
 
   async setPreferences(){
@@ -189,18 +198,18 @@ export class JefeDeCarreraComponent implements OnInit {
       {def: 'id_docente', label: 'Docente', hide: true},
       {def: 'inicio', label: 'Inicio', hide: true},
       {def: 'fin', label: 'Fin', hide: true},
-      {def : 'horas_planta', label: 'Horas de Planta',hide: true},
-      {def: 'horas_totales', label: 'Horas Totales', hide:true},
-      {def: 'silabo_subido', label: 'Silabo Subido', hide:true},
-      {def: 'aula_revisada', label: 'Aula Revisada', hide: true},
-      {def: 'examen_revisado', label: 'Examen Revisado', hide:true},
-      {def: 'contrato_impreso', label: 'Contrato Impreso', hide:true},
-      {def: 'contrato_firmado', label: 'Contrato Firmado', hide: true},
-      {def: 'planilla_lista', label: 'Planilla Lista', hide: true},
-      {def: 'planilla_firmada', label: 'Planilla Firmada', hide: true},
-      {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: true},
-      {def: 'cheque_recibido', label: 'Cheque Recibido', hide:true},
-      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: true},
+      {def : 'horas_planta', label: 'Horas de Planta',hide: true,rol: true},
+      {def: 'horas_totales', label: 'Horas Totales', hide:true,rol: true},
+      {def: 'silabo_subido', label: 'Silabo Subido', hide:true,rol: true},
+      {def: 'aula_revisada', label: 'Aula Revisada', hide: true,rol: true},
+      {def: 'examen_revisado', label: 'Examen Revisado', hide:true,rol: true},
+      {def: 'contrato_impreso', label: 'Contrato Impreso', hide:true,rol: true},
+      {def: 'contrato_firmado', label: 'Contrato Firmado', hide: true,rol: true},
+      {def: 'planilla_lista', label: 'Planilla Lista', hide: true,rol: true},
+      {def: 'planilla_firmada', label: 'Planilla Firmada', hide: true,rol: true},
+      {def: 'cheque_solicitado', label: 'Cheque Solicitado', hide: true,rol: true},
+      {def: 'cheque_recibido', label: 'Cheque Recibido', hide:true,rol: true},
+      {def: 'cheque_entregado', label: 'Cheque Entregado', hide: true,rol: true},
       {def: 'opciones',label: 'Opciones',hide: true}
     ];
 
@@ -285,11 +294,11 @@ export class JefeDeCarreraComponent implements OnInit {
   }
 
   neededColumnDefinitionsMaterias(){
-    return this.displayedColumnsMaterias.filter(res=>(res.label!='Opciones'&&res.hide!=false && res.label != "Materia" && res.label != "Docente" && res.label != "Inicio" && res.label != "Fin"));
+    return this.displayedColumnsMaterias.filter(res=>(res.label!='Opciones'&&res.rol!=false && res.label != "Materia" && res.label != "Docente" && res.label != "Inicio" && res.label != "Fin"));
   }
 
   neededColumnDefinitionsDocentes(){
-    return this.displayedColumnsDocentes.filter(res=>(res.label!='Opciones'&&res.hide!=false && res.label != "Docente"));
+    return this.displayedColumnsDocentes.filter(res=>(res.label!='Opciones' && res.label != "Docente"));
   }
 
   getDisplayedColumns():string[] {
@@ -460,7 +469,7 @@ export class JefeDeCarreraComponent implements OnInit {
     let negation = !(hide);
     let body = this.tokenService.getUsuarioDocFollow().preferencias_seguimiento;
     body[def.toString()] = negation;
-    console.log(body);
+    //console.log(body);
     this.materiaService.putUsuarios({"preferencias_seguimiento": body}, this.tokenService.userDocFollow._id).subscribe(
       res => {
         console.log(res);
@@ -470,12 +479,34 @@ export class JefeDeCarreraComponent implements OnInit {
       }
     );
   }
-  changePreferenceMat(element) {
-    console.log(element)
+  changePreferenceMat(def,hide) {
+    let negation = !(hide);
+    let body = this.tokenService.getUsuarioDocFollow().preferencias_materias;
+    body[def.toString()] = negation;
+    //console.log(body);
+    this.materiaService.putUsuarios({"preferencias_materias": body}, this.tokenService.userDocFollow._id).subscribe(
+      res => {
+        console.log(res);
+        this.updatePreferences();
+      },error => {
+        console.log(error);
+      }
+    );
   }
 
-  changePreferenceDoc(element) {
-    console.log(element)
+  changePreferenceDoc(def,hide) {
+    let negation = !(hide);
+    let body = this.tokenService.getUsuarioDocFollow().preferencias_docente;
+    body[def.toString()] = negation;
+    //console.log(body);
+    this.materiaService.putUsuarios({"preferencias_docente": body}, this.tokenService.userDocFollow._id).subscribe(
+      res => {
+        console.log(res);
+        this.updatePreferences();
+      },error => {
+        console.log(error);
+      }
+    );
   }
 }
 
