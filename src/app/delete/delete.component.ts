@@ -8,7 +8,7 @@ import {AlertComponent} from "../alert/alert.component";
   templateUrl: './delete.component.html',
   styleUrls: ['./delete.component.css']
 })
-export class DeleteComponent  {
+export class DeleteComponent  implements OnInit{
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,public dialogRef: MatDialogRef<DeleteComponent>,private materiaService:MateriasService,public dialog: MatDialog) { }
 
@@ -55,5 +55,24 @@ export class DeleteComponent  {
 
   cancelDeletion() {
     this.dialogRef.close()
+  }
+
+  enviarMail() {
+    let asunto: string;
+    let message: string;
+    if(this.data.email.toString() == "contrato"){
+      asunto = "Firmar contrato"
+
+    }else if(this.data.email.toString() == "planilla"){
+      asunto = "Firmar planilla"
+
+    }else if(this.data.email.toString() == "cheque"){
+      asunto = "Recoger cheque"
+
+    }
+  }
+
+  ngOnInit() {
+    console.log(this.data)
   }
 }

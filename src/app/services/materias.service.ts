@@ -100,6 +100,10 @@ export class MateriasService {
   }
 
   getMaterias(anio?,semestre?):Observable<any>{
+    let newParam:string = '';
+    if(anio && semestre){
+      newParam += anio.toString()+"/"+semestre.toString();
+    }
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
     if(this.tokenService.getUsuarioDocFollow() && this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){

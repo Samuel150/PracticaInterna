@@ -1,8 +1,7 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MateriasService} from "../services/materias.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {merge, Observable} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {AddMateriaComponent} from "../add-materia/add-materia.component";
 import {AddDocenteComponent} from "../add-docente/add-docente.component";
@@ -149,13 +148,6 @@ export class JefeDeCarreraComponent implements OnInit {
     this.dataSourceConfiguracionDocentes = new MatTableDataSource(this.neededColumnDefinitionsDocentes());
   }
 
-  setPreferenciasDocentes(user){
-    let prefDoc = user.preferencias_docente;
-    this.displayedColumnsDocentes[1].hide= prefDoc.materias_asignadas;
-    this.displayedColumnsDocentes[2].hide= prefDoc.horas_planta;
-    this.displayedColumnsDocentes[3].hide= prefDoc.horas_cubiertas;
-    this.displayedColumnsDocentes[5].hide= prefDoc.evaluacion_pares;
-  }
   setPreferenciasSeguimiento(user: Usuario){
     let prefSeg = user.preferencias_seguimiento;
     let i = 4;
@@ -359,6 +351,16 @@ export class JefeDeCarreraComponent implements OnInit {
   }
 
   setCheckbox(idMateria,body) {
+    let idDocente = this.dataSourceMaterias3.filteredData.filter(a=>a._id==idMateria).map(a=>a.id_docente);
+    let docente = this.dataSourceDocentes.filteredData.filter(a=>a._id==idDocente[0]);
+    console.log(docente);
+    if(body.contrato_impreso){
+      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{docente:docente,email:"contrato",element:null}});
+    }else if(body.planilla_lista){
+      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{docente:docente,email:"planilla",element:null}});
+    }else if(body.cheque_recibido){
+      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{docente:docente,email:"cheque",element:null}});
+    }
     if(this.tokenService.getUsuarioDocFollow().rol!="decano"){
       this.materiaService.putMateria(idMateria,body).subscribe(
         res=>{
@@ -414,7 +416,7 @@ export class JefeDeCarreraComponent implements OnInit {
   }
 
   deleteMateria(element: Materia) {
-    let dialogRef = this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{element:element,def:"materia"}});
+    let dialogRef = this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{element:element,def:"materia",docente:null}});
     dialogRef.afterClosed().subscribe(()=> {
       this.getDocentes();
       this.getMaterias();
@@ -423,7 +425,7 @@ export class JefeDeCarreraComponent implements OnInit {
   }
 
   deleteDocente(element: Docente) {
-    let dialogRef = this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{element:element,def:"docente"}});
+    let dialogRef = this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{element:element,def:"docente",docente:null}});
     dialogRef.afterClosed().subscribe(()=> {
           this.getDocentes();
           this.getMaterias();
@@ -512,21 +514,6 @@ export class JefeDeCarreraComponent implements OnInit {
       }
     );
   }
-
-  // changePreferenceDoc(def,hide) {
-  //   let negation = !(hide);
-  //   let body = this.tokenService.getUsuarioDocFollow().preferencias_docente;
-  //   body[def.toString()] = negation;
-  //   //console.log(body);
-  //   this.materiaService.putUsuarios({"preferencias_docente": body}, this.tokenService.userDocFollow._id).subscribe(
-  //     res => {
-  //       console.log(res);
-  //       this.updatePreferences();
-  //     },error => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
 
   setCheckboxEsp(idMateria,body) {
     if(this.tokenService.getUsuarioDocFollow().rol!="registros"){
