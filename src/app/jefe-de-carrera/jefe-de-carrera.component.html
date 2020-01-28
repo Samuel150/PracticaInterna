@@ -5,11 +5,22 @@
   </mat-tab>
   <mat-tab label="Materias" *ngIf="!decano">
     <div class="allTable">
-      <button mat-raised-button color="warn" *ngIf="jefe||asistente" (click)="openAddMaterias()">Añadir Materia</button>
-      <button mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
+      <button class="boton" mat-raised-button color="warn" *ngIf="jefe||asistente" (click)="openAddMaterias()">Añadir Materia</button>
+      <button class="boton" mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
+      <button [disabled]="formPeriodo.invalid" class="boton" mat-raised-button color="warn"  (click)="buscarMateriasPeriodo()">Buscar por periodo</button>
+      <mat-form-field style="width: 80px;" class="boton" [formGroup]="formPeriodo">
+        <input required formControlName="anio"  matInput placeholder="Año">
+      </mat-form-field>
+      <mat-form-field style="width: 120px;" class="boton" [formGroup]="formPeriodo">
+        <mat-label>Semestre</mat-label>
+        <select matNativeControl required formControlName="semestre">
+          <option value="1">1er Semestre</option>
+          <option value="2">2do Semestre</option>
+        </select>
+      </mat-form-field>
       <br/>
-      <mat-form-field>
-        <input matInput (keyup)="applyFilterMaterias2($event.target.value)" placeholder="Buscar">
+      <mat-form-field style="width: 400px;">
+        <input  matInput (keyup)="applyFilterMaterias2($event.target.value)" placeholder="Buscar en Tabla">
       </mat-form-field>
       <table #sortMaterias mat-table [dataSource]="dataSourceMaterias2"  matSort  class="mat-elevation-z8">
         <ng-container matColumnDef="nombre" sticky>
@@ -144,11 +155,11 @@
   </mat-tab>
   <mat-tab label="Docentes" *ngIf="decano||jefe||asistente">
     <div class="allTable">
-      <button mat-raised-button color="warn" *ngIf="jefe||asistente" (click)="openAddDocentes()">Añadir Docente</button>
-      <button mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
+      <button class="boton" mat-raised-button color="warn" *ngIf="jefe||asistente" (click)="openAddDocentes()">Añadir Docente</button>
+      <button class="boton" mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
       <br/>
       <mat-form-field>
-        <input matInput (keyup)="applyFilterDocentes($event.target.value)" placeholder="Buscar">
+        <input matInput (keyup)="applyFilterDocentes($event.target.value)" placeholder="Buscar en Tabla">
       </mat-form-field>
       <table #sortDocentes mat-table [dataSource]="dataSourceDocentes"  matSort class="mat-elevation-z8">
         <ng-container matColumnDef="nombre">
@@ -198,10 +209,10 @@
   </mat-tab>
   <mat-tab label="Seguimiento General" *ngIf="decano||jefe">
     <div class="Table">
-      <button mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
+      <button  class="boton" mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
       <br/>
       <mat-form-field>
-        <input matInput (keyup)="applyFilterMaterias($event.target.value)" placeholder="Buscar">
+        <input matInput (keyup)="applyFilterMaterias($event.target.value)" placeholder="Buscar en Tabla">
       </mat-form-field>
       <table #sortGeneral mat-table [dataSource]="dataSourceMaterias"  matSort  class="mat-elevation-z8">
         <ng-container matColumnDef="nombre" sticky>
@@ -328,11 +339,11 @@
   </mat-tab>
   <mat-tab label="Cuentas" *ngIf="admin">
       <div class="allTable">
-        <button mat-raised-button color="warn" *ngIf="true" (click)="openAddCuentas()">Añadir Cuenta</button>
-        <button mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
+        <button  class="boton" mat-raised-button color="warn" *ngIf="true" (click)="openAddCuentas()">Añadir Cuenta</button>
+        <button  class="boton" mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
         <br/>
         <mat-form-field>
-          <input matInput (keyup)="applyFilterUsuarios($event.target.value)" placeholder="Buscar">
+          <input matInput (keyup)="applyFilterUsuarios($event.target.value)" placeholder="Buscar en Tabla">
         </mat-form-field>
         <table #sortUsuarios mat-table [dataSource]="dataSourceUsuarios"  matSort class="mat-elevation-z8">
           <ng-container matColumnDef="nombre">

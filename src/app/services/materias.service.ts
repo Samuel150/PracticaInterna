@@ -99,7 +99,7 @@ export class MateriasService {
     });
   }
 
-  getMaterias():Observable<any>{
+  getMaterias(anio?,semestre?):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
     if(this.tokenService.getUsuarioDocFollow() && this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){

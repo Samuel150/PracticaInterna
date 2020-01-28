@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MateriasService} from "../services/materias.service";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {merge, Observable} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {AddMateriaComponent} from "../add-materia/add-materia.component";
@@ -51,6 +51,11 @@ export class JefeDeCarreraComponent implements OnInit {
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
   displayedColumnsUsuarios: string[]=['nombre','email','rol','opciones'];
+
+  formPeriodo = new FormGroup({
+    anio: new FormControl('',Validators.required),
+    semestre: new FormControl(Validators.required),
+  });
 
   constructor(private route: Router,
               private materiaService: MateriasService,
@@ -224,8 +229,8 @@ export class JefeDeCarreraComponent implements OnInit {
       {def: 'opciones',label: 'Opciones',hide: true}
     ];
 
-  private getMaterias(){
-    this.materiaService.getMaterias().subscribe(
+  private getMaterias(anio?,semestre?){
+    this.materiaService.getMaterias(anio,semestre).subscribe(
       res => {
         this.dataSourceMaterias = new MatTableDataSource(res);
         this.dataSourceMaterias.sort = this.sort1;
@@ -239,8 +244,8 @@ export class JefeDeCarreraComponent implements OnInit {
       }
     );
   }
-  private getMaterias2(){
-    this.materiaService.getMaterias().subscribe(
+  private getMaterias2(anio?,semestre?){
+    this.materiaService.getMaterias(anio,semestre).subscribe(
     res=>{
       this.dataSourceMaterias3 = new MatTableDataSource(res);
     }, err => {
@@ -534,6 +539,13 @@ export class JefeDeCarreraComponent implements OnInit {
           console.log(error);
         }
       )
+    }
+  }
+
+  buscarMateriasPeriodo() {
+    if(this.formPeriodo.valid){
+      this.getMaterias(this.formPeriodo.value.anio.toString(),this.formPeriodo.value.semestre.toString());
+      this.getMaterias2(this.formPeriodo.value.anio.toString(),this.formPeriodo.value.semestre.toString());
     }
   }
 }
