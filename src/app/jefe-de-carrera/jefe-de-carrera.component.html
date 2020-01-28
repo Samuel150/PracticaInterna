@@ -337,7 +337,7 @@
         <table #sortUsuarios mat-table [dataSource]="dataSourceUsuarios"  matSort class="mat-elevation-z8">
           <ng-container matColumnDef="nombre">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-            <td style="text-align: left; width: 120px; padding-right: 20px" mat-cell *matCellDef="let element"> {{element.nombre}} {{element.segundo_nombre}} {{element.apellido_paterno}}  {{element.apellido_materno}}</td>
+            <td (click)="editUsuario(element,true)" style="text-align: left; width: 120px; padding-right: 20px" mat-cell *matCellDef="let element"> {{element.nombre}} {{element.segundo_nombre}} {{element.apellido_paterno}}  {{element.apellido_materno}}</td>
           </ng-container>
           <ng-container matColumnDef="email">
             <th mat-header-cell  *matHeaderCellDef > Email </th>
@@ -364,7 +364,6 @@
       </div>
   </mat-tab>
   <mat-tab label="Configuracion">
-    <button mat-raised-button color="warn"  (click)="updatePreferences()">Guardar Cambios</button>
     <div class="allTable" *ngIf="decano || jefe">
       <table mat-table [dataSource]="dataSourceConfiguracion" class="mat-elevation-z8">
         <ng-container matColumnDef="opcion">

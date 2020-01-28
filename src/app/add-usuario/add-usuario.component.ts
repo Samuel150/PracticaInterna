@@ -57,6 +57,10 @@ export class AddUsuarioComponent implements OnInit {
   onSubmit() {
     if((this.form.value.rol == "asistente" || this.form.value.rol == "registros" || this.form.value.rol == "contabilidad") && this.form.value.super_usuario){
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Solo los decanos y jefes de carrera pueden ser super usuarios"}});
+    }else if(this.form.value.rol == "jefe_carrera" && (this.form.value.nombre_corto == ""||this.form.value.nombre_corto == null)) {
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar nombre corto al jefe de carrera"}});
+    }else if(this.form.value.rol != "jefe_carrera" && this.form.value.nombre_corto != "") {
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Solo jefes de carrera deben tener nobre corto"}});
     }else{
       this.materiaService.postUsuarios(this.form.value).subscribe(
         res=>{

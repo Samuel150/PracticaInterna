@@ -13,7 +13,7 @@ export class PreferenciasPendientes {
   public cheque_recibido:boolean,
   public cheque_entregado:boolean,
   public horas_totales:boolean,
-  public horas_planta:boolean
+  public horas_planta:boolean,
   ){
   }
 }
@@ -41,6 +41,7 @@ export class Usuario {
     public super_usuario: boolean,
     public preferencias_seguimiento: PreferenciasPendientes,
     public preferencias: PreferenciasPendientes,
+    public nombre_corto: string,
   ){
 
   }

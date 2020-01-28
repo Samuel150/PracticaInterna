@@ -11,6 +11,7 @@ import {Super} from "../models/super";
 import {PreferenciasDocente, PreferenciasPendientes, Usuario} from "../models/usuario";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {AlertComponent} from "../alert/alert.component";
+import {Materia} from "../models/materia";
 
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
@@ -61,7 +62,7 @@ export class AddMateriaComponent implements OnInit {
     this.preferencias = new PreferenciasPendientes('',false,false,false,false,false,false,false,false,false,false,false,false);
     this.preferenciasDoc = new PreferenciasDocente('',false,false,false,false);
     this.docente = new Docente('','','','','','',0,0,0,0,false,'',0);
-    this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias);
+    this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias,'');
     this.super = new Super();
     this.super.docente = this.docente;
     this.super.usuario = this.usuario;
@@ -171,7 +172,7 @@ export class AddMateriaComponent implements OnInit {
   }
 
   displayDocente(subject) : string {
-    if(subject){
+    if((subject && subject.nombre)){
       if(subject.segundo_nombre!=""){
         return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
       }else{
@@ -183,7 +184,7 @@ export class AddMateriaComponent implements OnInit {
   }
 
   displayDocente2(subject) {
-    if(subject instanceof Docente || (subject && subject.nombre)) {
+    if(subject instanceof Materia || (subject && subject.nombre)) {
       if(subject.segundo_nombre!=""){
         return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
       }else{

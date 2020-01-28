@@ -22,7 +22,8 @@ export class EditUsuarioComponent {
     apellido_materno: new FormControl(this.data.usuario.apellido_materno,Validators.required),
     email: new FormControl(this.data.usuario.email, Validators.required),
     rol: new FormControl(this.data.usuario.rol,Validators.required),
-    super_usuario: new FormControl(this.data.usuario.super_usuario)
+    super_usuario: new FormControl(this.data.usuario.super_usuario),
+    nombre_corto: new FormControl(this.data.usuario.nombre_corto)
   });
 
 
@@ -32,7 +33,11 @@ export class EditUsuarioComponent {
         width: '300px',
         data: {action: "Conflicto", message: "Solo decanos y jefes de carrera pueden ser super usuarios"}
       });
-    } else {
+    } else if(this.form.value.rol == "jefe_carrera" && (this.form.value.nombre_corto == ""||this.form.value.nombre_corto == null)) {
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar nombre corto al jefe de carrera"}});
+    }else if(this.form.value.rol != "jefe_carrera" && this.form.value.nombre_corto != "") {
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Solo jefes de carrera deben tener nobre corto"}});
+    }else {
       this.materiaService.putUsuarios(this.form.value, this.data.usuario._id).subscribe(
         res => {
           this.dialogRef.close();

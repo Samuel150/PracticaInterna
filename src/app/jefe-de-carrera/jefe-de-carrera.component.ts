@@ -433,8 +433,8 @@ export class JefeDeCarreraComponent implements OnInit {
     });
   }
 
-  editUsuario(element) {
-    let dialogRef = this.dialogMaterias.open(EditUsuarioComponent, {width:'750px',data:{usuario:element}});
+  editUsuario(element, view?: boolean) {
+    let dialogRef = this.dialogMaterias.open(EditUsuarioComponent, {width:'750px',data:{usuario:element,view:view}});
     dialogRef.afterClosed().subscribe(()=>{
       this.getUsuarios();
     });
