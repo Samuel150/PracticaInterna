@@ -27,17 +27,32 @@ export class EditUsuarioComponent {
 
 
   onSubmit() {
-    this.materiaService.putUsuarios(this.form.value,this.data.usuario._id).subscribe(
-      res=>{
-        this.dialogRef.close();
-        if(res.status==200) {
-          this.dialog.open(AlertComponent, {width:'300px',data:{action:"Modificación",message:"Usuario modificado exitosamente"}});
+    if ((this.form.value.rol == "asistente" || this.form.value.rol == "registros" || this.form.value.rol == "contabilidad") && this.form.value.super_usuario) {
+      this.dialog.open(AlertComponent, {
+        width: '300px',
+        data: {action: "Conflicto", message: "Solo decanos y jefes de carrera pueden ser super usuarios"}
+      });
+    } else {
+      this.materiaService.putUsuarios(this.form.value, this.data.usuario._id).subscribe(
+        res => {
+          this.dialogRef.close();
+          if (res.status == 200) {
+            this.dialog.open(AlertComponent, {
+              width: '300px',
+              data: {action: "Modificación", message: "Usuario modificado exitosamente"}
+            });
+          }
+        }, error => {
+          console.log(error);
+          this.dialog.open(AlertComponent, {
+            width: '300px',
+            data: {action: "Error", message: "Error al modificar usuario"}
+          });
         }
-      },error => {
-        console.log(error);
-        this.dialog.open(AlertComponent, {width:'300px',data:{action:"Error",message:"Error al modificar usuario"}});
-      }
-    )
-  }
+      )
 
+    }
+
+
+  }
 }

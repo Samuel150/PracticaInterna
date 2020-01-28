@@ -27,16 +27,20 @@
       </mat-form-field>
     </div>
     <div>
-
       <mat-form-field class="form" [formGroup]="form">
         <mat-label>Rol</mat-label>
         <select matNativeControl required formControlName="rol">
+          <option value="decano">Decano</option>
           <option value="jefe_carrera">Jefe de Carrera</option>
           <option value="asistente">Asistente Administrativa</option>
           <option value="registros">Encargada de Registros</option>
           <option value="contabilidad">Encargada de Contabilidad</option>
         </select>
-<!--        <input formControlName="rol" type="text" id="rol" matInput placeholder="Rol" name="rol">-->
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="form" [formGroup]="form">
+        <input formControlName="nombre_corto" type="text" id="nombre_corto" matInput placeholder="Nombre Corto" name="nombre_corto">
       </mat-form-field>
     </div>
     <div>

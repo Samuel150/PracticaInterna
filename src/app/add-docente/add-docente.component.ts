@@ -30,7 +30,7 @@ export class AddDocenteComponent implements OnInit {
   constructor(private materiaService: MateriasService,public dialogRef: MatDialogRef<AddDocenteComponent>, public dialog: MatDialog) {
     this.preferencias = new PreferenciasPendientes('',false,false,false,false,false,false,false,false,false,false,false,false);
     this.preferenciasDoc = new PreferenciasDocente('',false,false,false,false);
-    this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias,this.preferencias,this.preferenciasDoc);
+    this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias);
     this.super = new Super();
     this.super.docente = this.docente;
     this.super.usuario = this.usuario;

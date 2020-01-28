@@ -33,6 +33,7 @@ export class JefeDeCarreraComponent implements OnInit {
 
   public usuarioDoc: Usuario;
   public admin: boolean;
+  public decano: boolean;
   public jefe: boolean;
   public asistente: boolean;
   public registros: boolean;
@@ -85,23 +86,22 @@ export class JefeDeCarreraComponent implements OnInit {
 
   async setRoles(){
     this.admin = this.tokenService.getUsuarioDocFollow().super_usuario;
+    this.decano = this.tokenService.getUsuarioDocFollow().rol =="decano";
     this.jefe = this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera";
     this.asistente = this.tokenService.getUsuarioDocFollow().rol=="asistente";
     this.registros = this.tokenService.getUsuarioDocFollow().rol=="registros";
     this.contabilidad = this.tokenService.getUsuarioDocFollow().rol=="contabilidad";
 
-    this.columnDefinitions.filter(a=>a.def=='opciones').map(a=>a.hide=(this.admin||this.jefe||this.asistente));
-
-    this.displayedColumnsMaterias.filter(a=>(a.def=='horas_planta' || a.def=='horas_totales')).map(a=>a.hide=(this.admin||this.jefe||this.asistente));
-    this.displayedColumnsMaterias.filter(a=>(a.def=='silabo_subido'||a.def=='aula_revisada' || a.def=='examen_revisado')).map(a=>a.hide=(this.admin||this.jefe));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='horas_planta' || a.def=='horas_totales')).map(a=>a.hide=(this.jefe||this.asistente));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='silabo_subido'||a.def=='aula_revisada' || a.def=='examen_revisado')).map(a=>a.hide=(this.jefe));
     this.displayedColumnsMaterias.filter(a=>(a.def=='contrato_impreso'||a.def=='contrato_firmado')).map(a=>a.hide=(this.asistente));
     this.displayedColumnsMaterias.filter(a=>a.def=='planilla_lista').map(a=>a.hide=(this.registros));
     this.displayedColumnsMaterias.filter(a=>a.def=='planilla_firmada').map(a=>a.hide=(this.registros|| this.contabilidad));
     this.displayedColumnsMaterias.filter(a=>(a.def=='cheque_solicitado'||a.def=='cheque_recibido'||a.def=='cheque_entregado')).map(a=>a.hide=(this.contabilidad));
     this.displayedColumnsMaterias.filter(a=>a.def=='opciones').map(a=>a.hide=(this.admin||this.jefe||this.asistente));
 
-    this.displayedColumnsMaterias.filter(a=>(a.def=='horas_planta' || a.def=='horas_totales')).map(a=>a.rol=(this.admin||this.jefe||this.asistente));
-    this.displayedColumnsMaterias.filter(a=>(a.def=='silabo_subido'||a.def=='aula_revisada' || a.def=='examen_revisado')).map(a=>a.rol=(this.admin||this.jefe));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='horas_planta' || a.def=='horas_totales')).map(a=>a.rol=(this.jefe||this.asistente));
+    this.displayedColumnsMaterias.filter(a=>(a.def=='silabo_subido'||a.def=='aula_revisada' || a.def=='examen_revisado')).map(a=>a.rol=(this.jefe));
     this.displayedColumnsMaterias.filter(a=>(a.def=='contrato_impreso'||a.def=='contrato_firmado')).map(a=>a.rol=(this.asistente));
     this.displayedColumnsMaterias.filter(a=>a.def=='planilla_lista').map(a=>a.rol=(this.registros));
     this.displayedColumnsMaterias.filter(a=>a.def=='planilla_firmada').map(a=>a.rol=(this.registros|| this.contabilidad));
@@ -111,12 +111,10 @@ export class JefeDeCarreraComponent implements OnInit {
 
   async setPreferences(){
     let user = this.tokenService.getUsuarioDocFollow();
-    let prefMat = user.preferencias_materias;
+    let prefMat = user.preferencias;
     if(user.rol=="jefe_carrera"){
       //seguimiento
       this.setPreferenciasSeguimiento(user);
-      //docentes
-      this.setPreferenciasDocentes(user);
       //materias
       this.displayedColumnsMaterias[4].hide=prefMat.horas_planta;
       this.displayedColumnsMaterias[5].hide=prefMat.horas_totales;
@@ -124,7 +122,6 @@ export class JefeDeCarreraComponent implements OnInit {
       this.displayedColumnsMaterias[7].hide=prefMat.aula_revisada;
       this.displayedColumnsMaterias[8].hide=prefMat.examen_revisado;
     }else if(user.rol=="asistente"){
-      this.setPreferenciasDocentes(user);
       this.displayedColumnsMaterias[9].hide=prefMat.contrato_impreso;
       this.displayedColumnsMaterias[10].hide=prefMat.contrato_firmado;
     }else if(user.rol=="registros"){
@@ -135,6 +132,9 @@ export class JefeDeCarreraComponent implements OnInit {
       this.displayedColumnsMaterias[13].hide=prefMat.cheque_solicitado;
       this.displayedColumnsMaterias[14].hide=prefMat.cheque_recibido;
       this.displayedColumnsMaterias[15].hide=prefMat.cheque_entregado;
+    }else if(user.rol=="decano"){
+      //seguimiento
+      this.setPreferenciasSeguimiento(user);
     }
   }
 
@@ -354,26 +354,32 @@ export class JefeDeCarreraComponent implements OnInit {
   }
 
   setCheckbox(idMateria,body) {
-    this.materiaService.putMateria(idMateria,body).subscribe(
-      res=>{
-        console.log(res);
-        this.getMaterias();
-      },
-      error => {
-        console.log(error);
-      }
-    )
+    if(this.tokenService.getUsuarioDocFollow().rol!="decano"){
+      this.materiaService.putMateria(idMateria,body).subscribe(
+        res=>{
+          console.log(res);
+          this.getMaterias();
+        },
+        error => {
+          console.log(error);
+        }
+      )
+    }
+
   }
 
   setEvalPares(idDocente,body) {
-    this.materiaService.putDocente(idDocente,body).subscribe(
-      res=>{
-        console.log(res);
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    if(this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){
+      this.materiaService.putDocente(idDocente,body).subscribe(
+        res=>{
+          console.log(res);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
+
   }
 
   editMateria(element: Materia, view?: boolean) {
@@ -457,6 +463,8 @@ export class JefeDeCarreraComponent implements OnInit {
       return "Encargada de Registros"
     }else if(rol == "contabilidad"){
       return "Encargada de Contabilidad"
+    }else if(rol == "decano"){
+      return "Decano"
     }
   }
 
@@ -487,10 +495,10 @@ export class JefeDeCarreraComponent implements OnInit {
   }
   changePreferenceMat(def,hide) {
     let negation = !(hide);
-    let body = this.tokenService.getUsuarioDocFollow().preferencias_materias;
+    let body = this.tokenService.getUsuarioDocFollow().preferencias;
     body[def.toString()] = negation;
     //console.log(body);
-    this.materiaService.putUsuarios({"preferencias_materias": body}, this.tokenService.userDocFollow._id).subscribe(
+    this.materiaService.putUsuarios({"preferencias": body}, this.tokenService.userDocFollow._id).subscribe(
       res => {
         console.log(res);
         this.updatePreferences();
@@ -500,18 +508,32 @@ export class JefeDeCarreraComponent implements OnInit {
     );
   }
 
-  changePreferenceDoc(def,hide) {
-    let negation = !(hide);
-    let body = this.tokenService.getUsuarioDocFollow().preferencias_docente;
-    body[def.toString()] = negation;
-    //console.log(body);
-    this.materiaService.putUsuarios({"preferencias_docente": body}, this.tokenService.userDocFollow._id).subscribe(
-      res => {
-        console.log(res);
-        this.updatePreferences();
-      },error => {
-        console.log(error);
-      }
-    );
+  // changePreferenceDoc(def,hide) {
+  //   let negation = !(hide);
+  //   let body = this.tokenService.getUsuarioDocFollow().preferencias_docente;
+  //   body[def.toString()] = negation;
+  //   //console.log(body);
+  //   this.materiaService.putUsuarios({"preferencias_docente": body}, this.tokenService.userDocFollow._id).subscribe(
+  //     res => {
+  //       console.log(res);
+  //       this.updatePreferences();
+  //     },error => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
+
+  setCheckboxEsp(idMateria,body) {
+    if(this.tokenService.getUsuarioDocFollow().rol!="registros"){
+      this.materiaService.putMateria(idMateria,body).subscribe(
+        res=>{
+          console.log(res);
+          this.getMaterias();
+        },
+        error => {
+          console.log(error);
+        }
+      )
+    }
   }
 }

@@ -23,6 +23,7 @@ export class AddUsuarioComponent implements OnInit {
     apellido_materno: new FormControl('',Validators.required),
     email: new FormControl('', Validators.required),
     rol: new FormControl('',Validators.required),
+    nombre_corto: new FormControl(),
     super_usuario: new FormControl(false,Validators.required),
     preferencias_seguimiento: new FormControl({
       "silabo_subido": true,
@@ -37,7 +38,7 @@ export class AddUsuarioComponent implements OnInit {
       "cheque_entregado": true,
       "horas_totales": true,
       "horas_planta": true}),
-    preferencias_materias: new FormControl({
+    preferencias: new FormControl({
       "silabo_subido": true,
       "aula_revisada": true,
       "examen_revisado": true,
@@ -50,26 +51,23 @@ export class AddUsuarioComponent implements OnInit {
       "cheque_entregado": true,
       "horas_totales": true,
       "horas_planta": true
-    }),
-    preferencias_docente: new FormControl({
-      "email": "false",
-      "materias_asignadas": true,
-      "horas_planta": true,
-      "horas_cubiertas": true,
-      "evaluacion_pares": true
     })
   });
 
   onSubmit() {
-    this.materiaService.postUsuarios(this.form.value).subscribe(
-      res=>{
-        this.dialogRef.close();
-        if(res.status==200) {
-          this.dialog.open(AlertComponent, {width:'300px',data:{action:"Adición",message:"Usuario añadido exitosamente"}});
-        }
+    if((this.form.value.rol == "asistente" || this.form.value.rol == "registros" || this.form.value.rol == "contabilidad") && this.form.value.super_usuario){
+      this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Solo los decanos y jefes de carrera pueden ser super usuarios"}});
+    }else{
+      this.materiaService.postUsuarios(this.form.value).subscribe(
+        res=>{
+          this.dialogRef.close();
+          if(res.status==200) {
+            this.dialog.open(AlertComponent, {width:'300px',data:{action:"Adición",message:"Usuario añadido exitosamente"}});
+          }
         }, error => {
-        console.log(error);
-      }
-    );
+          console.log(error);
+        }
+      );
+    }
   }
 }

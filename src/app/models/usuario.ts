@@ -39,10 +39,8 @@ export class Usuario {
     public ci: number,
     public rol: string,
     public super_usuario: boolean,
-    public preferencias_pendientes: PreferenciasPendientes,
     public preferencias_seguimiento: PreferenciasPendientes,
-    public preferencias_materias: PreferenciasPendientes,
-    public preferencias_docente:PreferenciasDocente
+    public preferencias: PreferenciasPendientes,
   ){
 
   }
