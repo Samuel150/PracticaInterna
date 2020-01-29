@@ -43,7 +43,7 @@ export class AppDateAdapter extends NativeDateAdapter {
   ]
 })
 export class EditMateriaComponent implements OnInit {
-
+  public docenteAntiguo:string;
   public dataSourceDocentes=[];
   myControlDocentes = new FormControl();
   filterOptionsDocentes: Observable<string[]>;
@@ -53,7 +53,11 @@ export class EditMateriaComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data.materia.id_jefe_carrera);
+    if(this.data.docente.length == 0){
+      this.docenteAntiguo = "";
+    }else{
+      this.docenteAntiguo = this.data.docente[0]._id.toString();
+    }
     this.getDocentes();
     this.getUsuarios();
     this.filterOptionsUsuarios = this.myControlUsuarios.valueChanges.pipe(
@@ -124,7 +128,7 @@ export class EditMateriaComponent implements OnInit {
       }
       this.form.value.id_jefe_carrera = this.data.materia.id_jefe_carrera;
       //console.log(this.form.value);
-      this.materiaService.putMateria(this.data.materia._id, this.form.value).subscribe(
+      this.materiaService.putMateria(this.data.materia._id, this.form.value,this.docenteAntiguo).subscribe(
         res => {
           this.dialogRef.close();
           if(res.status==200) {

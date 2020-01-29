@@ -42,6 +42,9 @@ export class Usuario {
     public preferencias_seguimiento: PreferenciasPendientes,
     public preferencias: PreferenciasPendientes,
     public nombre_corto: string,
+    public ver_pendientes_pasadas: boolean,
+    public ver_evaluacion_pares: boolean,
+    public ver_horas_no_asignadas: boolean
   ){
 
   }

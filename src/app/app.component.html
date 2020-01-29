@@ -1,6 +1,6 @@
 <mat-toolbar color="warn" >
   <mat-toolbar-row>
-  <span>DocFollow</span>
+  <span>Doc&&Check</span>
   <span class="example-spacer"></span>
   <button *ngIf="tokenService.userDocFollow"  mat-raised-button (click)="signOut()">Log Out</button>
   <p *ngIf="tokenService.userDocFollow">   {{tokenService.getUser().name}}</p>

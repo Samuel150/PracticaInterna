@@ -13,7 +13,7 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class GoogleLogInComponent {
 
-  description = 'Modulo de Seguimiento de Docentes';
+  description = 'Sistema de Gestión de Procedimientos de Docentes';
 
   constructor(private route: Router, private authService: AuthService, private tokenService: TokenService,
               private materiasService: MateriasService,public dialog: MatDialog) {
@@ -30,6 +30,7 @@ export class GoogleLogInComponent {
           this.tokenService.setEmail(user.email);
           this.route.navigate(['seguimiento']);
         },error=>{
+          console.log(error);
           this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Cuenta no registrada"}});
           this.authService.signOut().catch(console.log);
           this.tokenService.reset();

@@ -70,7 +70,16 @@
   <h2>Añadir materias con archivo excel</h2>
   <div class="grid">
     <div>
-      <input type="file" (change)="onFileChange($event)">
+      <form method="post" enctype="multipart/form-data">
+        <div>
+          <label for="file">Elegir el archivo excel</label>
+          <input type="file" id="file" (change)="onFileChange($event)">
+        </div>
+        <div>
+          <button mat-raised-button color="primary" (click)="submitFile()">Subir archivo</button>
+        </div>
+      </form>
+
     </div>
   </div>
 </div>

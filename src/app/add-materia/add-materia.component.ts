@@ -58,11 +58,14 @@ export class AddMateriaComponent implements OnInit {
   public preferenciasDoc:PreferenciasDocente;
   public super: Super;
   public dataSourceDocentes=[];
+
+  target: DataTransfer;
+
   constructor(private materiaService: MateriasService,public dialogRef: MatDialogRef<AddMateriaComponent>, public dialog: MatDialog) {
     this.preferencias = new PreferenciasPendientes('',false,false,false,false,false,false,false,false,false,false,false,false);
     this.preferenciasDoc = new PreferenciasDocente('',false,false,false,false);
     this.docente = new Docente('','','','','','',0,0,0,0,false,'',0);
-    this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias,'');
+    this.usuario = new Usuario('','','','','','',0,'',false,this.preferencias,this.preferencias,'',false,false,false);
     this.super = new Super();
     this.super.docente = this.docente;
     this.super.usuario = this.usuario;
@@ -212,22 +215,21 @@ export class AddMateriaComponent implements OnInit {
   }
 
   onFileChange(evt: any) {
-    const target: DataTransfer = <DataTransfer>(evt.target);
-    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+    this.target = <DataTransfer>(evt.target);
+  }
+
+  submitFile(){
+    if (this.target.files.length !== 1) throw new Error('Cannot use multiple files');
     const reader: FileReader = new FileReader();
     reader.onload = async (e: any) => {
       /* read workbook */
       const bstr: string = e.target.result;
       const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary', cellDates: true});
-
       /* grab first sheet */
       const wsname: string = wb.SheetNames[0];
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-
       /* save data */
       this.data = <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1}));
-      //Joaco aqui debes enviar el this.data que es el array, el boton es feo despues lo arreglo
-      //si te da error con el xlsx pon esto npm install xlsx
       this.materiaService.postMateriasExcel(this.data).subscribe(
         res=>{
           console.log(res);
@@ -235,10 +237,9 @@ export class AddMateriaComponent implements OnInit {
           console.log(error)
         }
       );
+      console.log(this.data);
     };
-    reader.readAsBinaryString(target.files[0]);
-
-
+    reader.readAsBinaryString(this.target.files[0]);
   }
 }
 

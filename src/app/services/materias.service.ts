@@ -3,8 +3,6 @@ import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http'
 import {Materia} from '../models/materia'
 import {Docente} from '../models/docente'
 import {Observable} from "rxjs";
-import {DocentePost} from "../models/docentePost";
-import {MateriaPost} from "../models/materiaPost";
 import {TokenService} from "./token.service";
 import {Usuario} from "../models/usuario";
 
@@ -13,7 +11,7 @@ import {Usuario} from "../models/usuario";
 })
 export class MateriasService {
 
-  readonly URL_API = "http://skynet.lp.upb.edu:7875";
+  readonly URL_API = "http://192.168.50.100:7875";
   //readonly URL_API = "http://localhost:3700";
 
   constructor(private http: HttpClient, private tokenService: TokenService) {
@@ -68,7 +66,25 @@ export class MateriasService {
   getDocentes():Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
-    return this.http.get(this.URL_API + "/docentes/getAll",{headers:headers});
+    if(this.tokenService.getUsuarioDocFollow() && this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){
+      return this.http.get(this.URL_API+"/docentes/getByUserId/"+this.tokenService.getUsuarioDocFollow().nombre_corto,{headers:headers});
+    }else{
+      return this.http.get(this.URL_API+"/docentes/getAll/",{headers:headers});
+    }
+  }
+
+  getMaterias(anio?,semestre?):Observable<any>{
+    let newParam:string = '';
+    if(anio && semestre){
+      newParam += anio.toString()+"/"+semestre.toString();
+    }
+    let headers = new HttpHeaders().set('Content-Type', "application/json")
+      .set('Token', this.tokenService.getToken());
+    if(this.tokenService.getUsuarioDocFollow() && this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){
+      return this.http.get(this.URL_API+"/materias/getByUserId/"+this.tokenService.getUsuarioDocFollow().nombre_corto+"/"+newParam,{headers:headers});
+    }else{
+      return this.http.get(this.URL_API+"/materias/getAll/"+newParam,{headers:headers});
+    }
   }
 
   postDocente(docente){
@@ -99,19 +115,7 @@ export class MateriasService {
     });
   }
 
-  getMaterias(anio?,semestre?):Observable<any>{
-    let newParam:string = '';
-    if(anio && semestre){
-      newParam += anio.toString()+"/"+semestre.toString();
-    }
-    let headers = new HttpHeaders().set('Content-Type', "application/json")
-      .set('Token', this.tokenService.getToken());
-    if(this.tokenService.getUsuarioDocFollow() && this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){
-      return this.http.get(this.URL_API+"/materias/getByUserId/"+this.tokenService.getUsuarioDocFollow()._id+"/"+newParam,{headers:headers});
-    }else{
-      return this.http.get(this.URL_API+"/materias/getAll/"+newParam,{headers:headers});
-    }
-  }
+
 
   postMateria(materia){
     let params = JSON.stringify(materia);
@@ -123,8 +127,14 @@ export class MateriasService {
     });
   }
 
-  putMateria(materiaId,body){
-    return this.http.put(this.URL_API+"/materias/update"+`/${materiaId}`, body,{
+  putMateria(materiaId,body,docenteAntiguo?){
+    let newParam: string;
+    if(docenteAntiguo){
+      newParam = "/"+docenteAntiguo
+    }else{
+      newParam = "";
+    }
+    return this.http.put(this.URL_API+"/materias/update"+`/${materiaId}`+newParam, body,{
       headers:new HttpHeaders()
         .set('Content-Type', "application/json")
         .set('Token', this.tokenService.getToken()),
@@ -132,18 +142,19 @@ export class MateriasService {
     });
   }
 
-  deleteMateria(materia: Materia){
-    return this.http.delete(this.URL_API+"/materias/delete"+`/${materia._id}`,{
+  deleteMateria(materia: Materia,idDocAn?){
+    let newParam:string;
+    if(!idDocAn){
+      newParam = "";
+    }else{
+      newParam = idDocAn
+    }
+    return this.http.delete(this.URL_API+"/materias/delete"+`/${materia._id}`+newParam,{
       headers:new HttpHeaders()
         .set('Content-Type', "application/json")
         .set('Token', this.tokenService.getToken()),
       observe:"response"
     });
-  }
-
-  getDocente(docente){
-    let headers = new HttpHeaders().set('Content-Type', "application/json");
-    return this.http.get<Docente>(this.URL_API + "/docentes/getOne"+`/${docente}`,{headers:headers});
   }
 
   getPendientes():Observable<any>{
@@ -155,14 +166,10 @@ export class MateriasService {
       return this.http.get(this.URL_API + "/pendientes/",{headers:headers});
     }
   }
-  //
-  // putUsuario(body,idUsuario){
-  //   return this.http.put(this.URL_API+"/usuarios/update"+`/${idUsuario}`, body,{
-  //     headers:new HttpHeaders()
-  //       .set('Content-Type', "application/json")
-  //       .set('Token', this.tokenService.getToken()),
-  //     observe:"response"
-  //   });
-  // }
 
+  sendMail(body){
+    let headers = new HttpHeaders().set('Content-Type', "application/json")
+      .set('Token', this.tokenService.getToken());
+    return this.http.post(this.URL_API+'/sendMail',body,{headers:headers});
+  }
 }

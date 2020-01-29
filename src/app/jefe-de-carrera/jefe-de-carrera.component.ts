@@ -41,6 +41,8 @@ export class JefeDeCarreraComponent implements OnInit {
   public dataSourceConfiguracion: MatTableDataSource<Configuracion>;
   public dataSourceConfiguracionMaterias: MatTableDataSource<Configuracion>;
   public dataSourceConfiguracionDocentes: MatTableDataSource<Configuracion>;
+  public dataSourceConfiguarionPendientes: MatTableDataSource<Configuracion>;
+
 
   public dataSourceMaterias: MatTableDataSource<Materia>;
   public dataSourceMaterias2: MatTableDataSource<Materia>;
@@ -140,21 +142,20 @@ export class JefeDeCarreraComponent implements OnInit {
       //seguimiento
       this.setPreferenciasSeguimiento(user);
     }
+    if(user.rol!="decano"){
+      this.displayedColumnsPendientes[0].hide=user.ver_pendientes_pasadas;
+      this.displayedColumnsPendientes[1].hide=user.ver_evaluacion_pares;
+      this.displayedColumnsPendientes[2].hide=user.ver_horas_no_asignadas;
+    }
   }
 
   async setConfigurationTables(){
     this.dataSourceConfiguracion =  new MatTableDataSource(this.neededColumnDefinitions());
     this.dataSourceConfiguracionMaterias =  new MatTableDataSource(this.neededColumnDefinitionsMaterias());
     this.dataSourceConfiguracionDocentes = new MatTableDataSource(this.neededColumnDefinitionsDocentes());
+    this.dataSourceConfiguarionPendientes = new MatTableDataSource(this.displayedColumnsPendientes);
   }
 
-  setPreferenciasDocentes(user){
-    let prefDoc = user.preferencias_docente;
-    this.displayedColumnsDocentes[1].hide= prefDoc.materias_asignadas;
-    this.displayedColumnsDocentes[2].hide= prefDoc.horas_planta;
-    this.displayedColumnsDocentes[3].hide= prefDoc.horas_cubiertas;
-    this.displayedColumnsDocentes[5].hide= prefDoc.evaluacion_pares;
-  }
   setPreferenciasSeguimiento(user: Usuario){
     let prefSeg = user.preferencias_seguimiento;
     let i = 4;
@@ -179,6 +180,12 @@ export class JefeDeCarreraComponent implements OnInit {
   @ViewChild('paginatorGeneral',{read:MatPaginator,static: false}) public paginator1: MatPaginator;
   @ViewChild('paginatorUsuarios',{read:MatPaginator,static: false}) public paginator4: MatPaginator;
 
+  displayedColumnsPendientes =
+    [
+      {def: "ver_pendientes_pasadas", label: "Pendientes pasados", hide: true},
+      {def: "ver_evaluacion_pares", label: "Evaluacion por pares", hide: true},
+      {def: "ver_horas_no_asignadas", label: "Asignar horas a docentes", hide: true}
+    ];
 
   columnDefinitions =
     [{def: 'nombre', label: 'Materia', hide: true},
@@ -277,7 +284,7 @@ export class JefeDeCarreraComponent implements OnInit {
   }
 
   openAddMaterias() {
-    let dialogRef = this.dialogMaterias.open(AddMateriaComponent, {width:'750px', height:'450px'});
+    let dialogRef = this.dialogMaterias.open(AddMateriaComponent, {width:'750px', height:'600px'});
     dialogRef.afterClosed().subscribe(() => {
       this.getDocentes();
       this.getMaterias();
@@ -357,16 +364,15 @@ export class JefeDeCarreraComponent implements OnInit {
     this.dataSourceUsuarios.filter = filterValue.trim().toLowerCase();
   }
 
-  setCheckbox(idMateria,body) {
+  setCheckbox(idMateria,body,materia?) {
     let idDocente = this.dataSourceMaterias3.filteredData.filter(a=>a._id==idMateria).map(a=>a.id_docente);
     let docente = this.dataSourceDocentes.filteredData.filter(a=>a._id==idDocente[0]);
-    console.log(docente);
     if(body.contrato_impreso){
-      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{docente:docente,email:"contrato",element:null}});
+      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{materia:materia,docente:docente,asunto:"firmar_contrato",element:null}});
     }else if(body.planilla_lista){
-      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{docente:docente,email:"planilla",element:null}});
+      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{materia:materia,docente:docente,asunto:"firmar_planilla",element:null}});
     }else if(body.cheque_recibido){
-      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{docente:docente,email:"cheque",element:null}});
+      this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{materia:materia,docente:docente,asunto:"recoger_cheque",element:null}});
     }
     if(this.tokenService.getUsuarioDocFollow().rol!="decano"){
       this.materiaService.putMateria(idMateria,body).subscribe(
@@ -423,7 +429,8 @@ export class JefeDeCarreraComponent implements OnInit {
   }
 
   deleteMateria(element: Materia) {
-    let dialogRef = this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{element:element,def:"materia",docente:null}});
+    let idDocenteAc = this.dataSourceMaterias3.filteredData.filter(a=>a._id == element._id).map(a=>a.id_docente);
+    let dialogRef = this.dialogMaterias.open(DeleteComponent, {width:'300px',data:{docenteAc:idDocenteAc,element:element,def:"materia",docente:null}});
     dialogRef.afterClosed().subscribe(()=> {
       this.getDocentes();
       this.getMaterias();
@@ -482,7 +489,7 @@ export class JefeDeCarreraComponent implements OnInit {
     }
   }
 
-  async updatePreferences() {
+  async  updatePreferences() {
     await this.materiaService.getUsuarioByEmail(this.tokenService.getUsuarioDocFollow().email).subscribe(
       res=>{
         this.tokenService.setUserDocFollow(res);
@@ -522,20 +529,26 @@ export class JefeDeCarreraComponent implements OnInit {
     );
   }
 
-  // changePreferenceDoc(def,hide) {
-  //   let negation = !(hide);
-  //   let body = this.tokenService.getUsuarioDocFollow().preferencias_docente;
-  //   body[def.toString()] = negation;
-  //   //console.log(body);
-  //   this.materiaService.putUsuarios({"preferencias_docente": body}, this.tokenService.userDocFollow._id).subscribe(
-  //     res => {
-  //       console.log(res);
-  //       this.updatePreferences();
-  //     },error => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
+  changePreferenceOld(def,hide) {
+    let negation = !(hide);
+    let body = {};
+    if(def.toString()=="ver_pendientes_pasadas"){
+      body = {"ver_pendientes_pasadas": negation}
+    }else if(def.toString()=="ver_evaluacion_pares"){
+      body = {"ver_evaluacion_pares": negation}
+    }else if(def.toString()=="ver_horas_no_asignadas"){
+      body = {"ver_horas_no_asignadas": negation}
+    }
+    console.log(body);
+    this.materiaService.putUsuarios(body, this.tokenService.userDocFollow._id).subscribe(
+      res => {
+        console.log(res);
+        this.updatePreferences();
+      },error => {
+        console.log(error);
+      }
+    );
+  }
 
   setCheckboxEsp(idMateria,body) {
     if(this.tokenService.getUsuarioDocFollow().rol!="registros"){

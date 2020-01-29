@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {MateriasService} from "../services/materias.service";
 import {AlertComponent} from "../alert/alert.component";
+import {error} from "util";
 
 @Component({
   selector: 'app-delete',
@@ -15,7 +16,13 @@ export class DeleteComponent  implements OnInit{
 
   confirmDeletion() {
     if(this.data.def == "materia"){
-      this.materiaService.deleteMateria(this.data.element).subscribe(
+      let idDocAn: string;
+      if(this.data.docenteAc.length==0){
+        idDocAn = "";
+      }else{
+        idDocAn = "/"+this.data.docenteAc[0];
+      }
+      this.materiaService.deleteMateria(this.data.element,idDocAn).subscribe(
         res=>{
           this.dialogRef.close();
           if(res.status==200) {
@@ -58,18 +65,22 @@ export class DeleteComponent  implements OnInit{
   }
 
   enviarMail() {
-    let asunto: string;
-    let message: string;
-    if(this.data.email.toString() == "contrato"){
-      asunto = "Firmar contrato"
-
-    }else if(this.data.email.toString() == "planilla"){
-      asunto = "Firmar planilla"
-
-    }else if(this.data.email.toString() == "cheque"){
-      asunto = "Recoger cheque"
-
+    let body = {
+      "destino": this.data.docente[0].email,
+      "materia": this.data.materia.nombre,
+      "inicio": this.data.materia.inicio,
+      "fin": this.data.materia.fin,
+      "asunto": this.data.asunto
+    };
+    console.log(body);
+    this.materiaService.sendMail(body).subscribe(
+      res=>{
+        this.dialog.open(AlertComponent, {width:'300px',data:{action:"Éxito",message:"Email enviado"}});
+      },error=>{
+        console.log(error);
+        this.dialog.open(AlertComponent, {width:'300px',data:{action:"Error",message:"No se pudo enviar el email"}});
     }
+    )
   }
 
   ngOnInit() {
