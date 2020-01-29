@@ -148,6 +148,13 @@ export class JefeDeCarreraComponent implements OnInit {
     this.dataSourceConfiguracionDocentes = new MatTableDataSource(this.neededColumnDefinitionsDocentes());
   }
 
+  setPreferenciasDocentes(user){
+    let prefDoc = user.preferencias_docente;
+    this.displayedColumnsDocentes[1].hide= prefDoc.materias_asignadas;
+    this.displayedColumnsDocentes[2].hide= prefDoc.horas_planta;
+    this.displayedColumnsDocentes[3].hide= prefDoc.horas_cubiertas;
+    this.displayedColumnsDocentes[5].hide= prefDoc.evaluacion_pares;
+  }
   setPreferenciasSeguimiento(user: Usuario){
     let prefSeg = user.preferencias_seguimiento;
     let i = 4;
@@ -514,6 +521,21 @@ export class JefeDeCarreraComponent implements OnInit {
       }
     );
   }
+
+  // changePreferenceDoc(def,hide) {
+  //   let negation = !(hide);
+  //   let body = this.tokenService.getUsuarioDocFollow().preferencias_docente;
+  //   body[def.toString()] = negation;
+  //   //console.log(body);
+  //   this.materiaService.putUsuarios({"preferencias_docente": body}, this.tokenService.userDocFollow._id).subscribe(
+  //     res => {
+  //       console.log(res);
+  //       this.updatePreferences();
+  //     },error => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
 
   setCheckboxEsp(idMateria,body) {
     if(this.tokenService.getUsuarioDocFollow().rol!="registros"){

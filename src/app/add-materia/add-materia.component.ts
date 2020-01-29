@@ -146,7 +146,8 @@ export class AddMateriaComponent implements OnInit {
           this.form.value.horas_planta="0";
           this.form.value.id_docente = "";
         }
-        this.form.value.id_jefe_carrera=this.super.usuario._id;
+        this.form.value.id_jefe_carrera=this.super.usuario.nombre_corto;
+        console.log(this.form.value);
         this.materiaService.postMateria(this.form.value).subscribe(
           res => {
             this.dialogRef.close();
@@ -168,7 +169,7 @@ export class AddMateriaComponent implements OnInit {
 
   private _filterUsuarios(value: string) {
     const filterValue = value.toLowerCase();
-    return this.dataSourceUsuarios.filter(option=>option.rol=="jefe_carrera" ).filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
+    return this.dataSourceUsuarios.filter(option=>option.rol=="jefe_carrera" ).filter(option=>(option.nombre_corto).toLowerCase().includes(filterValue));
   }
 
   displayDocente(subject) : string {
@@ -190,6 +191,21 @@ export class AddMateriaComponent implements OnInit {
       }else{
         return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
       }
+    }else{
+      return "";
+    }
+  }
+  displayUsuario(subject) : string {
+    if((subject && subject.nombre)){
+      return subject.nombre_corto
+    }else{
+      return ""
+    }
+  }
+
+  displayUsuario2(subject) {
+    if((subject && subject.nombre)) {
+      return subject.nombre_corto
     }else{
       return "";
     }

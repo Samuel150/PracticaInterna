@@ -53,6 +53,7 @@ export class EditMateriaComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.data.materia.id_jefe_carrera);
     this.getDocentes();
     this.getUsuarios();
     this.filterOptionsUsuarios = this.myControlUsuarios.valueChanges.pipe(
@@ -89,7 +90,7 @@ export class EditMateriaComponent implements OnInit {
   }
   private _filterUsuarios(value: string) {
     const filterValue = value.toLowerCase();
-    return this.dataSourceUsuarios.filter(option=>option.rol=="jefe_carrera").filter(option=>(option.nombre+" "+option.segundo_nombre+" "+option.apellido_paterno+" "+option.apellido_materno).toLowerCase().includes(filterValue));
+    return this.dataSourceUsuarios.filter(option=>option.rol=="jefe_carrera").filter(option=>(option.nombre_corto).toLowerCase().includes(filterValue));
   }
 
   form: FormGroup = new FormGroup({
@@ -99,12 +100,12 @@ export class EditMateriaComponent implements OnInit {
     id_docente: new FormControl(''),
     horas_totales: new FormControl(this.data.materia.horas_totales, [Validators.required,Validators.pattern('^\\d*$')]),
     horas_planta: new FormControl(this.data.materia.horas_planta,Validators.pattern('^\\d*$')),
-    id_jefe_carrera: new FormControl(''),
+    id_jefe_carrera: new FormControl(this.data.materia.id_jefe_carrera, Validators.required),
     aula: new FormControl(this.data.materia.aula)
   });
 
   onSubmit() {
-    if(this.data.jefe && !this.data.jefe[0]){
+    if(!this.form.value.id_jefe_carrera){
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar un jefe de carrera encargado"}});
     }else if (this.data.docente && this.data.docente[0] && (this.form.value.horas_planta==null || this.form.value.horas_planta.toString()=="")) {
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar horas de planta al docente"}});
@@ -121,7 +122,8 @@ export class EditMateriaComponent implements OnInit {
         this.form.value.id_docente = "";
         this.form.value.horas_planta = "0";
       }
-      this.form.value.id_jefe_carrera = this.data.jefe[0]._id;
+      this.form.value.id_jefe_carrera = this.data.materia.id_jefe_carrera;
+      //console.log(this.form.value);
       this.materiaService.putMateria(this.data.materia._id, this.form.value).subscribe(
         res => {
           this.dialogRef.close();
@@ -161,6 +163,23 @@ export class EditMateriaComponent implements OnInit {
       }else{
         return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
       }
+    }else{
+      return subject
+    }
+  }
+
+  displayUsuario(subject) {
+    if(subject && subject.nombre_corto){
+      return subject.nombre_corto
+    }else{
+      return subject
+    }
+
+  }
+
+  displayUsuario2(subject) {
+    if(subject &&   subject.nombre_corto){
+      return subject.nombre_corto
     }else{
       return subject
     }

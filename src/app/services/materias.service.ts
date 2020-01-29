@@ -107,9 +107,9 @@ export class MateriasService {
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
     if(this.tokenService.getUsuarioDocFollow() && this.tokenService.getUsuarioDocFollow().rol=="jefe_carrera"){
-      return this.http.get(this.URL_API+"/materias/getByUserId/"+this.tokenService.getUsuarioDocFollow()._id,{headers:headers});
+      return this.http.get(this.URL_API+"/materias/getByUserId/"+this.tokenService.getUsuarioDocFollow()._id+"/"+newParam,{headers:headers});
     }else{
-      return this.http.get(this.URL_API+"/materias/getAll/",{headers:headers});
+      return this.http.get(this.URL_API+"/materias/getAll/"+newParam,{headers:headers});
     }
   }
 

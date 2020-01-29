@@ -34,9 +34,9 @@
     <div>
       <mat-form-field class="form" [formGroup]="form">
         <input id="encargado" [matAutocomplete]="auto2" [formControl]="myControlUsuarios" type="text" matInput placeholder="Jefe de Carrera Encargado" name="usuario" [(ngModel)]="super.usuario">
-        <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayDocente2" >
+        <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayUsuario2" >
           <mat-option *ngFor="let option of filterOptionsUsuarios | async" [value]="option">
-            {{displayDocente(option)}}
+            {{displayUsuario(option)}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

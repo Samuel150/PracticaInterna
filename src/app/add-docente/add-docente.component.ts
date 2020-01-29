@@ -76,8 +76,7 @@ export class AddDocenteComponent implements OnInit {
     if(!this.super.usuario._id){
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar un jefe de carrera encargado"}});
     }else{
-      this.form.value.id_jefe_carrera=this.super.usuario._id;
-      console.log(this.form.value);
+      this.form.value.id_jefe_carrera=this.super.usuario.nombre_corto;
       this.materiaService.postDocente(this.form.value).subscribe(
         res=>{
           this.dialogRef.close();
@@ -92,25 +91,18 @@ export class AddDocenteComponent implements OnInit {
     }
 
   }
-  displayDocente(subject) : string {
-    if(subject){
-      if(subject.segundo_nombre!=""){
-        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
-      }else{
-        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
-      }
+
+  displayUsuario(subject) : string {
+    if(subject && subject.nombre){
+      return subject.nombre_corto;
     }else{
       return ""
     }
   }
 
-  displayDocente2(subject) {
-    if(subject instanceof Docente || (subject && subject.nombre)) {
-      if(subject.segundo_nombre!=""){
-        return subject.nombre+" "+subject.segundo_nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
-      }else{
-        return subject.nombre+" "+subject.apellido_paterno+" "+subject.apellido_materno
-      }
+  displayUsuario2(subject) {
+    if((subject && subject.nombre)) {
+      return subject.nombre_corto;
     }else{
       return "";
     }

@@ -39,10 +39,10 @@
       </div>
       <div>
         <mat-form-field class="form" [formGroup]="form">
-          <input [readonly]="data.visual" id="encargado" [matAutocomplete]="auto2" [formControl]="myControlUsuarios" type="text" matInput placeholder="Jefe de Carrera Encargado" name="id_jefe_carrera" [ngModel]="data.jefe[0]" [(ngModel)]="data.jefe[0]">
-          <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayDocente2" >
-            <mat-option *ngFor="let option of filterOptionsUsuarios | async" [value]="option">
-              {{displayDocente(option)}}
+          <input [readonly]="data.visual" id="encargado" [matAutocomplete]="auto2" [formControl]="myControlUsuarios" type="text" matInput placeholder="Jefe de Carrera Encargado" name="id_jefe_carrera" [(ngModel)]="data.docente.id_jefe_carrera">
+          <mat-autocomplete  #auto2="matAutocomplete" [displayWith]="displayUsuario2" >
+            <mat-option *ngFor="let option of filterOptionsUsuarios | async" [value]="option.nombre_corto">
+              {{displayUsuario(option)}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
