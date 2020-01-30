@@ -158,8 +158,8 @@
       <button class="boton" mat-raised-button color="warn" *ngIf="jefe||asistente" (click)="openAddDocentes()">Añadir Docente</button>
       <button class="boton" mat-raised-button color="warn"  (click)="refresh()">Actualizar</button>
       <br/>
-      <mat-form-field>
-        <input matInput (keyup)="applyFilterDocentes($event.target.value)" placeholder="Buscar en Tabla">
+      <mat-form-field style="width: 400px;">
+        <input matInput  (keyup)="applyFilterDocentes($event.target.value)" placeholder="Buscar en Tabla">
       </mat-form-field>
       <table #sortDocentes mat-table [dataSource]="dataSourceDocentes"  matSort class="mat-elevation-z8">
         <ng-container matColumnDef="nombre">
@@ -222,8 +222,8 @@
         </select>
       </mat-form-field>
       <br/>
-      <mat-form-field>
-        <input matInput (keyup)="applyFilterMaterias($event.target.value)" placeholder="Buscar en Tabla">
+      <mat-form-field style="width: 400px;">
+        <input  matInput (keyup)="applyFilterMaterias($event.target.value)" placeholder="Buscar en Tabla">
       </mat-form-field>
       <table #sortGeneral mat-table [dataSource]="dataSourceMaterias"  matSort  class="mat-elevation-z8">
         <ng-container matColumnDef="nombre" sticky>
@@ -350,6 +350,8 @@
   </mat-tab>
   <mat-tab label="Configuracion">
     <div class="allTable" *ngIf="!decano">
+      <button *ngIf="admin"  class="boton" style="margin-bottom: 5px" mat-raised-button color="warn"  (click)="resetAnio()">Reset evaluacion por pares</button>
+      <button *ngIf="admin" class="boton" style="margin-bottom: 5px" mat-raised-button color="warn"  (click)="resetSemestre()">Reset materias asignadas y horas cubiertas</button>
       <table mat-table [dataSource]="dataSourceConfiguarionPendientes" class="mat-elevation-z8">
         <ng-container matColumnDef="opcion">
           <th mat-header-cell *matHeaderCellDef> Extras </th>

@@ -17,6 +17,11 @@ export class MateriasService {
   constructor(private http: HttpClient, private tokenService: TokenService) {
   }
 
+  getDocentesAnyWay():Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', "application/json")
+      .set('Token', this.tokenService.getToken());
+    return this.http.get(this.URL_API+"/docentes/getAll/",{headers:headers});
+  }
   postMateriasExcel(excel){
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
@@ -171,5 +176,17 @@ export class MateriasService {
     let headers = new HttpHeaders().set('Content-Type', "application/json")
       .set('Token', this.tokenService.getToken());
     return this.http.post(this.URL_API+'/sendMail',body,{headers:headers});
+  }
+
+  resetAnio() {
+    let headers = new HttpHeaders().set('Content-Type', "application/json")
+      .set('Token', this.tokenService.getToken());
+    return this.http.post(this.URL_API+"/reset/eval_pares",{headers: headers});
+  }
+
+  resetSemestre() {
+    let headers = new HttpHeaders().set('Content-Type', "application/json")
+      .set('Token', this.tokenService.getToken());
+    return this.http.post(this.URL_API+"/reset/semestre",{headers: headers});
   }
 }

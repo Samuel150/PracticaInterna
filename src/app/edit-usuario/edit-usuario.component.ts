@@ -23,7 +23,10 @@ export class EditUsuarioComponent {
     email: new FormControl(this.data.usuario.email, Validators.required),
     rol: new FormControl(this.data.usuario.rol,Validators.required),
     super_usuario: new FormControl(this.data.usuario.super_usuario),
-    nombre_corto: new FormControl(this.data.usuario.nombre_corto)
+    nombre_corto: new FormControl(this.data.usuario.nombre_corto),
+    ver_pendientes_pasadas: new FormControl(this.data.usuario.ver_pendientes_pasadas),
+    ver_evaluacion_pares: new FormControl(this.data.usuario.ver_evaluacion_pares),
+    ver_horas_no_asignadas: new FormControl(this.data.usuario.ver_horas_no_asignadas),
   });
 
 

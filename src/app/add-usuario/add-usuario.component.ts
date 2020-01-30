@@ -23,8 +23,11 @@ export class AddUsuarioComponent implements OnInit {
     apellido_materno: new FormControl('',Validators.required),
     email: new FormControl('', Validators.required),
     rol: new FormControl('',Validators.required),
-    nombre_corto: new FormControl(),
+    nombre_corto: new FormControl(''),
     super_usuario: new FormControl(false,Validators.required),
+    ver_pendientes_pasadas: new FormControl(false),
+    ver_evaluacion_pares: new FormControl(false),
+    ver_horas_no_asignadas: new FormControl(false),
     preferencias_seguimiento: new FormControl({
       "silabo_subido": true,
       "aula_revisada": true,
@@ -55,11 +58,12 @@ export class AddUsuarioComponent implements OnInit {
   });
 
   onSubmit() {
+    console.log(this.form.value);
     if((this.form.value.rol == "asistente" || this.form.value.rol == "registros" || this.form.value.rol == "contabilidad") && this.form.value.super_usuario){
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Solo los decanos y jefes de carrera pueden ser super usuarios"}});
     }else if(this.form.value.rol == "jefe_carrera" && (this.form.value.nombre_corto == ""||this.form.value.nombre_corto == null)) {
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Asignar nombre corto al jefe de carrera"}});
-    }else if(this.form.value.rol != "jefe_carrera" && this.form.value.nombre_corto != "") {
+    }else if(this.form.value.rol != "jefe_carrera" && (this.form.value.nombre_corto != "")) {
       this.dialog.open(AlertComponent, {width:'300px',data:{action:"Conflicto",message:"Solo jefes de carrera deben tener nobre corto"}});
     }else{
       this.materiaService.postUsuarios(this.form.value).subscribe(

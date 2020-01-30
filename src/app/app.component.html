@@ -1,10 +1,10 @@
 <mat-toolbar color="warn" >
   <mat-toolbar-row>
-  <span>Doc&&Check</span>
+  <span>Doc&Check</span>
   <span class="example-spacer"></span>
-  <button *ngIf="tokenService.userDocFollow"  mat-raised-button (click)="signOut()">Log Out</button>
-  <p *ngIf="tokenService.userDocFollow">   {{tokenService.getUser().name}}</p>
-  <img *ngIf="tokenService.userDocFollow" height="75%" src="{{ tokenService.getUser().photoUrl }}">
+  <p class="space" *ngIf="tokenService.userDocFollow">   {{tokenService.getUser().name}}</p>
+  <img class="space" *ngIf="tokenService.userDocFollow" height="75%" src="{{ tokenService.getUser().photoUrl }}">
+  <button class="space" *ngIf="tokenService.userDocFollow"  mat-raised-button (click)="signOut()">Log Out</button>
   </mat-toolbar-row>
 </mat-toolbar>
 

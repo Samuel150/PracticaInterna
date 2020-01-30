@@ -48,6 +48,7 @@ export class JefeDeCarreraComponent implements OnInit {
   public dataSourceMaterias2: MatTableDataSource<Materia>;
   public dataSourceMaterias3: MatTableDataSource<Materia>;
   public dataSourceDocentes: MatTableDataSource<Docente>;
+  public dataSourceDocentes2:MatTableDataSource<Docente>;
   public dataSourceUsuarios: MatTableDataSource<Usuario>;
 
   displayedColumnsConfiguracion: string[]=['opcion','configuracion'];
@@ -55,7 +56,7 @@ export class JefeDeCarreraComponent implements OnInit {
 
   formPeriodo = new FormGroup({
     anio: new FormControl('',Validators.required),
-    semestre: new FormControl(Validators.required),
+    semestre: new FormControl('',Validators.required),
   });
 
   constructor(private route: Router,
@@ -78,6 +79,7 @@ export class JefeDeCarreraComponent implements OnInit {
       this.route.navigate(['']);
     });
     this.getDocentes();
+    this.getDocentes2();
     this.getMaterias();
     this.getMaterias2();
     this.getUsuarios();
@@ -106,6 +108,9 @@ export class JefeDeCarreraComponent implements OnInit {
     this.displayedColumnsMaterias.filter(a=>(a.def=='cheque_solicitado'||a.def=='cheque_recibido'||a.def=='cheque_entregado')).map(a=>a.hide=(this.contabilidad));
     this.displayedColumnsMaterias.filter(a=>a.def=='opciones').map(a=>a.hide=(this.admin||this.jefe||this.asistente));
 
+    this.displayedColumnsPendientes.filter(a=>(a.def=="ver_evaluacion_pares"||a.def=="ver_horas_no_asignadas")).map(a=>a.hide=(this.jefe));
+    this.displayedColumnsPendientes.filter(a=>(a.def=="ver_evaluacion_pares"||a.def=="ver_horas_no_asignadas")).map(a=>a.rol=(this.jefe));
+
     this.displayedColumnsMaterias.filter(a=>(a.def=='horas_planta' || a.def=='horas_totales')).map(a=>a.rol=(this.jefe||this.asistente));
     this.displayedColumnsMaterias.filter(a=>(a.def=='silabo_subido'||a.def=='aula_revisada' || a.def=='examen_revisado')).map(a=>a.rol=(this.jefe));
     this.displayedColumnsMaterias.filter(a=>(a.def=='contrato_impreso'||a.def=='contrato_firmado')).map(a=>a.rol=(this.asistente));
@@ -113,6 +118,7 @@ export class JefeDeCarreraComponent implements OnInit {
     this.displayedColumnsMaterias.filter(a=>a.def=='planilla_firmada').map(a=>a.rol=(this.registros|| this.contabilidad));
     this.displayedColumnsMaterias.filter(a=>(a.def=='cheque_solicitado'||a.def=='cheque_recibido'||a.def=='cheque_entregado')).map(a=>a.rol=(this.contabilidad));
     this.displayedColumnsMaterias.filter(a=>a.def=='opciones').map(a=>a.rol=(this.admin||this.jefe||this.asistente));
+
   }
 
   async setPreferences(){
@@ -153,7 +159,7 @@ export class JefeDeCarreraComponent implements OnInit {
     this.dataSourceConfiguracion =  new MatTableDataSource(this.neededColumnDefinitions());
     this.dataSourceConfiguracionMaterias =  new MatTableDataSource(this.neededColumnDefinitionsMaterias());
     this.dataSourceConfiguracionDocentes = new MatTableDataSource(this.neededColumnDefinitionsDocentes());
-    this.dataSourceConfiguarionPendientes = new MatTableDataSource(this.displayedColumnsPendientes);
+    this.dataSourceConfiguarionPendientes = new MatTableDataSource(this.neededColumDefinitionsExtras());
   }
 
   setPreferenciasSeguimiento(user: Usuario){
@@ -182,9 +188,9 @@ export class JefeDeCarreraComponent implements OnInit {
 
   displayedColumnsPendientes =
     [
-      {def: "ver_pendientes_pasadas", label: "Pendientes pasados", hide: true},
-      {def: "ver_evaluacion_pares", label: "Evaluacion por pares", hide: true},
-      {def: "ver_horas_no_asignadas", label: "Asignar horas a docentes", hide: true}
+      {def: "ver_pendientes_pasadas", label: "Pendientes pasados", hide: true,rol:true},
+      {def: "ver_evaluacion_pares", label: "Evaluacion por pares", hide: true,rol:true},
+      {def: "ver_horas_no_asignadas", label: "Asignar horas a docentes", hide: true,rol:true}
     ];
 
   columnDefinitions =
@@ -242,7 +248,7 @@ export class JefeDeCarreraComponent implements OnInit {
         this.dataSourceMaterias.sort = this.sort1;
         this.dataSourceMaterias.paginator = this.paginator1;
         this.dataSourceMaterias2 = new MatTableDataSource(res);
-        this.dataSourceMaterias2.filteredData.map(a=>a.id_docente=this.displayDocente(a.id_docente));
+        this.dataSourceMaterias2.filteredData.map(a=>a.id_docente=this.displayDocente2(a.id_docente));
         this.dataSourceMaterias2.sort = this.sort3;
         this.dataSourceMaterias2.paginator = this.paginator3;
       }, err => {
@@ -258,6 +264,15 @@ export class JefeDeCarreraComponent implements OnInit {
       //console.log(err);
     }
     )
+  }
+  private getDocentes2() {
+    this.materiaService.getDocentesAnyWay().subscribe(
+      res=>{
+        this.dataSourceDocentes2 = new MatTableDataSource(res);
+      },err=>{
+        //console.log(err);
+      }
+    );
   }
 
   private getDocentes(){
@@ -313,6 +328,10 @@ export class JefeDeCarreraComponent implements OnInit {
     return this.displayedColumnsDocentes.filter(res=>(res.label!='Opciones' && res.label != "Docente"));
   }
 
+  neededColumDefinitionsExtras(){
+    return this.displayedColumnsPendientes.filter(res=>res.rol!=false);
+  }
+
   getDisplayedColumns():string[] {
 
     return this.columnDefinitions.filter(cd=>cd.hide).map(cd=>cd.def);
@@ -331,6 +350,21 @@ export class JefeDeCarreraComponent implements OnInit {
   displayDocente(docente) {
     if(this.dataSourceDocentes!=null){
       let docenteFilter = this.dataSourceDocentes.filteredData;
+      let docenteAc = docenteFilter.find(res=>res._id==docente);
+      if(docenteAc){
+        if(docenteAc.segundo_nombre!=""){
+          return docenteAc.nombre+" "+docenteAc.segundo_nombre+" "+docenteAc.apellido_paterno+" "+docenteAc.apellido_materno;
+        }else{
+          return docenteAc.nombre+" "+docenteAc.apellido_paterno+" "+docenteAc.apellido_materno;
+        }
+      }else{
+        return "";
+      }
+    }
+  }
+  displayDocente2(docente) {
+    if(this.dataSourceDocentes2!=null){
+      let docenteFilter = this.dataSourceDocentes2.filteredData;
       let docenteAc = docenteFilter.find(res=>res._id==docente);
       if(docenteAc){
         if(docenteAc.segundo_nombre!=""){
@@ -405,7 +439,7 @@ export class JefeDeCarreraComponent implements OnInit {
   editMateria(element: Materia, view?: boolean) {
     let idMateria = element._id;
     let idDocente = this.dataSourceMaterias3.filteredData.filter(a=>a._id == idMateria).map(a=>a.id_docente);
-    let docente = this.dataSourceDocentes.filteredData.filter(a=>a._id == idDocente as unknown as string);
+    let docente = this.dataSourceDocentes2.filteredData.filter(a=>a._id == idDocente as unknown as string);
     let idJefe = this.dataSourceMaterias3.filteredData.filter(a=>a._id ==idMateria).map(a=>a.id_jefe_carrera);
     let jefe = this.dataSourceUsuarios.filteredData.filter(a=>a._id==idJefe as unknown as string);
     let dialogRef = this.dialogMaterias.open(EditMateriaComponent, {width:'750px',data:{materia: element,docente:docente,jefe:jefe,visual:view}});
@@ -551,7 +585,7 @@ export class JefeDeCarreraComponent implements OnInit {
   }
 
   setCheckboxEsp(idMateria,body) {
-    if(this.tokenService.getUsuarioDocFollow().rol!="registros"){
+    if(this.tokenService.getUsuarioDocFollow().rol=="registros"){
       this.materiaService.putMateria(idMateria,body).subscribe(
         res=>{
           console.log(res);
@@ -569,5 +603,26 @@ export class JefeDeCarreraComponent implements OnInit {
       this.getMaterias(this.formPeriodo.value.anio.toString(),this.formPeriodo.value.semestre.toString());
       this.getMaterias2(this.formPeriodo.value.anio.toString(),this.formPeriodo.value.semestre.toString());
     }
+  }
+
+
+  resetAnio() {
+    this.materiaService.resetAnio().subscribe(
+      res=>{
+        console.log(res);
+      },error =>{
+        console.log(error);
+      }
+    )
+  }
+
+  resetSemestre() {
+    this.materiaService.resetSemestre().subscribe(
+      res=>{
+        console.log(res);
+      },error=>{
+        console.log(error);
+      }
+    )
   }
 }

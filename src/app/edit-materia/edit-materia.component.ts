@@ -70,7 +70,7 @@ export class EditMateriaComponent implements OnInit {
     );
   }
   getDocentes() {
-    this.materiaService.getDocentes().subscribe(
+    this.materiaService.getDocentesAnyWay().subscribe(
       res => {
         this.dataSourceDocentes = res;
       }, err => {
