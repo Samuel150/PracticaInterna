@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MateriasService} from "../services/materias.service";
 import {FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
-import { NativeDateAdapter } from "@angular/material";
+import { NativeDateAdapter } from "@angular/material/core";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 import {Docente} from "../models/docente";
 import {Observable} from "rxjs";
