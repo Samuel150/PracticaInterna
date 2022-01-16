@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
+import {SocialAuthService, GoogleLoginProvider, SocialUser} from "angularx-social-login";
 import {TokenService} from "./token.service";
 import {MateriasService} from "./materias.service";
 
@@ -8,7 +8,7 @@ import {MateriasService} from "./materias.service";
 })
 export class AuthorizationService {
 
-  constructor(public authService: AuthService, public tokenService: TokenService, public materiasService: MateriasService) {
+  constructor(public authService: SocialAuthService, public tokenService: TokenService, public materiasService: MateriasService) {
 
   }
 

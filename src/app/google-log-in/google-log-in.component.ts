@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService, GoogleLoginProvider, SocialUser} from 'angularx-social-login';
+import {SocialAuthService, GoogleLoginProvider, SocialUser} from 'angularx-social-login';
 import {MateriasService} from "../services/materias.service";
 import {TokenService} from "../services/token.service";
 import {Router} from "@angular/router";
@@ -15,7 +15,7 @@ export class GoogleLogInComponent {
 
   description = 'Sistema de Gestión de Procedimientos de Docentes';
 
-  constructor(private route: Router, private authService: AuthService, private tokenService: TokenService,
+  constructor(private route: Router, private authService: SocialAuthService, private tokenService: TokenService,
               private materiasService: MateriasService,public dialog: MatDialog) {
   }
 

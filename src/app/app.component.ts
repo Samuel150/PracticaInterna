@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService, SocialUser} from "angularx-social-login";
+import {SocialAuthService, SocialUser} from "angularx-social-login";
 import {TokenService} from "./services/token.service";
 import {Router} from "@angular/router";
 import {AuthorizationService} from "./services/authorization.service";
@@ -12,7 +12,7 @@ import {AuthorizationService} from "./services/authorization.service";
 export class AppComponent{
 
 
-  constructor(public authService: AuthService, public tokenService: TokenService, private route: Router) {
+  constructor(public authService: SocialAuthService, public tokenService: TokenService, private route: Router) {
   }
 
 
