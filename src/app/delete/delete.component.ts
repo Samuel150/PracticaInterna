@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {MateriasService} from "../services/materias.service";
 import {AlertComponent} from "../alert/alert.component";
-import {error} from "util";
 
 @Component({
   selector: 'app-delete',

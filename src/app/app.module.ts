@@ -11,7 +11,7 @@ import { PendientesComponent } from './pendientes/pendientes.component';
 import { AddMateriaComponent } from './add-materia/add-materia.component';
 import { AddDocenteComponent } from './add-docente/add-docente.component';
 import {HttpClientModule} from "@angular/common/http";
-import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { SocialLoginModule, GoogleLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLogInComponent } from './google-log-in/google-log-in.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -24,17 +24,9 @@ import { DeleteComponent } from './delete/delete.component';
 import { AddUsuarioComponent } from './add-usuario/add-usuario.component';
 import { EditUsuarioComponent } from './edit-usuario/edit-usuario.component';
 import { AlertComponent } from './alert/alert.component';
+import { RouterModule } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
- const config = new AuthServiceConfig([
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider('602723697704-ucdbgn6m678gf5rkj02npjl2rrcak250.apps.googleusercontent.com')
-  }
-]);
-
-export function provideConfig() {
-  return config;
-}
 
 
 @NgModule({
@@ -65,22 +57,34 @@ export function provideConfig() {
       MatDatepickerModule,
       MatSortModule,
       MatPaginatorModule,
-      MatIconModule
+      MatIconModule,
+      RouterModule,
+      MatToolbarModule,
   ],
-  entryComponents:[
-    AddMateriaComponent,
-    AddDocenteComponent,
-    EditMateriaComponent,
-    EditDocenteComponent,
-    AddUsuarioComponent,
-    EditUsuarioComponent,
-    AlertComponent,
-    DeleteComponent
-  ],
+  // entryComponents:[
+  //   AddMateriaComponent,
+  //   AddDocenteComponent,
+  //   EditMateriaComponent,
+  //   EditDocenteComponent,
+  //   AddUsuarioComponent,
+  //   EditUsuarioComponent,
+  //   AlertComponent,
+  //   DeleteComponent
+  // ],
   providers: [
     {
-      provide: AuthServiceConfig,
-      useFactory: provideConfig
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              ''//aqui poner user id
+            )
+          },
+        ]
+      } as SocialAuthServiceConfig,
     }
   ],
   bootstrap: [AppComponent]
