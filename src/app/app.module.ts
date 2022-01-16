@@ -24,6 +24,8 @@ import { DeleteComponent } from './delete/delete.component';
 import { AddUsuarioComponent } from './add-usuario/add-usuario.component';
 import { EditUsuarioComponent } from './edit-usuario/edit-usuario.component';
 import { AlertComponent } from './alert/alert.component';
+import { RouterModule } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 
 
@@ -55,18 +57,20 @@ import { AlertComponent } from './alert/alert.component';
       MatDatepickerModule,
       MatSortModule,
       MatPaginatorModule,
-      MatIconModule
+      MatIconModule,
+      RouterModule,
+      MatToolbarModule,
   ],
-  entryComponents:[
-    AddMateriaComponent,
-    AddDocenteComponent,
-    EditMateriaComponent,
-    EditDocenteComponent,
-    AddUsuarioComponent,
-    EditUsuarioComponent,
-    AlertComponent,
-    DeleteComponent
-  ],
+  // entryComponents:[
+  //   AddMateriaComponent,
+  //   AddDocenteComponent,
+  //   EditMateriaComponent,
+  //   EditDocenteComponent,
+  //   AddUsuarioComponent,
+  //   EditUsuarioComponent,
+  //   AlertComponent,
+  //   DeleteComponent
+  // ],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
@@ -76,7 +80,7 @@ import { AlertComponent } from './alert/alert.component';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '602723697704-ucdbgn6m678gf5rkj02npjl2rrcak250.apps.googleusercontent.com'
+              '796692231532-89v9jkgrp1cko1kqpl2c55rnsvnh1rcm.apps.googleusercontent.com'
             )
           },
         ]
