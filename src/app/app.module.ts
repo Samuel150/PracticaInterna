@@ -80,7 +80,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              ''//aqui poner user id
+              '602723697704-ucdbgn6m678gf5rkj02npjl2rrcak250.apps.googleusercontent.com'//aqui poner user id
             )
           },
         ]
